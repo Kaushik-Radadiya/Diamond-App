@@ -27,6 +27,7 @@ export default Theme = {
     blackText: '#000000',
     blackBg: '#d4d3d9',
     whiteText: '#ffffff',
+    LightBlack: '#1B1E23',
   },
   fontFamily: {
     PoppinsBlack: 'Poppins-Black',
