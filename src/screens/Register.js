@@ -1,0 +1,242 @@
+import React, {useState, useRef} from 'react';
+import {View, Text, ImageBackground, StyleSheet} from 'react-native';
+import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
+import CommonButton from '../component/CommonButton';
+import CommonTextInput from '../component/CommonTextInput';
+import Theme from '../utils/Theme';
+
+export default function Register({navigation}) {
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [companyName, setCompnayName] = useState('');
+  const [email, setEmail] = useState('');
+  const [mobileNumber, setMobileNumber] = useState('');
+  const [password, setPassword] = useState('');
+
+  const refFirstName = useRef(null);
+  const refLastName = useRef(null);
+  const refEmailAddress = useRef(null);
+  const refCompanyName = useRef(null);
+  const refMobileNumber = useRef(null);
+  const refPassword = useRef(null);
+
+  const onRegisterButtonPress = (item) => {};
+  const onFacebookButtonPress = () => {};
+  const onGoogleButtonPress = () => {};
+
+  return (
+    <View style={styles.container}>
+      <ImageBackground
+        resizeMode={'stretch'}
+        source={{uri: 'bg'}}
+        style={styles.image}>
+        <View style={styles.topSubContainer}>
+          <Text style={styles.titleText}>Register</Text>
+        </View>
+        <ScrollView>
+          <View style={styles.bootomSubContainer}>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}>
+              <CommonTextInput
+                refs={refFirstName}
+                icon={'ic_user'}
+                placeholder={'First Name'}
+                onChangeText={(text) => setFirstName(text)}
+                returnKeyType={'next'}
+                onSubmitEditing={() => refLastName.current.focus()}
+                width={'47%'}
+              />
+              <CommonTextInput
+                refs={refLastName}
+                icon={'ic_user'}
+                placeholder={'Last Name'}
+                onChangeText={(text) => setLastName(text)}
+                returnKeyType={'next'}
+                onSubmitEditing={() => refCompanyName.current.focus()}
+                width={'47%'}
+              />
+            </View>
+            <CommonTextInput
+              refs={refCompanyName}
+              icon={'ic_company_name'}
+              placeholder={'Company Name'}
+              onChangeText={(text) => setCompnayName(text)}
+              returnKeyType={'next'}
+              onSubmitEditing={() => refEmailAddress.current.focus()}
+            />
+            <CommonTextInput
+              refs={refEmailAddress}
+              icon={'ic_mail'}
+              placeholder={'Email Address'}
+              onChangeText={(text) => setEmail(text)}
+              returnKeyType={'next'}
+              onSubmitEditing={() => refMobileNumber.current.focus()}
+            />
+            <CommonTextInput
+              refs={refMobileNumber}
+              icon={'ic_mobile'}
+              placeholder={'Mobile Number'}
+              onChangeText={(text) => setMobileNumber(text)}
+              returnKeyType={'next'}
+              onSubmitEditing={() => refPassword.current.focus()}
+            />
+            <CommonTextInput
+              refs={refPassword}
+              icon={'ic_password'}
+              placeholder="Password"
+              returnKeyType={'done'}
+              onChangeText={(text) => setPassword(text)}
+              onSubmitEditing={() => {}}
+            />
+
+            <CommonButton
+              buttonStyle={[
+                styles.buttonStyle,
+                {
+                  backgroundColor: Theme.colors.theme,
+                  justifyContent: 'center',
+                },
+              ]}
+              text={'REGISTER'}
+              textStyle={[
+                styles.buttonTextStyle,
+                {
+                  color: Theme.colors.whiteText,
+                },
+              ]}
+              buttonPress={onRegisterButtonPress}
+            />
+            <Text style={styles.continueWithText}>Or Continue With</Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}>
+              <CommonButton
+                buttonStyle={[styles.buttonStyle, styles.socialButton]}
+                icon={'ic_facebook'}
+                iconStyle={styles.buttonIconStyle}
+                text={'Facebook'}
+                textStyle={[styles.buttonTextStyle]}
+                buttonPress={onFacebookButtonPress}
+              />
+              <CommonButton
+                buttonStyle={[styles.buttonStyle, styles.socialButton]}
+                icon={'ic_google'}
+                iconStyle={styles.buttonIconStyle}
+                text={'Google'}
+                textStyle={[styles.buttonTextStyle]}
+                buttonPress={onGoogleButtonPress}
+              />
+            </View>
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                paddingHorizontal: 20,
+                paddingVertical: 30,
+              }}>
+              <Text
+                style={{
+                  textAlign: 'center',
+                  fontFamily: Theme.fontFamily.PoppinsMedium,
+                  fontSize: Theme.fontSizes.small,
+                }}>
+                By Continuing Your Confirm That You Agree With Our Terms And
+                Condition
+              </Text>
+            </View>
+
+            <View style={styles.registerContainer}>
+              <Text style={styles.registerText}>Already have an account?</Text>
+              <TouchableOpacity onPress={() => navigation.goBack()}>
+                <Text
+                  style={[
+                    styles.registerText,
+                    {
+                      color: Theme.colors.theme,
+                      marginHorizontal: 5,
+                    },
+                  ]}>
+                  LOGIN
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </ScrollView>
+      </ImageBackground>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  image: {
+    flex: 1,
+  },
+  titleText: {
+    fontSize: Theme.fontSizes.large,
+    fontFamily: Theme.fontFamily.PoppinsMedium,
+    color: Theme.colors.theme,
+  },
+  welcomeImage: {
+    marginVertical: 15,
+  },
+  topSubContainer: {
+    padding: 35,
+  },
+  bootomSubContainer: {
+    flex: 1,
+    paddingHorizontal: 25,
+  },
+  buttonStyle: {
+    height: 60,
+    borderRadius: 10,
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    marginTop: 20,
+  },
+  buttonIconStyle: {height: 30, width: 30},
+  buttonTextStyle: {
+    fontFamily: Theme.fontFamily.PoppinsMedium,
+    fontSize: Theme.fontSizes.small,
+    color: Theme.colors.theme,
+    marginLeft: 10,
+  },
+  textInputStyle: {
+    marginHorizontal: 15,
+    fontSize: Theme.fontSizes.small,
+    fontFamily: Theme.fontFamily.PoppinsRegular,
+  },
+  forgotPassText: {
+    color: Theme.colors.theme,
+    fontFamily: Theme.fontFamily.PoppinsMedium,
+    fontSize: Theme.fontSizes.small,
+  },
+  continueWithText: {
+    alignSelf: 'center',
+    marginTop: 25,
+    fontFamily: Theme.fontFamily.PoppinsMedium,
+    fontSize: Theme.fontSizes.small,
+  },
+  socialButton: {
+    backgroundColor: Theme.colors.categoryBg,
+    flexDirection: 'row',
+    width: '45%',
+  },
+  registerContainer: {
+    flexDirection: 'row',
+    marginBottom: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  registerText: {
+    fontFamily: Theme.fontFamily.PoppinsMedium,
+    fontSize: Theme.fontSizes.small,
+  },
+});
