@@ -14,7 +14,7 @@ export default function Login({navigation}) {
   const onLoginButtonPress = () => {
     navigation.reset({
       index: 0,
-      routes: [{name: 'LookingFor'}],
+      routes: [{name: 'Home'}],
     });
   };
   const onFacebookButtonPress = () => {};
