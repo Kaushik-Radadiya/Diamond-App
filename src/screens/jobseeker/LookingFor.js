@@ -12,7 +12,7 @@ import DropDownModal from '../../component/DropDownModal';
 import CommonDropDown from '../../component/CommonDropDown';
 import CommonRadio from '../../component/CommonRadio';
 
-export default function LookingFor() {
+export default function LookingFor({navigation}) {
   const [dropDownVisible, showHideDropDown] = useState(false);
   const [selectedCategory, setCategory] = useState('Select Category');
   const [selectedColour, setColour] = useState('Select Type');
@@ -65,6 +65,13 @@ export default function LookingFor() {
     }
   };
 
+  onSkip = () => {
+    navigation.reset({
+      index: 0,
+      routes: [{name: 'Home'}],
+    });
+  };
+
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -79,7 +86,9 @@ export default function LookingFor() {
         />
         <View style={styles.topSubContainer}>
           <Text style={styles.titleText}>What are you looking for?</Text>
-          <TouchableOpacity style={styles.skipContainer}>
+          <TouchableOpacity
+            style={styles.skipContainer}
+            onPress={() => onSkip()}>
             <Text style={styles.skipText}>Skip</Text>
           </TouchableOpacity>
         </View>

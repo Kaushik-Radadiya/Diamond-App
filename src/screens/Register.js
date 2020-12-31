@@ -3,9 +3,11 @@ import {View, Text, ImageBackground, StyleSheet} from 'react-native';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import CommonButton from '../component/CommonButton';
 import CommonTextInput from '../component/CommonTextInput';
+import {APPTYPE} from '../utils/Constant';
 import Theme from '../utils/Theme';
 
-export default function Register({navigation}) {
+export default function Register({navigation, route}) {
+  const {apptype} = route.params;
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [companyName, setCompnayName] = useState('');
@@ -55,18 +57,24 @@ export default function Register({navigation}) {
                 placeholder={'Last Name'}
                 onChangeText={(text) => setLastName(text)}
                 returnKeyType={'next'}
-                onSubmitEditing={() => refCompanyName.current.focus()}
+                onSubmitEditing={() =>
+                  apptype == APPTYPE.JOBPROVIDER
+                    ? refCompanyName.current.focus()
+                    : refEmailAddress.current.focus()
+                }
                 width={'47%'}
               />
             </View>
-            <CommonTextInput
-              refs={refCompanyName}
-              icon={'ic_company_name'}
-              placeholder={'Company Name'}
-              onChangeText={(text) => setCompnayName(text)}
-              returnKeyType={'next'}
-              onSubmitEditing={() => refEmailAddress.current.focus()}
-            />
+            {apptype == APPTYPE.JOBPROVIDER ? (
+              <CommonTextInput
+                refs={refCompanyName}
+                icon={'ic_company_name'}
+                placeholder={'Company Name'}
+                onChangeText={(text) => setCompnayName(text)}
+                returnKeyType={'next'}
+                onSubmitEditing={() => refEmailAddress.current.focus()}
+              />
+            ) : null}
             <CommonTextInput
               refs={refEmailAddress}
               icon={'ic_mail'}

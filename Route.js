@@ -16,6 +16,10 @@ import JobSaved from './src/screens/jobseeker/JobSaved';
 import Profile from './src/screens/jobseeker/Profile';
 import Setting from './src/screens/jobseeker/Setting';
 import FreelanceJobs from './src/screens/jobseeker/FreelanceJobs';
+import Dashbord from './src/screens/jobprovider/Dashbord';
+import AllJobs from './src/screens/jobprovider/AllJobs';
+import PostedJobs from './src/screens/jobprovider/PostedJobs';
+import ProviderProfile from './src/screens/jobprovider/ProviderProfile';
 
 const Stack = createStackNavigator();
 
@@ -45,6 +49,36 @@ const ProfileStack = () => {
   return (
     <Stack.Navigator headerMode={'none'}>
       <Stack.Screen name="Profile" component={Profile} />
+    </Stack.Navigator>
+  );
+};
+
+const DashbordStack = () => {
+  return (
+    <Stack.Navigator headerMode={'none'}>
+      <Stack.Screen name="Dashbord" component={Dashbord} />
+    </Stack.Navigator>
+  );
+};
+
+const PostedJobsStack = () => {
+  return (
+    <Stack.Navigator headerMode={'none'}>
+      <Stack.Screen name="PostedJobs" component={PostedJobs} />
+    </Stack.Navigator>
+  );
+};
+const AllJobsStack = () => {
+  return (
+    <Stack.Navigator headerMode={'none'}>
+      <Stack.Screen name="AllJobs" component={AllJobs} />
+    </Stack.Navigator>
+  );
+};
+const ProviderProfileStack = () => {
+  return (
+    <Stack.Navigator headerMode={'none'}>
+      <Stack.Screen name="ProviderProfile" component={ProviderProfile} />
     </Stack.Navigator>
   );
 };
@@ -104,6 +138,59 @@ const JobSeekerDashbord = () => {
   );
 };
 
+const JobProviderDashbord = () => {
+  return (
+    <Tab.Navigator
+      screenOptions={({route}) => ({
+        tabBarLabel: ({focused}) => {
+          let labelName;
+          if (route.name === 'Dashbord') {
+            labelName = 'HOME';
+          } else if (route.name === 'PostedJobs') {
+            labelName = 'POSTED JOB';
+          } else if (route.name === 'AllJobs') {
+            labelName = 'ALL JOBS';
+          } else {
+            labelName = 'PROFILE';
+          }
+
+          return focused ? (
+            <Text
+              style={{
+                fontFamily: Theme.fontFamily.PoppinsRegular,
+                fontSize: Theme.fontSizes.mini,
+                color: Theme.colors.theme,
+              }}>
+              {labelName}
+            </Text>
+          ) : null;
+        },
+        tabBarIcon: ({focused, color, size}) => {
+          let iconName;
+
+          if (route.name === 'Dashbord') {
+            iconName = focused ? 'ic_homefill' : 'ic_home';
+          } else if (route.name === 'PostedJobs') {
+            iconName = focused ? 'ic_postedjobfill' : 'ic_postedjob';
+          } else if (route.name === 'AllJobs') {
+            iconName = focused ? 'ic_alljobsfill' : 'ic_alljobs';
+          } else {
+            iconName = focused ? 'ic_profilefill' : 'ic_profile';
+          }
+
+          return (
+            <Image style={{height: 25, width: 25}} source={{uri: iconName}} />
+          );
+        },
+      })}>
+      <Tab.Screen name="Dashbord" component={DashbordStack} />
+      <Tab.Screen name="PostedJobs" component={PostedJobsStack} />
+      <Tab.Screen name="AllJobs" component={AllJobsStack} />
+      <Tab.Screen name="ProviderProfileS" component={ProviderProfileStack} />
+    </Tab.Navigator>
+  );
+};
+
 const Route = () => {
   return (
     <NavigationContainer>
@@ -113,6 +200,7 @@ const Route = () => {
         <Stack.Screen name="Register" component={Register} />
         <Stack.Screen name="LookingFor" component={LookingFor} />
         <Stack.Screen name="Home" component={JobSeekerDashbord} />
+        <Stack.Screen name="Dashbord" component={JobProviderDashbord} />
         <Stack.Screen name="Setting" component={Setting} />
         <Stack.Screen name="FreelanceJobs" component={FreelanceJobs} />
       </Stack.Navigator>

@@ -6,6 +6,7 @@ export default function CommonHeader({...props}) {
     title,
     filterPress,
     isJobAvailable,
+    isJobProvider,
     navigation,
     isBack,
     headerRightButtonPress,
@@ -47,16 +48,18 @@ export default function CommonHeader({...props}) {
               <Image style={styles.headerButton} source={{uri: 'ic_filter'}} />
             </TouchableOpacity>
           ) : null}
-          <TouchableOpacity
-            style={styles.headerButtonContainer}
-            onPress={() => navigation.navigate('FreelanceJobs')}>
-            {isJobAvailable ? <View style={styles.jobBadge}></View> : null}
+          {!isJobProvider ? (
+            <TouchableOpacity
+              style={styles.headerButtonContainer}
+              onPress={() => navigation.navigate('FreelanceJobs')}>
+              {isJobAvailable ? <View style={styles.jobBadge}></View> : null}
 
-            <Image
-              style={styles.headerButton}
-              source={{uri: 'ic_jobproviderfill'}}
-            />
-          </TouchableOpacity>
+              <Image
+                style={styles.headerButton}
+                source={{uri: 'ic_jobproviderfill'}}
+              />
+            </TouchableOpacity>
+          ) : null}
           <TouchableOpacity
             style={styles.headerButtonContainer}
             onPress={() => navigation.navigate('Setting')}>

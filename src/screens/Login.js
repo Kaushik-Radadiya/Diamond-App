@@ -3,20 +3,32 @@ import {View, Text, ImageBackground, StyleSheet} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import CommonButton from '../component/CommonButton';
 import CommonTextInput from '../component/CommonTextInput';
+import {APPTYPE} from '../utils/Constant';
 import Theme from '../utils/Theme';
+import {getData} from '../utils/Utils';
 
-export default function Login({navigation}) {
+export default function Login({navigation, route}) {
+  const {apptype} = route.params;
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const emailAddressInput = useRef(null);
   const passwordInput = useRef(null);
 
   const onLoginButtonPress = () => {
-    navigation.reset({
-      index: 0,
-      routes: [{name: 'Home'}],
-    });
+    console.log('type====', apptype);
+    if (apptype == APPTYPE.JOBPROVIDER) {
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'Dashbord'}],
+      });
+    } else {
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'LookingFor'}],
+      });
+    }
   };
+
   const onFacebookButtonPress = () => {};
   const onGoogleButtonPress = () => {};
 
@@ -94,7 +106,8 @@ export default function Login({navigation}) {
           </View>
           <View style={styles.registerContainer}>
             <Text style={styles.registerText}>Don't have an account?</Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('Register', {apptype})}>
               <Text
                 style={[
                   styles.registerText,

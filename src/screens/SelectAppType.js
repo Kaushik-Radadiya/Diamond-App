@@ -8,14 +8,13 @@ import {
   useWindowDimensions,
 } from 'react-native';
 import CommonButton from '../component/CommonButton';
+import {APPTYPE} from '../utils/Constant';
 import Theme from '../utils/Theme';
+import {storeData} from '../utils/Utils';
 
 export default function SelectAppType({navigation}) {
   const window = useWindowDimensions();
 
-  const JOBSEEKER = 'Job Seeker',
-    JOBPROVIDER = 'Job Provider',
-    SELLER = 'Seller';
   const [isJobSeekerSelected, setJobSeekerSelected] = useState(false);
   const [isJobProviderSelected, setJobProviderSelected] = useState(false);
   const [isSellerSelected, setSellerSelected] = useState(false);
@@ -23,11 +22,11 @@ export default function SelectAppType({navigation}) {
   const commonButtonPress = (item) => {
     console.log('====item====', item);
 
-    if (item == JOBSEEKER) {
+    if (item == APPTYPE.JOBSEEKER) {
       setJobSeekerSelected(true);
       setJobProviderSelected(false);
       setSellerSelected(false);
-    } else if (item == JOBPROVIDER) {
+    } else if (item == APPTYPE.JOBPROVIDER) {
       setJobSeekerSelected(false);
       setJobProviderSelected(true);
       setSellerSelected(false);
@@ -37,7 +36,10 @@ export default function SelectAppType({navigation}) {
       setSellerSelected(true);
     }
 
-    navigation.navigate('Login');
+    if (item != APPTYPE.SELLER) {
+      storeData(APPTYPE.TYPE, item);
+      navigation.navigate('Login', {apptype: item});
+    }
   };
 
   return (
@@ -77,7 +79,7 @@ export default function SelectAppType({navigation}) {
             ]}
             icon={isJobSeekerSelected ? 'ic_jobseekerfill' : 'ic_jobseeker'}
             iconStyle={[styles.buttonIconStyle]}
-            text={JOBSEEKER}
+            text={APPTYPE.JOBSEEKER}
             textStyle={[
               styles.buttonTextStyle,
               {
@@ -101,7 +103,7 @@ export default function SelectAppType({navigation}) {
               isJobProviderSelected ? 'ic_jobproviderfill' : 'ic_jobprovider'
             }
             iconStyle={styles.buttonIconStyle}
-            text={JOBPROVIDER}
+            text={APPTYPE.JOBPROVIDER}
             textStyle={[
               styles.buttonTextStyle,
               {
@@ -123,7 +125,7 @@ export default function SelectAppType({navigation}) {
             ]}
             icon={isSellerSelected ? 'ic_sellerfill' : 'ic_seller'}
             iconStyle={styles.buttonIconStyle}
-            text={SELLER}
+            text={APPTYPE.SELLER}
             textStyle={[
               styles.buttonTextStyle,
               {
