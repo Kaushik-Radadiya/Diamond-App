@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">DiamondApp</string>
+    <string name="facebook_app_id">3509932299128719</string>
+    <string name="server_client_id">7347435748-r5nl1eduvqpdo4itna9khffnisndrf15.apps.googleusercontent.com</string>
 </resources>

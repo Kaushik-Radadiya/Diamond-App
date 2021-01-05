@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 10,
     alignItems: 'center',
-    paddingHorizontal: 20,
+    paddingHorizontal: 15,
     marginTop: 20,
   },
   buttonIconStyle: {height: 30, width: 30},

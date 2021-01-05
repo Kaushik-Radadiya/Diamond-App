@@ -16,28 +16,30 @@
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* DiamondAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* DiamondAppTests.m */; };
+		32ABD29E71EA4448899229BA /* Poppins-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BF554DB2907749259C0B10DC /* Poppins-Medium.ttf */; };
+		3A321FA2A1C14E91BF65BA0F /* Poppins-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2A0D132E9825448695C9EB4F /* Poppins-Light.ttf */; };
+		3AEAF27AC9454AFEAEC3B396 /* Poppins-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B6B058484D89498EA31B1491 /* Poppins-Bold.ttf */; };
+		4D12CB955E9A43EDA30A7EC8 /* Poppins-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DD0998A970214FA39A8AFFE1 /* Poppins-SemiBoldItalic.ttf */; };
 		59FD9E676A9F9A5E9FF508F0 /* libPods-DiamondApp-DiamondAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F0E9AA8CA1D1F396A208D1D5 /* libPods-DiamondApp-DiamondAppTests.a */; };
+		60FEFFC6664F4054BF6D3231 /* Poppins-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 934FC362EE224CE0B458E1D6 /* Poppins-SemiBold.ttf */; };
+		6921C05F35A445FE89D6018E /* Poppins-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E82FA6B4C25E49B094AC54CD /* Poppins-ExtraBold.ttf */; };
+		6FA8901EECFF4244A367AF04 /* Poppins-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 31B47E7A58584E5BA1B112A5 /* Poppins-Regular.ttf */; };
+		7288AA9A25A46CEF00B4E561 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7288AA9925A46CEF00B4E561 /* GoogleService-Info.plist */; };
+		728D4BE625A376F200A63672 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 728D4BE525A376F200A63672 /* File.swift */; };
 		762779E5494171CCEF06C328 /* libPods-DiamondApp-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FDE350255DFBCFBE11F3CB69 /* libPods-DiamondApp-tvOSTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		BE1DE4D52461BF3A9B6BCEC5 /* libPods-DiamondApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 11EAAC570A925810D789D77C /* libPods-DiamondApp.a */; };
-		B194932608034790AAD68ED2 /* Poppins-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 289C421549024D0098D59AFF /* Poppins-Black.ttf */; };
-		9C059334CFC24FE085649343 /* Poppins-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5AD1F2C3C05C4820949F6802 /* Poppins-BlackItalic.ttf */; };
-		3AEAF27AC9454AFEAEC3B396 /* Poppins-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B6B058484D89498EA31B1491 /* Poppins-Bold.ttf */; };
-		DE423A0D78E24D28A1CE5E54 /* Poppins-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3B89C166874245158DD9D308 /* Poppins-BoldItalic.ttf */; };
-		6921C05F35A445FE89D6018E /* Poppins-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E82FA6B4C25E49B094AC54CD /* Poppins-ExtraBold.ttf */; };
-		BA48A732112F4EFDAA0EE915 /* Poppins-ExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B8A38E8876E648C9B7215738 /* Poppins-ExtraBoldItalic.ttf */; };
-		D4067FBE0EB1430691A6A9FA /* Poppins-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 08395B219E06414EA393CC5E /* Poppins-ExtraLight.ttf */; };
-		E386CF75BF2B462387FA6141 /* Poppins-ExtraLightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 553FFD5174884F2182108529 /* Poppins-ExtraLightItalic.ttf */; };
-		B9907399622F45E39590FEA4 /* Poppins-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8F0D6D9B610F4AF7B889478F /* Poppins-Italic.ttf */; };
-		3A321FA2A1C14E91BF65BA0F /* Poppins-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2A0D132E9825448695C9EB4F /* Poppins-Light.ttf */; };
-		E950184BBEDA4BEEB9E4C903 /* Poppins-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 85155EC7E52942FBB1967AA5 /* Poppins-LightItalic.ttf */; };
-		32ABD29E71EA4448899229BA /* Poppins-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BF554DB2907749259C0B10DC /* Poppins-Medium.ttf */; };
-		F938F90F2D5E490EB8DE2496 /* Poppins-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6662F85C6B404FA4BB1E98CA /* Poppins-MediumItalic.ttf */; };
-		6FA8901EECFF4244A367AF04 /* Poppins-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 31B47E7A58584E5BA1B112A5 /* Poppins-Regular.ttf */; };
-		60FEFFC6664F4054BF6D3231 /* Poppins-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 934FC362EE224CE0B458E1D6 /* Poppins-SemiBold.ttf */; };
-		4D12CB955E9A43EDA30A7EC8 /* Poppins-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DD0998A970214FA39A8AFFE1 /* Poppins-SemiBoldItalic.ttf */; };
 		8B78885F6F454C2BACD4BBB9 /* Poppins-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 725906C91F754287BAF26F7A /* Poppins-Thin.ttf */; };
+		9C059334CFC24FE085649343 /* Poppins-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5AD1F2C3C05C4820949F6802 /* Poppins-BlackItalic.ttf */; };
+		B194932608034790AAD68ED2 /* Poppins-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 289C421549024D0098D59AFF /* Poppins-Black.ttf */; };
+		B9907399622F45E39590FEA4 /* Poppins-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8F0D6D9B610F4AF7B889478F /* Poppins-Italic.ttf */; };
+		BA48A732112F4EFDAA0EE915 /* Poppins-ExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B8A38E8876E648C9B7215738 /* Poppins-ExtraBoldItalic.ttf */; };
+		BE1DE4D52461BF3A9B6BCEC5 /* libPods-DiamondApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 11EAAC570A925810D789D77C /* libPods-DiamondApp.a */; };
+		D4067FBE0EB1430691A6A9FA /* Poppins-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 08395B219E06414EA393CC5E /* Poppins-ExtraLight.ttf */; };
 		D680A2A59FE940C5B924D084 /* Poppins-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FC95FAAE38E548868E14EF8A /* Poppins-ThinItalic.ttf */; };
+		DE423A0D78E24D28A1CE5E54 /* Poppins-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3B89C166874245158DD9D308 /* Poppins-BoldItalic.ttf */; };
+		E386CF75BF2B462387FA6141 /* Poppins-ExtraLightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 553FFD5174884F2182108529 /* Poppins-ExtraLightItalic.ttf */; };
+		E950184BBEDA4BEEB9E4C903 /* Poppins-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 85155EC7E52942FBB1967AA5 /* Poppins-LightItalic.ttf */; };
+		F938F90F2D5E490EB8DE2496 /* Poppins-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6662F85C6B404FA4BB1E98CA /* Poppins-MediumItalic.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +64,7 @@
 		00E356EE1AD99517003FC87E /* DiamondAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DiamondAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* DiamondAppTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DiamondAppTests.m; sourceTree = "<group>"; };
+		08395B219E06414EA393CC5E /* Poppins-ExtraLight.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-ExtraLight.ttf"; path = "../assets/fonts/Poppins-ExtraLight.ttf"; sourceTree = "<group>"; };
 		0878F80B86F3D2B3D7B96912 /* Pods-DiamondApp-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DiamondApp-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-DiamondApp-tvOSTests/Pods-DiamondApp-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		11EAAC570A925810D789D77C /* libPods-DiamondApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-DiamondApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07F961A680F5B00A75B9A /* DiamondApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DiamondApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -70,39 +73,41 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = DiamondApp/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = DiamondApp/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = DiamondApp/main.m; sourceTree = "<group>"; };
+		289C421549024D0098D59AFF /* Poppins-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Black.ttf"; path = "../assets/fonts/Poppins-Black.ttf"; sourceTree = "<group>"; };
+		2A0D132E9825448695C9EB4F /* Poppins-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Light.ttf"; path = "../assets/fonts/Poppins-Light.ttf"; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* DiamondApp-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "DiamondApp-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* DiamondApp-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "DiamondApp-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		31B47E7A58584E5BA1B112A5 /* Poppins-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Regular.ttf"; path = "../assets/fonts/Poppins-Regular.ttf"; sourceTree = "<group>"; };
 		31C610EECEAAEBBA217BAB43 /* Pods-DiamondApp-DiamondAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DiamondApp-DiamondAppTests.debug.xcconfig"; path = "Target Support Files/Pods-DiamondApp-DiamondAppTests/Pods-DiamondApp-DiamondAppTests.debug.xcconfig"; sourceTree = "<group>"; };
 		34F8C3CEAF8DEEADF8DB9C36 /* Pods-DiamondApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DiamondApp.release.xcconfig"; path = "Target Support Files/Pods-DiamondApp/Pods-DiamondApp.release.xcconfig"; sourceTree = "<group>"; };
 		38F295B0855AC3FA2A0602FC /* libPods-DiamondApp-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-DiamondApp-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3B89C166874245158DD9D308 /* Poppins-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-BoldItalic.ttf"; path = "../assets/fonts/Poppins-BoldItalic.ttf"; sourceTree = "<group>"; };
+		553FFD5174884F2182108529 /* Poppins-ExtraLightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-ExtraLightItalic.ttf"; path = "../assets/fonts/Poppins-ExtraLightItalic.ttf"; sourceTree = "<group>"; };
+		5AD1F2C3C05C4820949F6802 /* Poppins-BlackItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-BlackItalic.ttf"; path = "../assets/fonts/Poppins-BlackItalic.ttf"; sourceTree = "<group>"; };
+		6662F85C6B404FA4BB1E98CA /* Poppins-MediumItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-MediumItalic.ttf"; path = "../assets/fonts/Poppins-MediumItalic.ttf"; sourceTree = "<group>"; };
+		725906C91F754287BAF26F7A /* Poppins-Thin.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Thin.ttf"; path = "../assets/fonts/Poppins-Thin.ttf"; sourceTree = "<group>"; };
+		7288AA9925A46CEF00B4E561 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		728D4BE425A376F200A63672 /* DiamondApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DiamondApp-Bridging-Header.h"; sourceTree = "<group>"; };
+		728D4BE525A376F200A63672 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = DiamondApp/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		85155EC7E52942FBB1967AA5 /* Poppins-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-LightItalic.ttf"; path = "../assets/fonts/Poppins-LightItalic.ttf"; sourceTree = "<group>"; };
+		8F0D6D9B610F4AF7B889478F /* Poppins-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Italic.ttf"; path = "../assets/fonts/Poppins-Italic.ttf"; sourceTree = "<group>"; };
+		934FC362EE224CE0B458E1D6 /* Poppins-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-SemiBold.ttf"; path = "../assets/fonts/Poppins-SemiBold.ttf"; sourceTree = "<group>"; };
 		A53860994487EFCF2F2CE69A /* Pods-DiamondApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DiamondApp.debug.xcconfig"; path = "Target Support Files/Pods-DiamondApp/Pods-DiamondApp.debug.xcconfig"; sourceTree = "<group>"; };
+		B6B058484D89498EA31B1491 /* Poppins-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Bold.ttf"; path = "../assets/fonts/Poppins-Bold.ttf"; sourceTree = "<group>"; };
+		B8A38E8876E648C9B7215738 /* Poppins-ExtraBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-ExtraBoldItalic.ttf"; path = "../assets/fonts/Poppins-ExtraBoldItalic.ttf"; sourceTree = "<group>"; };
 		BADA3DB26165A7C096BAC3D8 /* Pods-DiamondApp-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DiamondApp-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-DiamondApp-tvOS/Pods-DiamondApp-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
+		BF554DB2907749259C0B10DC /* Poppins-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Medium.ttf"; path = "../assets/fonts/Poppins-Medium.ttf"; sourceTree = "<group>"; };
+		DD0998A970214FA39A8AFFE1 /* Poppins-SemiBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-SemiBoldItalic.ttf"; path = "../assets/fonts/Poppins-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
+		E82FA6B4C25E49B094AC54CD /* Poppins-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-ExtraBold.ttf"; path = "../assets/fonts/Poppins-ExtraBold.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		EE431B152E28E5FB8BF4F6B0 /* Pods-DiamondApp-DiamondAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DiamondApp-DiamondAppTests.release.xcconfig"; path = "Target Support Files/Pods-DiamondApp-DiamondAppTests/Pods-DiamondApp-DiamondAppTests.release.xcconfig"; sourceTree = "<group>"; };
 		EE9B9AED59B0E86856DB6BAD /* Pods-DiamondApp-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DiamondApp-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-DiamondApp-tvOSTests/Pods-DiamondApp-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		F0E9AA8CA1D1F396A208D1D5 /* libPods-DiamondApp-DiamondAppTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-DiamondApp-DiamondAppTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2EF9577539845C55A5FD883 /* Pods-DiamondApp-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DiamondApp-tvOS.release.xcconfig"; path = "Target Support Files/Pods-DiamondApp-tvOS/Pods-DiamondApp-tvOS.release.xcconfig"; sourceTree = "<group>"; };
+		FC95FAAE38E548868E14EF8A /* Poppins-ThinItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-ThinItalic.ttf"; path = "../assets/fonts/Poppins-ThinItalic.ttf"; sourceTree = "<group>"; };
 		FDE350255DFBCFBE11F3CB69 /* libPods-DiamondApp-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-DiamondApp-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		289C421549024D0098D59AFF /* Poppins-Black.ttf */ = {isa = PBXFileReference; name = "Poppins-Black.ttf"; path = "../assets/fonts/Poppins-Black.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		5AD1F2C3C05C4820949F6802 /* Poppins-BlackItalic.ttf */ = {isa = PBXFileReference; name = "Poppins-BlackItalic.ttf"; path = "../assets/fonts/Poppins-BlackItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		B6B058484D89498EA31B1491 /* Poppins-Bold.ttf */ = {isa = PBXFileReference; name = "Poppins-Bold.ttf"; path = "../assets/fonts/Poppins-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		3B89C166874245158DD9D308 /* Poppins-BoldItalic.ttf */ = {isa = PBXFileReference; name = "Poppins-BoldItalic.ttf"; path = "../assets/fonts/Poppins-BoldItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		E82FA6B4C25E49B094AC54CD /* Poppins-ExtraBold.ttf */ = {isa = PBXFileReference; name = "Poppins-ExtraBold.ttf"; path = "../assets/fonts/Poppins-ExtraBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		B8A38E8876E648C9B7215738 /* Poppins-ExtraBoldItalic.ttf */ = {isa = PBXFileReference; name = "Poppins-ExtraBoldItalic.ttf"; path = "../assets/fonts/Poppins-ExtraBoldItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		08395B219E06414EA393CC5E /* Poppins-ExtraLight.ttf */ = {isa = PBXFileReference; name = "Poppins-ExtraLight.ttf"; path = "../assets/fonts/Poppins-ExtraLight.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		553FFD5174884F2182108529 /* Poppins-ExtraLightItalic.ttf */ = {isa = PBXFileReference; name = "Poppins-ExtraLightItalic.ttf"; path = "../assets/fonts/Poppins-ExtraLightItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		8F0D6D9B610F4AF7B889478F /* Poppins-Italic.ttf */ = {isa = PBXFileReference; name = "Poppins-Italic.ttf"; path = "../assets/fonts/Poppins-Italic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		2A0D132E9825448695C9EB4F /* Poppins-Light.ttf */ = {isa = PBXFileReference; name = "Poppins-Light.ttf"; path = "../assets/fonts/Poppins-Light.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		85155EC7E52942FBB1967AA5 /* Poppins-LightItalic.ttf */ = {isa = PBXFileReference; name = "Poppins-LightItalic.ttf"; path = "../assets/fonts/Poppins-LightItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		BF554DB2907749259C0B10DC /* Poppins-Medium.ttf */ = {isa = PBXFileReference; name = "Poppins-Medium.ttf"; path = "../assets/fonts/Poppins-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		6662F85C6B404FA4BB1E98CA /* Poppins-MediumItalic.ttf */ = {isa = PBXFileReference; name = "Poppins-MediumItalic.ttf"; path = "../assets/fonts/Poppins-MediumItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		31B47E7A58584E5BA1B112A5 /* Poppins-Regular.ttf */ = {isa = PBXFileReference; name = "Poppins-Regular.ttf"; path = "../assets/fonts/Poppins-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		934FC362EE224CE0B458E1D6 /* Poppins-SemiBold.ttf */ = {isa = PBXFileReference; name = "Poppins-SemiBold.ttf"; path = "../assets/fonts/Poppins-SemiBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		DD0998A970214FA39A8AFFE1 /* Poppins-SemiBoldItalic.ttf */ = {isa = PBXFileReference; name = "Poppins-SemiBoldItalic.ttf"; path = "../assets/fonts/Poppins-SemiBoldItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		725906C91F754287BAF26F7A /* Poppins-Thin.ttf */ = {isa = PBXFileReference; name = "Poppins-Thin.ttf"; path = "../assets/fonts/Poppins-Thin.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		FC95FAAE38E548868E14EF8A /* Poppins-ThinItalic.ttf */ = {isa = PBXFileReference; name = "Poppins-ThinItalic.ttf"; path = "../assets/fonts/Poppins-ThinItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -161,13 +166,16 @@
 		13B07FAE1A68108700A75B9A /* DiamondApp */ = {
 			isa = PBXGroup;
 			children = (
+				7288AA9925A46CEF00B4E561 /* GoogleService-Info.plist */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
+				728D4BE525A376F200A63672 /* File.swift */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				728D4BE425A376F200A63672 /* DiamondApp-Bridging-Header.h */,
 			);
 			name = DiamondApp;
 			sourceTree = "<group>";
@@ -185,6 +193,31 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		607EF5EA23DB40158012A6EA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				289C421549024D0098D59AFF /* Poppins-Black.ttf */,
+				5AD1F2C3C05C4820949F6802 /* Poppins-BlackItalic.ttf */,
+				B6B058484D89498EA31B1491 /* Poppins-Bold.ttf */,
+				3B89C166874245158DD9D308 /* Poppins-BoldItalic.ttf */,
+				E82FA6B4C25E49B094AC54CD /* Poppins-ExtraBold.ttf */,
+				B8A38E8876E648C9B7215738 /* Poppins-ExtraBoldItalic.ttf */,
+				08395B219E06414EA393CC5E /* Poppins-ExtraLight.ttf */,
+				553FFD5174884F2182108529 /* Poppins-ExtraLightItalic.ttf */,
+				8F0D6D9B610F4AF7B889478F /* Poppins-Italic.ttf */,
+				2A0D132E9825448695C9EB4F /* Poppins-Light.ttf */,
+				85155EC7E52942FBB1967AA5 /* Poppins-LightItalic.ttf */,
+				BF554DB2907749259C0B10DC /* Poppins-Medium.ttf */,
+				6662F85C6B404FA4BB1E98CA /* Poppins-MediumItalic.ttf */,
+				31B47E7A58584E5BA1B112A5 /* Poppins-Regular.ttf */,
+				934FC362EE224CE0B458E1D6 /* Poppins-SemiBold.ttf */,
+				DD0998A970214FA39A8AFFE1 /* Poppins-SemiBoldItalic.ttf */,
+				725906C91F754287BAF26F7A /* Poppins-Thin.ttf */,
+				FC95FAAE38E548868E14EF8A /* Poppins-ThinItalic.ttf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
 		6BD995323705AFA0BFF248C3 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -197,7 +230,6 @@
 				0878F80B86F3D2B3D7B96912 /* Pods-DiamondApp-tvOSTests.debug.xcconfig */,
 				EE9B9AED59B0E86856DB6BAD /* Pods-DiamondApp-tvOSTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -234,32 +266,6 @@
 			);
 			name = Products;
 			sourceTree = "<group>";
-		};
-		607EF5EA23DB40158012A6EA /* Resources */ = {
-			isa = "PBXGroup";
-			children = (
-				289C421549024D0098D59AFF /* Poppins-Black.ttf */,
-				5AD1F2C3C05C4820949F6802 /* Poppins-BlackItalic.ttf */,
-				B6B058484D89498EA31B1491 /* Poppins-Bold.ttf */,
-				3B89C166874245158DD9D308 /* Poppins-BoldItalic.ttf */,
-				E82FA6B4C25E49B094AC54CD /* Poppins-ExtraBold.ttf */,
-				B8A38E8876E648C9B7215738 /* Poppins-ExtraBoldItalic.ttf */,
-				08395B219E06414EA393CC5E /* Poppins-ExtraLight.ttf */,
-				553FFD5174884F2182108529 /* Poppins-ExtraLightItalic.ttf */,
-				8F0D6D9B610F4AF7B889478F /* Poppins-Italic.ttf */,
-				2A0D132E9825448695C9EB4F /* Poppins-Light.ttf */,
-				85155EC7E52942FBB1967AA5 /* Poppins-LightItalic.ttf */,
-				BF554DB2907749259C0B10DC /* Poppins-Medium.ttf */,
-				6662F85C6B404FA4BB1E98CA /* Poppins-MediumItalic.ttf */,
-				31B47E7A58584E5BA1B112A5 /* Poppins-Regular.ttf */,
-				934FC362EE224CE0B458E1D6 /* Poppins-SemiBold.ttf */,
-				DD0998A970214FA39A8AFFE1 /* Poppins-SemiBoldItalic.ttf */,
-				725906C91F754287BAF26F7A /* Poppins-Thin.ttf */,
-				FC95FAAE38E548868E14EF8A /* Poppins-ThinItalic.ttf */,
-			);
-			name = Resources;
-			sourceTree = "<group>";
-			path = "";
 		};
 /* End PBXGroup section */
 
@@ -357,7 +363,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						LastSwiftMigration = 1120;
+						LastSwiftMigration = 1200;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -423,6 +429,7 @@
 				4D12CB955E9A43EDA30A7EC8 /* Poppins-SemiBoldItalic.ttf in Resources */,
 				8B78885F6F454C2BACD4BBB9 /* Poppins-Thin.ttf in Resources */,
 				D680A2A59FE940C5B924D084 /* Poppins-ThinItalic.ttf in Resources */,
+				7288AA9A25A46CEF00B4E561 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -465,10 +472,14 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-DiamondApp-DiamondAppTests/Pods-DiamondApp-DiamondAppTests-resources.sh",
+				"${PODS_ROOT}/FBSDKCoreKit/FacebookSDKStrings.bundle",
+				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/AccessibilityResources.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FacebookSDKStrings.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AccessibilityResources.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -497,10 +508,14 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-DiamondApp/Pods-DiamondApp-resources.sh",
+				"${PODS_ROOT}/FBSDKCoreKit/FacebookSDKStrings.bundle",
+				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/AccessibilityResources.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FacebookSDKStrings.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AccessibilityResources.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -650,6 +665,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				728D4BE625A376F200A63672 /* File.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -691,6 +707,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 31C610EECEAAEBBA217BAB43 /* Pods-DiamondApp-DiamondAppTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -714,6 +731,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = EE431B152E28E5FB8BF4F6B0 /* Pods-DiamondApp-DiamondAppTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = DiamondAppTests/Info.plist;
@@ -747,6 +765,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = DiamondApp;
+				SWIFT_OBJC_BRIDGING_HEADER = "DiamondApp-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -769,6 +788,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = DiamondApp;
+				SWIFT_OBJC_BRIDGING_HEADER = "DiamondApp-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

@@ -1,11 +1,24 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {View, Text, ImageBackground, StyleSheet} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import CommonButton from '../component/CommonButton';
 import CommonTextInput from '../component/CommonTextInput';
+import APIKit from '../utils/APIKit';
 import {APPTYPE} from '../utils/Constant';
 import Theme from '../utils/Theme';
-import {getData} from '../utils/Utils';
+import {API_LOGIN} from '../utils/Url';
+import {useDispatch} from 'react-redux';
+import {
+  AccessToken,
+  GraphRequest,
+  GraphRequestManager,
+  LoginManager,
+} from 'react-native-fbsdk';
+import {
+  GoogleSignin,
+  GoogleSigninButton,
+  statusCodes,
+} from '@react-native-community/google-signin';
 
 export default function Login({navigation, route}) {
   const {apptype} = route.params;
@@ -13,24 +26,109 @@ export default function Login({navigation, route}) {
   const [password, setPassword] = useState('');
   const emailAddressInput = useRef(null);
   const passwordInput = useRef(null);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    console.log('=====logout=====');
+    LoginManager.logOut();
+    GoogleSignin.configure();
+  }, []);
+
+  // signOut = async () => {
+  //   try {
+  //     await GoogleSignin.revokeAccess();
+  //     await GoogleSignin.signOut();
+  //     setloggedIn(false);
+  //     setuserInfo([]);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+
+  const getInfoFromToken = (token) => {
+    const PROFILE_REQUEST_PARAMS = {
+      fields: {
+        string: 'id,name,first_name,last_name,email',
+      },
+    };
+    const profileRequest = new GraphRequest(
+      '/me',
+      {token, parameters: PROFILE_REQUEST_PARAMS},
+      (error, user) => {
+        if (error) {
+          console.log('login info has error: ' + error);
+        } else {
+          console.log('result:', user);
+        }
+      },
+    );
+    new GraphRequestManager().addRequest(profileRequest).start();
+  };
 
   const onLoginButtonPress = () => {
     console.log('type====', apptype);
-    if (apptype == APPTYPE.JOBPROVIDER) {
-      navigation.reset({
-        index: 0,
-        routes: [{name: 'Dashbord'}],
+
+    APIKit.post(API_LOGIN, {
+      email: 'eve.holt@reqres.in',
+      password: 'cityslicka',
+    })
+      .then(function (response) {
+        console.log('======', response);
+
+        dispatch({type: 'Login', payload: response});
+
+        if (apptype == APPTYPE.JOBPROVIDER) {
+          navigation.reset({
+            index: 0,
+            routes: [{name: 'Dashbord'}],
+          });
+        } else {
+          navigation.reset({
+            index: 0,
+            routes: [{name: 'LookingFor'}],
+          });
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
       });
-    } else {
-      navigation.reset({
-        index: 0,
-        routes: [{name: 'LookingFor'}],
-      });
-    }
   };
 
-  const onFacebookButtonPress = () => {};
-  const onGoogleButtonPress = () => {};
+  const onFacebookButtonPress = () => {
+    LoginManager.logInWithPermissions(['public_profile', 'email']).then(
+      (login) => {
+        if (login.isCancelled) {
+          console.log('Login cancelled');
+        } else {
+          AccessToken.getCurrentAccessToken().then((data) => {
+            const accessToken = data.accessToken.toString();
+            getInfoFromToken(accessToken);
+          });
+        }
+      },
+      (error) => {
+        console.log('Login fail with error: ' + error);
+      },
+    );
+  };
+  const onGoogleButtonPress = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      console.log('==========+>', userInfo);
+      this.props.navigation.navigate('Home', userInfo.user);
+    } catch (error) {
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        // user cancelled the login flow
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        // operation (f.e. sign in) is in progress already
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        // play services not available or outdated
+      } else {
+        // some other error happened
+      }
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -153,7 +251,7 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 10,
     alignItems: 'center',
-    paddingHorizontal: 20,
+    paddingHorizontal: 15,
     marginVertical: 5,
   },
   buttonIconStyle: {height: 30, width: 30},

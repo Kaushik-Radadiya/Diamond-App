@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "7347435748",
+    "project_id": "diamondapp-92a17",
+    "storage_bucket": "diamondapp-92a17.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:7347435748:android:654c3ca8d224d6a5da54f1",
+        "android_client_info": {
+          "package_name": "com.diamondapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "7347435748-ijqckrfn39jimnhn64j5sbrmauvfr37c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.diamondapp",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "7347435748-45ln0qtaim0kcutr0ukpgbdgcd9eudnk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDsZyascRSTQV3i-uZH_9sc09Nfg6DyBvE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "7347435748-45ln0qtaim0kcutr0ukpgbdgcd9eudnk.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "7347435748-n1eg719b07qob0t45mkrn4uelmdte8dk.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.DiamondApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
