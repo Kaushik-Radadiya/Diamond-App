@@ -3,8 +3,8 @@ import {View, Text, ImageBackground, StyleSheet} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import CommonButton from '../component/CommonButton';
 import CommonTextInput from '../component/CommonTextInput';
-import APIKit from '../utils/APIKit';
-import {APPTYPE} from '../utils/Constant';
+import APIKit, {setClientToken} from '../utils/APIKit';
+import {API_RESPONSE_STATUS, APPTYPE} from '../utils/Constant';
 import Theme from '../utils/Theme';
 import {API_LOGIN} from '../utils/Url';
 import {useDispatch} from 'react-redux';
@@ -19,18 +19,22 @@ import {
   GoogleSigninButton,
   statusCodes,
 } from '@react-native-community/google-signin';
+import Toast from '../component/Toast';
+import Loader from '../component/Loader';
 
 export default function Login({navigation, route}) {
   const {apptype} = route.params;
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('123@admin.com');
+  const [password, setPassword] = useState('2');
+  const [loading, setLoader] = useState(false);
   const emailAddressInput = useRef(null);
   const passwordInput = useRef(null);
+  const toast = useRef(null);
   const dispatch = useDispatch();
 
   useEffect(() => {
     console.log('=====logout=====');
-    LoginManager.logOut();
+    // LoginManager.logOut();
     GoogleSignin.configure();
   }, []);
 
@@ -68,28 +72,42 @@ export default function Login({navigation, route}) {
   const onLoginButtonPress = () => {
     console.log('type====', apptype);
 
+    setLoader(true);
     APIKit.post(API_LOGIN, {
-      email: 'eve.holt@reqres.in',
-      password: 'cityslicka',
+      email: email,
+      password: password,
     })
       .then(function (response) {
-        console.log('======', response);
+        console.log('======', response.data);
 
-        dispatch({type: 'Login', payload: response});
-
-        if (apptype == APPTYPE.JOBPROVIDER) {
-          navigation.reset({
-            index: 0,
-            routes: [{name: 'Dashbord'}],
-          });
+        setLoader(false);
+        if (
+          response &&
+          response.data &&
+          response.data.DATA.length &&
+          response.status == API_RESPONSE_STATUS.STATUS_200
+        ) {
+          dispatch({type: 'Login', payload: response});
+          setClientToken(response.data.DATA.token);
+          if (apptype == APPTYPE.JOBPROVIDER) {
+            navigation.reset({
+              index: 0,
+              routes: [{name: 'Dashbord'}],
+            });
+          } else {
+            navigation.reset({
+              index: 0,
+              routes: [{name: 'LookingFor'}],
+            });
+          }
         } else {
-          navigation.reset({
-            index: 0,
-            routes: [{name: 'LookingFor'}],
-          });
+          console.log('====response.data.MESSAGE===', response.data.MESSAGE);
+          console.log('=====toast', toast);
+          toast.current.show(response.data.MESSAGE);
         }
       })
       .catch(function (error) {
+        setLoader(false);
         console.log(error);
       });
   };
@@ -132,6 +150,8 @@ export default function Login({navigation, route}) {
 
   return (
     <View style={styles.container}>
+      <Toast ref={toast} duration={5000} />
+      <Loader loading={loading} />
       <ImageBackground
         resizeMode={'stretch'}
         source={{uri: 'bg'}}

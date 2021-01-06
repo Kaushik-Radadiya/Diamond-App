@@ -28,6 +28,8 @@ export default Theme = {
     blackBg: '#d4d3d9',
     whiteText: '#ffffff',
     LightBlack: '#1B1E23',
+    success: '#22c93d',
+    error: '#e63729E5',
   },
   fontFamily: {
     PoppinsBlack: 'Poppins-Black',

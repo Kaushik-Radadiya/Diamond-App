@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create axios client, pre-configured with baseURL
 let APIKit = axios.create({
-  baseURL: 'https://reqres.in/api/',
+  baseURL: 'http://127.0.0.1:8000/api/',
   timeout: 10000,
   headers: {'Content-Type': 'application/json', Accept: "'application/json'"},
 });

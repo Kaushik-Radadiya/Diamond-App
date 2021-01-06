@@ -5,3 +5,7 @@ export const APPTYPE = {
   SELLER: 'Seller',
   TYPE: 'Type',
 };
+
+export const API_RESPONSE_STATUS = {
+  STATUS_200: '200',
+};
