@@ -18,7 +18,7 @@ export default Theme = {
   colors: {
     theme: '#4d43f0',
     categoryBg: '#f1f1fd',
-    itemBg: '#f8f8fe',
+    itemBg: '#f9f8fe',
     border: '#d6d6d6',
     greenText: '#009b31',
     greenBg: '#dbebe5',
@@ -30,6 +30,7 @@ export default Theme = {
     LightBlack: '#1B1E23',
     success: '#22c93d',
     error: '#e63729E5',
+    profileBg: '#A39FF6',
   },
   fontFamily: {
     PoppinsBlack: 'Poppins-Black',

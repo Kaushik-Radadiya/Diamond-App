@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -9,10 +9,38 @@ import {
 } from 'react-native';
 import Theme from '../../utils/Theme';
 import CommonHeader from '../../component/CommonHeader';
+import APIKit from '../../utils/APIKit';
+import {API_GET_JOB_PROVIDER_DATA} from '../../utils/Url';
+import Loader from '../../component/Loader';
+import {API_RESPONSE_STATUS} from '../../utils/Constant';
 
 export default function Dashboard({navigation}) {
   const onFilterPress = () => {
     console.log('===onFilterPress==');
+  };
+
+  const [jobProviderData, setProviderData] = useState(null);
+  const [loading, setLoader] = useState(false);
+
+  useEffect(() => {
+    getProviderData();
+  }, []);
+
+  getProviderData = () => {
+    setLoader(true);
+    APIKit.post(API_GET_JOB_PROVIDER_DATA)
+      .then(function (response) {
+        console.log('===JobProviderData===', response.data);
+        if (response.status == API_RESPONSE_STATUS.STATUS_200) {
+          const data = response.data.DATA.data;
+          setProviderData(data);
+        }
+        setLoader(false);
+      })
+      .catch(function (error) {
+        setLoader(false);
+        console.log(error);
+      });
   };
 
   const renderCard = (width, iconName, title, count, onButtonPress) => {
@@ -49,6 +77,7 @@ export default function Dashboard({navigation}) {
       resizeMode={'stretch'}
       source={{uri: 'bg'}}
       style={{flex: 1}}>
+      <Loader loading={loading} />
       <CommonHeader
         filterPress={onFilterPress}
         navigation={navigation}
@@ -74,14 +103,14 @@ export default function Dashboard({navigation}) {
             '48%',
             'ic_postedjobfill',
             'Active Post',
-            '02',
+            jobProviderData ? jobProviderData.active.count : '0',
             onActivePostPress,
           )}
           {renderCard(
             '48%',
             'ic_user',
             `Today's Applied user`,
-            '02',
+            jobProviderData ? jobProviderData.applied.count : '0',
             onActivePostPress,
           )}
         </View>
@@ -89,13 +118,15 @@ export default function Dashboard({navigation}) {
           '100%',
           'ic_total_post',
           `Total Post`,
-          '100',
+          jobProviderData ? jobProviderData.total.count : '0',
           onActivePostPress,
         )}
         <TouchableOpacity
           style={styles.buttonAddPost}
           activeOpacity={1}
-          onPress={() => {}}>
+          onPress={() => {
+            navigation.navigate('JobPost');
+          }}>
           <Image
             style={{height: 28, width: 28}}
             source={{uri: 'ic_add_post'}}

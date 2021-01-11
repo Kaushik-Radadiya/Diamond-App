@@ -14,11 +14,7 @@ import {
   GraphRequestManager,
   LoginManager,
 } from 'react-native-fbsdk';
-import {
-  GoogleSignin,
-  GoogleSigninButton,
-  statusCodes,
-} from '@react-native-community/google-signin';
+import {GoogleSignin, statusCodes} from '@react-native-community/google-signin';
 import Toast from '../component/Toast';
 import Loader from '../component/Loader';
 
@@ -81,12 +77,7 @@ export default function Login({navigation, route}) {
         console.log('======', response.data);
 
         setLoader(false);
-        if (
-          response &&
-          response.data &&
-          response.data.DATA.length &&
-          response.status == API_RESPONSE_STATUS.STATUS_200
-        ) {
+        if (response.status == API_RESPONSE_STATUS.STATUS_200) {
           dispatch({type: 'Login', payload: response});
           setClientToken(response.data.DATA.token);
           if (apptype == APPTYPE.JOBPROVIDER) {
@@ -108,6 +99,7 @@ export default function Login({navigation, route}) {
       })
       .catch(function (error) {
         setLoader(false);
+        toast.current.show('Network Error');
         console.log(error);
       });
   };

@@ -1,17 +1,19 @@
 import React from 'react';
 import {View, Text, ImageBackground} from 'react-native';
 import CommonHeader from '../../component/CommonHeader';
-import Theme from '../../utils/Theme';
 
-export default function Profile({navigation}) {
+export default function JobPost({navigation}) {
+  const onInfoPress = () => {};
   return (
     <ImageBackground
       resizeMode={'stretch'}
       source={{uri: 'bg'}}
       style={{flex: 1}}>
       <CommonHeader
-        title={'Profile'}
-        isJobAvailable={true}
+        isBack={true}
+        title={'Post Job'}
+        headerRightButtonPress={onInfoPress}
+        headerRightIcon={'ic_info'}
         navigation={navigation}
       />
     </ImageBackground>

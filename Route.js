@@ -20,6 +20,8 @@ import Dashbord from './src/screens/jobprovider/Dashbord';
 import AllJobs from './src/screens/jobprovider/AllJobs';
 import PostedJobs from './src/screens/jobprovider/PostedJobs';
 import ProviderProfile from './src/screens/jobprovider/ProviderProfile';
+import JobPost from './src/screens/jobprovider/JobPost';
+import EmployeeApplied from './src/screens/jobprovider/EmployeeApplied';
 
 const Stack = createStackNavigator();
 
@@ -65,6 +67,7 @@ const PostedJobsStack = () => {
   return (
     <Stack.Navigator headerMode={'none'}>
       <Stack.Screen name="PostedJobs" component={PostedJobs} />
+      <Stack.Screen name="EmployeeApplied" component={EmployeeApplied} />
     </Stack.Navigator>
   );
 };
@@ -194,7 +197,7 @@ const JobProviderDashbord = () => {
 const Route = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator headerMode={'none'}>
+      <Stack.Navigator headerMode={'none'} initialRouteName={'Dashbord'}>
         <Stack.Screen name="SelectAppType" component={SelectAppType} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Register" component={Register} />
@@ -203,6 +206,7 @@ const Route = () => {
         <Stack.Screen name="Dashbord" component={JobProviderDashbord} />
         <Stack.Screen name="Setting" component={Setting} />
         <Stack.Screen name="FreelanceJobs" component={FreelanceJobs} />
+        <Stack.Screen name="JobPost" component={JobPost} />
       </Stack.Navigator>
     </NavigationContainer>
   );

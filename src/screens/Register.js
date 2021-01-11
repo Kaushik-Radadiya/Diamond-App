@@ -1,10 +1,17 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {View, Text, ImageBackground, StyleSheet} from 'react-native';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import CommonButton from '../component/CommonButton';
 import CommonTextInput from '../component/CommonTextInput';
 import {APPTYPE} from '../utils/Constant';
 import Theme from '../utils/Theme';
+import {
+  AccessToken,
+  GraphRequest,
+  GraphRequestManager,
+  LoginManager,
+} from 'react-native-fbsdk';
+import {GoogleSignin, statusCodes} from '@react-native-community/google-signin';
 
 export default function Register({navigation, route}) {
   const {apptype} = route.params;
@@ -23,8 +30,68 @@ export default function Register({navigation, route}) {
   const refPassword = useRef(null);
 
   const onRegisterButtonPress = (item) => {};
-  const onFacebookButtonPress = () => {};
-  const onGoogleButtonPress = () => {};
+
+  useEffect(() => {
+    console.log('=====logout=====');
+    // LoginManager.logOut();
+    GoogleSignin.configure();
+  }, []);
+
+  const getInfoFromToken = (token) => {
+    const PROFILE_REQUEST_PARAMS = {
+      fields: {
+        string: 'id,name,first_name,last_name,email',
+      },
+    };
+    const profileRequest = new GraphRequest(
+      '/me',
+      {token, parameters: PROFILE_REQUEST_PARAMS},
+      (error, user) => {
+        if (error) {
+          console.log('login info has error: ' + error);
+        } else {
+          console.log('result:', user);
+        }
+      },
+    );
+    new GraphRequestManager().addRequest(profileRequest).start();
+  };
+
+  const onFacebookButtonPress = () => {
+    LoginManager.logInWithPermissions(['public_profile', 'email']).then(
+      (login) => {
+        if (login.isCancelled) {
+          console.log('Login cancelled');
+        } else {
+          AccessToken.getCurrentAccessToken().then((data) => {
+            const accessToken = data.accessToken.toString();
+            getInfoFromToken(accessToken);
+          });
+        }
+      },
+      (error) => {
+        console.log('Login fail with error: ' + error);
+      },
+    );
+  };
+  const onGoogleButtonPress = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      console.log('==========+>', userInfo);
+      this.props.navigation.navigate('Home', userInfo.user);
+    } catch (error) {
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        // user cancelled the login flow
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        // operation (f.e. sign in) is in progress already
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        // play services not available or outdated
+      } else {
+        // some other error happened
+      }
+    }
+  };
 
   return (
     <View style={styles.container}>
