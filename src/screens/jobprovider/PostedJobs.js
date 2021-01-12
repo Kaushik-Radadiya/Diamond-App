@@ -59,20 +59,22 @@ export default function PostedJobs({navigation}) {
         filterPress={onFilterPress}
       />
       {postedJobsData.length ? (
-        <FlatList
-          data={postedJobsData}
-          extraData={postedJobsData}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({item}) => (
-            <CommonCard
-              data={item}
-              onEmployeeApplied={onEmployeeApplied}
-              onClosedRecruitment={onClosedRecruitment}
-              onDeactivePost={onDeactivePost}
-              OnDeletePost={OnDeletePost}
-            />
-          )}
-        />
+        <View style={{paddingHorizontal: 15}}>
+          <FlatList
+            data={postedJobsData}
+            extraData={postedJobsData}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({item}) => (
+              <CommonCard
+                data={item}
+                onEmployeeApplied={onEmployeeApplied}
+                onClosedRecruitment={onClosedRecruitment}
+                onDeactivePost={onDeactivePost}
+                OnDeletePost={OnDeletePost}
+              />
+            )}
+          />
+        </View>
       ) : (
         <View style={styles.noJobContainer}>
           <Text style={styles.noJobText}>Not yet any job post.</Text>

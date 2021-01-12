@@ -20,6 +20,7 @@ export default function CommonCard({...props}) {
     onClosedRecruitment,
     onDeactivePost,
     OnDeletePost,
+    isJobSeeker,
   } = props;
   const renderImageAndText = (icon, title) => {
     return (
@@ -41,11 +42,107 @@ export default function CommonCard({...props}) {
     );
   };
 
+  const renderStatusView = () => {
+    if (isJobSeeker) {
+      return (
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <View style={styles.statusContainer}>
+            <View
+              style={[
+                styles.statusBackground,
+                {
+                  backgroundColor:
+                    data.status == 'OPEN'
+                      ? Theme.colors.greenBg
+                      : Theme.colors.redBg,
+                },
+              ]}>
+              <Text
+                style={[
+                  styles.status,
+                  {
+                    color:
+                      data.status == 'OPEN'
+                        ? Theme.colors.greenText
+                        : Theme.colors.redText,
+                  },
+                ]}>
+                {data.status}
+              </Text>
+            </View>
+            {data.isUrgent ? (
+              <View
+                style={[
+                  styles.statusBackground,
+                  {
+                    backgroundColor: Theme.colors.redBg,
+                  },
+                ]}>
+                <Text
+                  style={[
+                    styles.status,
+                    {
+                      color: Theme.colors.redText,
+                    },
+                  ]}>
+                  {'URGENT REQUIREMENT'}
+                </Text>
+              </View>
+            ) : null}
+          </View>
+          <TouchableOpacity style={{paddingVertical: 5, flexDirection: 'row'}}>
+            <Text
+              style={{
+                fontFamily: Theme.fontFamily.PoppinsMedium,
+                fontSize: Theme.fontSizes.mini,
+                color: Theme.colors.theme,
+                marginRight: 5,
+              }}>
+              Apply Now
+            </Text>
+            <Image
+              style={{height: 22, width: 22}}
+              source={{uri: 'ic_apply_arow'}}
+            />
+          </TouchableOpacity>
+        </View>
+      );
+    } else {
+      return (
+        <View style={styles.statusContainer}>
+          <Text style={[styles.status, {marginRight: 10}]}>Status</Text>
+
+          <View
+            style={[
+              styles.statusBackground,
+              {
+                backgroundColor:
+                  data.status == 'OPEN'
+                    ? Theme.colors.greenBg
+                    : Theme.colors.blackBg,
+              },
+            ]}>
+            <Text
+              style={[
+                styles.status,
+                {
+                  color:
+                    data.status == 'OPEN'
+                      ? Theme.colors.greenText
+                      : Theme.colors.blackText,
+                },
+              ]}>
+              {data.status}
+            </Text>
+          </View>
+        </View>
+      );
+    }
+  };
+
   return (
     <View
       style={{
-        flex: 1,
-        paddingHorizontal: 15,
         paddingTop: 15,
       }}>
       <View style={styles.cardContainer}>
@@ -69,10 +166,12 @@ export default function CommonCard({...props}) {
             <TouchableOpacity
               style={{paddingVertical: 5}}
               activeOpacity={1}
-              onPress={() => setisMorePopupVisible(!isMorePopupVisible)}>
+              onPress={() =>
+                isJobSeeker ? {} : setisMorePopupVisible(!isMorePopupVisible)
+              }>
               <Image
                 style={{height: 22, width: 22}}
-                source={{uri: 'ic_more'}}
+                source={{uri: isJobSeeker ? 'ic_bookmark' : 'ic_more'}}
               />
             </TouchableOpacity>
           </View>
@@ -80,36 +179,12 @@ export default function CommonCard({...props}) {
           <View style={{paddingVertical: 10}}>
             {renderImageAndText('ic_sm_location', data.location)}
             {renderImageAndText('ic_sm_experiance', data.experiance)}
+            {isJobSeeker
+              ? renderImageAndText('ic_sm_experiance', data.note)
+              : null}
             {renderImageAndText('ic_sm_calendar', data.postedData)}
           </View>
-          {data.status ? (
-            <View style={styles.statusContainer}>
-              <Text style={styles.status}>Status</Text>
-              <View
-                style={[
-                  styles.statusBackground,
-                  {
-                    backgroundColor:
-                      data.status == 'OPEN'
-                        ? Theme.colors.greenBg
-                        : Theme.colors.blackBg,
-                  },
-                ]}>
-                <Text
-                  style={[
-                    styles.status,
-                    {
-                      color:
-                        data.status == 'OPEN'
-                          ? Theme.colors.greenText
-                          : Theme.colors.blackText,
-                    },
-                  ]}>
-                  {data.status}
-                </Text>
-              </View>
-            </View>
-          ) : null}
+          {data.status ? renderStatusView() : null}
         </View>
         {onEmployeeApplied && onClosedRecruitment ? (
           <View style={styles.bottomContainer}>
@@ -243,6 +318,5 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingHorizontal: 10,
     paddingVertical: 3,
-    marginLeft: 10,
   },
 });

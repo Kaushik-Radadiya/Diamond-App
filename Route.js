@@ -197,7 +197,7 @@ const JobProviderDashbord = () => {
 const Route = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator headerMode={'none'} initialRouteName={'Dashbord'}>
+      <Stack.Navigator headerMode={'none'} initialRouteName={'Home'}>
         <Stack.Screen name="SelectAppType" component={SelectAppType} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Register" component={Register} />

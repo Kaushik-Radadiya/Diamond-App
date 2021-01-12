@@ -111,6 +111,7 @@ export default function EmployeeApplied({navigation}) {
                   data={item.skills}
                   extraData={item.skills}
                   horizontal
+                  showsHorizontalScrollIndicator={false}
                   keyExtractor={(item, index) => index.toString()}
                   renderItem={({item, index}) => (
                     <View style={styles.skillContainer}>
