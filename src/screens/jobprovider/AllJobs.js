@@ -60,8 +60,10 @@ export default function AllJobs({navigation}) {
         navigation={navigation}
       />
       {postedJobsData.length ? (
-        <View style={{paddingHorizontal: 15}}>
+        <View style={{paddingHorizontal: 15, flex: 1}}>
           <FlatList
+            contentContainerStyle={{paddingBottom: 10}}
+            showsVerticalScrollIndicator={false}
             data={postedJobsData}
             extraData={postedJobsData}
             keyExtractor={(item, index) => index.toString()}

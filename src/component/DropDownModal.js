@@ -43,6 +43,7 @@ const DropDownModal = ({...props}) => {
           <FlatList
             data={data}
             renderItem={renderItem}
+            showsVerticalScrollIndicator={false}
             keyExtractor={(item, index) => index.toString()}
             extraData={data}
           />

@@ -68,40 +68,52 @@ export default function Login({navigation, route}) {
   const onLoginButtonPress = () => {
     console.log('type====', apptype);
 
-    setLoader(true);
-    APIKit.post(API_LOGIN, {
-      email: email,
-      password: password,
-    })
-      .then(function (response) {
-        console.log('======', response.data);
-
-        setLoader(false);
-        if (response.status == API_RESPONSE_STATUS.STATUS_200) {
-          dispatch({type: 'Login', payload: response});
-          setClientToken(response.data.DATA.token);
-          if (apptype == APPTYPE.JOBPROVIDER) {
-            navigation.reset({
-              index: 0,
-              routes: [{name: 'Dashbord'}],
-            });
-          } else {
-            navigation.reset({
-              index: 0,
-              routes: [{name: 'LookingFor'}],
-            });
-          }
-        } else {
-          console.log('====response.data.MESSAGE===', response.data.MESSAGE);
-          console.log('=====toast', toast);
-          toast.current.show(response.data.MESSAGE);
-        }
-      })
-      .catch(function (error) {
-        setLoader(false);
-        toast.current.show('Network Error');
-        console.log(error);
+    if (apptype == APPTYPE.JOBPROVIDER) {
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'Dashbord'}],
       });
+    } else {
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'LookingFor'}],
+      });
+    }
+
+    // setLoader(true);
+    // APIKit.post(API_LOGIN, {
+    //   email: email,
+    //   password: password,
+    // })
+    //   .then(function (response) {
+    //     console.log('======', response.data);
+
+    //     setLoader(false);
+    //     if (response.status == API_RESPONSE_STATUS.STATUS_200) {
+    //       dispatch({type: 'Login', payload: response});
+    //       setClientToken(response.data.DATA.token);
+    //       if (apptype == APPTYPE.JOBPROVIDER) {
+    //         navigation.reset({
+    //           index: 0,
+    //           routes: [{name: 'Dashbord'}],
+    //         });
+    //       } else {
+    //         navigation.reset({
+    //           index: 0,
+    //           routes: [{name: 'LookingFor'}],
+    //         });
+    //       }
+    //     } else {
+    //       console.log('====response.data.MESSAGE===', response.data.MESSAGE);
+    //       console.log('=====toast', toast);
+    //       toast.current.show(response.data.MESSAGE);
+    //     }
+    //   })
+    //   .catch(function (error) {
+    //     setLoader(false);
+    //     toast.current.show('Network Error');
+    //     console.log(error);
+    //   });
   };
 
   const onFacebookButtonPress = () => {

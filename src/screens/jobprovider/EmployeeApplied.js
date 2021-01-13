@@ -146,6 +146,7 @@ export default function EmployeeApplied({navigation}) {
       />
       <View style={{flex: 1, padding: 15}}>
         <FlatList
+          showsVerticalScrollIndicator={false}
           data={appliedJobData}
           extraData={appliedJobData}
           keyExtractor={(item, index) => index.toString()}

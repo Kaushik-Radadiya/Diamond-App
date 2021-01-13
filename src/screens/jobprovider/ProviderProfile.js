@@ -58,6 +58,7 @@ export default function ProviderProfile({navigation}) {
 
   const onLogout = () => {
     console.log('Logout');
+    navigation.navigate('SelectAppType');
   };
 
   const onEditProfile = () => {
@@ -182,10 +183,11 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
   },
   logoutText: {
-    fontFamily: Theme.fontFamily.PoppinsMedium,
-    fontSize: Theme.fontSizes.small - 1,
+    fontFamily: Theme.fontFamily.PoppinsRegular,
+    fontSize: Theme.fontSizes.small,
     color: Theme.colors.theme,
   },
 });

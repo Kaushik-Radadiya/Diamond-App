@@ -15,7 +15,7 @@ import CommonCard from '../../component/CommonCard';
 
 export default function Home({navigation}) {
   const searchCategory = ['Round-cut', 'Fency', 'Greder', 'Syner'];
-  const [recommendedJobData, setrecommendedJobData] = useState([
+  const [recommendedJobData, setRecommendedJobData] = useState([
     {
       id: 1,
       image: 'ic_user',
@@ -55,7 +55,8 @@ export default function Home({navigation}) {
         isJobAvailable={true}
         navigation={navigation}
       />
-      <View style={styles.titleContainer}>
+
+      <View style={[styles.titleContainer]}>
         <Text style={styles.titleText}>Welcome, John</Text>
         <View style={styles.searchContainer}>
           <TextInput
@@ -68,7 +69,7 @@ export default function Home({navigation}) {
       <View style={{paddingHorizontal: 15, paddingTop: 15, flex: 1}}>
         <Text style={styles.bodyTitle}>Search by Category</Text>
         <FlatList
-          style={{paddingVertical: 15}}
+          contentContainerStyle={{paddingVertical: 10}}
           data={searchCategory}
           extraData={searchCategory}
           horizontal
@@ -116,7 +117,6 @@ const styles = StyleSheet.create({
     marginVertical: 15,
     borderRadius: 10,
     paddingHorizontal: 20,
-    paddingVertical: 10,
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -124,6 +124,8 @@ const styles = StyleSheet.create({
     flex: 8,
     fontFamily: Theme.fontFamily.PoppinsRegular,
     fontSize: Theme.fontSizes.small,
+    marginTop: 5,
+    height: 40,
   },
   bodyTitle: {
     fontFamily: Theme.fontFamily.PoppinsRegular,
@@ -133,14 +135,15 @@ const styles = StyleSheet.create({
     backgroundColor: Theme.colors.categoryBg,
     justifyContent: 'center',
     paddingHorizontal: 20,
-    // paddingVertical: 20,
+    paddingVertical: 15,
     borderRadius: 10,
     marginRight: 10,
-    height: 40,
+    // height: 40,
   },
   categoryText: {
     fontFamily: Theme.fontFamily.PoppinsMedium,
     fontSize: Theme.fontSizes.mini + 1,
     color: Theme.colors.theme,
+    height: 20,
   },
 });

@@ -23,7 +23,7 @@ export default function Dashboard({navigation}) {
   const [loading, setLoader] = useState(false);
 
   useEffect(() => {
-    getProviderData();
+    // getProviderData();
   }, []);
 
   getProviderData = () => {

@@ -76,6 +76,7 @@ export default function CommonCard({...props}) {
                   styles.statusBackground,
                   {
                     backgroundColor: Theme.colors.redBg,
+                    marginLeft: 10,
                   },
                 ]}>
                 <Text
@@ -171,7 +172,13 @@ export default function CommonCard({...props}) {
               }>
               <Image
                 style={{height: 22, width: 22}}
-                source={{uri: isJobSeeker ? 'ic_bookmark' : 'ic_more'}}
+                source={{
+                  uri: isJobSeeker
+                    ? data.isSaved
+                      ? 'ic_bookmarkfill'
+                      : 'ic_bookmark'
+                    : 'ic_more',
+                }}
               />
             </TouchableOpacity>
           </View>
@@ -318,5 +325,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingHorizontal: 10,
     paddingVertical: 3,
+    justifyContent: 'center',
   },
 });

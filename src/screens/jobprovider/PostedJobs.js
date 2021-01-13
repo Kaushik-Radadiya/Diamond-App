@@ -45,6 +45,16 @@ export default function PostedJobs({navigation}) {
       postedData: 'Posted 02-10-2020',
       employApplied: 2,
     },
+    {
+      id: 2,
+      image: 'ic_user',
+      title: 'Syner (Planer)',
+      subTitle: 'Hari Krishna Diamond PVT. LTD.',
+      location: 'Surat, Gujarat',
+      experiance: 'Experiance 1 to 5 years',
+      postedData: 'Posted 02-10-2020',
+      employApplied: 2,
+    },
   ]);
 
   return (
@@ -59,8 +69,10 @@ export default function PostedJobs({navigation}) {
         filterPress={onFilterPress}
       />
       {postedJobsData.length ? (
-        <View style={{paddingHorizontal: 15}}>
+        <View style={{paddingHorizontal: 15, flex: 1}}>
           <FlatList
+            contentContainerStyle={{paddingBottom: 10}}
+            showsVerticalScrollIndicator={false}
             data={postedJobsData}
             extraData={postedJobsData}
             keyExtractor={(item, index) => index.toString()}
