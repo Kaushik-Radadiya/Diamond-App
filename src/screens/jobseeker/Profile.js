@@ -17,7 +17,7 @@ export default function Profile({navigation}) {
   const [skills, setskills] = useState(['Syner', 'Colur Paurity', 'Fency']);
   const renderBodyText = (title, value) => {
     return (
-      <View style={{paddingBottom: 15, flex: 1}}>
+      <View style={{paddingBottom: 5, flex: 1}}>
         {title != '' ? <Text style={styles.subTitle}>{title}</Text> : null}
         <Text
           style={{
@@ -50,7 +50,7 @@ export default function Profile({navigation}) {
       />
       <View style={styles.headerContainer}>
         <View style={styles.profileBgContainer}>
-          <Image style={{height: 40, width: 40}} source={{uri: 'ic_avatar'}} />
+          <Image style={{height: 35, width: 35}} source={{uri: 'ic_avatar'}} />
         </View>
         <Text style={styles.headerTitle}>John Doe</Text>
         <View style={styles.editProfileContiner}>
@@ -133,14 +133,14 @@ const styles = StyleSheet.create({
   headerContainer: {
     backgroundColor: Theme.colors.theme,
     paddingHorizontal: 10,
-    height: 175,
+    height: 150,
     width: '100%',
     alignItems: 'center',
   },
   profileBgContainer: {
-    height: 90,
-    width: 90,
-    borderRadius: 45,
+    height: 80,
+    width: 80,
+    borderRadius: 40,
     borderWidth: 3,
     borderColor: Theme.colors.whiteText,
     backgroundColor: Theme.colors.profileBg,
@@ -217,8 +217,8 @@ const styles = StyleSheet.create({
     backgroundColor: Theme.colors.itemBg,
     borderRadius: 10,
     position: 'absolute',
-    top: 140,
-    height: 65,
+    top: 122,
+    height: 55,
     width: '97%',
     borderWidth: 1,
     borderColor: Theme.colors.border,

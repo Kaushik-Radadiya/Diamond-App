@@ -5,7 +5,7 @@ import Theme from '../utils/Theme';
 export default function CommonDropDown({...props}) {
   const {title, buttonText, buttonIcon, onDropDwonPress} = props;
   return (
-    <View style={{paddingVertical: 10}}>
+    <View style={{paddingVertical: 5}}>
       <Text style={{fontFamily: Theme.fontFamily.PoppinsRegular}}>{title}</Text>
       <TouchableOpacity
         activeOpacity={1}
@@ -23,7 +23,7 @@ export default function CommonDropDown({...props}) {
 
 const styles = StyleSheet.create({
   buttonStyle: {
-    height: 60,
+    height: 55,
     borderRadius: 10,
     alignItems: 'center',
     paddingHorizontal: 15,

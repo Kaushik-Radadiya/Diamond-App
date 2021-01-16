@@ -74,7 +74,7 @@ export default function CommonHeader({...props}) {
 const styles = StyleSheet.create({
   headerContainer: {
     width: '100%',
-    height: 60,
+    height: 55,
     backgroundColor: Theme.colors.theme,
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -99,5 +99,5 @@ const styles = StyleSheet.create({
   headerButtonContainer: {
     padding: 8,
   },
-  headerButton: {height: 28, width: 28},
+  headerButton: {height: 25, width: 25},
 });

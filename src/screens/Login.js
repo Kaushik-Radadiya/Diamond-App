@@ -3,11 +3,11 @@ import {View, Text, ImageBackground, StyleSheet} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import CommonButton from '../component/CommonButton';
 import CommonTextInput from '../component/CommonTextInput';
-import APIKit, {setClientToken} from '../utils/APIKit';
+import APIKit, {postApi, setClientToken} from '../utils/APIKit';
 import {API_RESPONSE_STATUS, APPTYPE} from '../utils/Constant';
 import Theme from '../utils/Theme';
 import {API_LOGIN} from '../utils/Url';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   AccessToken,
   GraphRequest,
@@ -17,22 +17,54 @@ import {
 import {GoogleSignin, statusCodes} from '@react-native-community/google-signin';
 import Toast from '../component/Toast';
 import Loader from '../component/Loader';
+import {LOGIN_ERROR, LOGIN_SUCCESS, RESET} from '../redux/LoginReducer';
 
 export default function Login({navigation, route}) {
   const {apptype} = route.params;
   const [email, setEmail] = useState('123@admin.com');
-  const [password, setPassword] = useState('2');
+  const [password, setPassword] = useState('1');
   const [loading, setLoader] = useState(false);
   const emailAddressInput = useRef(null);
   const passwordInput = useRef(null);
   const toast = useRef(null);
   const dispatch = useDispatch();
+  const {loginResponse, loginError} = useSelector((state) => state);
 
   useEffect(() => {
     console.log('=====logout=====');
     // LoginManager.logOut();
     GoogleSignin.configure();
   }, []);
+
+  useEffect(() => {
+    if (loginResponse) {
+      console.log('======loginResponse', loginResponse);
+      setLoader(false);
+      if (loginResponse.status == API_RESPONSE_STATUS.STATUS_200) {
+        setClientToken(loginResponse.DATA.token);
+        if (apptype == APPTYPE.JOBPROVIDER) {
+          navigation.reset({
+            index: 0,
+            routes: [{name: 'Dashbord'}],
+          });
+        } else {
+          navigation.reset({
+            index: 0,
+            routes: [{name: 'LookingFor'}],
+          });
+        }
+      } else {
+        console.log('====response.MESSAGE===', loginResponse.MESSAGE);
+        toast.current.show(loginResponse.MESSAGE);
+      }
+    }
+
+    if (loginError) {
+      setLoader(false);
+      toast.current.show(loginError.message);
+      dispatch({type: RESET});
+    }
+  }, [loginResponse, loginError]);
 
   // signOut = async () => {
   //   try {
@@ -66,8 +98,6 @@ export default function Login({navigation, route}) {
   };
 
   const onLoginButtonPress = () => {
-    console.log('type====', apptype);
-
     if (apptype == APPTYPE.JOBPROVIDER) {
       navigation.reset({
         index: 0,
@@ -81,39 +111,12 @@ export default function Login({navigation, route}) {
     }
 
     // setLoader(true);
-    // APIKit.post(API_LOGIN, {
+    // const params = {
     //   email: email,
     //   password: password,
-    // })
-    //   .then(function (response) {
-    //     console.log('======', response.data);
+    // };
 
-    //     setLoader(false);
-    //     if (response.status == API_RESPONSE_STATUS.STATUS_200) {
-    //       dispatch({type: 'Login', payload: response});
-    //       setClientToken(response.data.DATA.token);
-    //       if (apptype == APPTYPE.JOBPROVIDER) {
-    //         navigation.reset({
-    //           index: 0,
-    //           routes: [{name: 'Dashbord'}],
-    //         });
-    //       } else {
-    //         navigation.reset({
-    //           index: 0,
-    //           routes: [{name: 'LookingFor'}],
-    //         });
-    //       }
-    //     } else {
-    //       console.log('====response.data.MESSAGE===', response.data.MESSAGE);
-    //       console.log('=====toast', toast);
-    //       toast.current.show(response.data.MESSAGE);
-    //     }
-    //   })
-    //   .catch(function (error) {
-    //     setLoader(false);
-    //     toast.current.show('Network Error');
-    //     console.log(error);
-    //   });
+    // dispatch(postApi(API_LOGIN, params, LOGIN_SUCCESS, LOGIN_ERROR));
   };
 
   const onFacebookButtonPress = () => {
@@ -272,23 +275,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: 25,
   },
   buttonStyle: {
-    height: 60,
+    height: 55,
     borderRadius: 10,
     alignItems: 'center',
     paddingHorizontal: 15,
     marginVertical: 5,
   },
-  buttonIconStyle: {height: 30, width: 30},
+  buttonIconStyle: {height: 25, width: 25},
   buttonTextStyle: {
     fontFamily: Theme.fontFamily.PoppinsMedium,
     fontSize: Theme.fontSizes.small,
     color: Theme.colors.theme,
     marginLeft: 10,
-  },
-  textInputStyle: {
-    marginHorizontal: 15,
-    fontSize: Theme.fontSizes.small,
-    fontFamily: Theme.fontFamily.PoppinsRegular,
   },
   forgotPassText: {
     color: Theme.colors.theme,
@@ -297,18 +295,18 @@ const styles = StyleSheet.create({
   },
   continueWithText: {
     alignSelf: 'center',
-    marginVertical: 20,
+    marginVertical: 15,
     fontFamily: Theme.fontFamily.PoppinsMedium,
-    fontSize: Theme.fontSizes.small,
+    fontSize: Theme.fontSizes.small - 1,
   },
   socialButton: {
     backgroundColor: Theme.colors.categoryBg,
     flexDirection: 'row',
-    width: '45%',
+    width: '48%',
   },
   registerContainer: {
     flexDirection: 'row',
-    paddingVertical: 30,
+    paddingVertical: 20,
     justifyContent: 'center',
     alignItems: 'center',
   },

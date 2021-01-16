@@ -91,6 +91,9 @@ const Tab = createBottomTabNavigator();
 const JobSeekerDashbord = () => {
   return (
     <Tab.Navigator
+      tabBarOptions={{
+        style: {height: 50},
+      }}
       screenOptions={({route}) => ({
         tabBarLabel: ({focused}) => {
           let labelName;
@@ -108,7 +111,7 @@ const JobSeekerDashbord = () => {
             <Text
               style={{
                 fontFamily: Theme.fontFamily.PoppinsRegular,
-                fontSize: Theme.fontSizes.mini,
+                fontSize: Theme.fontSizes.mini - 1,
                 color: Theme.colors.theme,
               }}>
               {labelName}
@@ -129,7 +132,7 @@ const JobSeekerDashbord = () => {
           }
 
           return (
-            <Image style={{height: 25, width: 25}} source={{uri: iconName}} />
+            <Image style={{height: 22, width: 22}} source={{uri: iconName}} />
           );
         },
       })}>
@@ -144,6 +147,9 @@ const JobSeekerDashbord = () => {
 const JobProviderDashbord = () => {
   return (
     <Tab.Navigator
+      tabBarOptions={{
+        style: {height: 50},
+      }}
       screenOptions={({route}) => ({
         tabBarLabel: ({focused}) => {
           let labelName;
@@ -161,7 +167,7 @@ const JobProviderDashbord = () => {
             <Text
               style={{
                 fontFamily: Theme.fontFamily.PoppinsRegular,
-                fontSize: Theme.fontSizes.mini,
+                fontSize: Theme.fontSizes.mini - 1,
                 color: Theme.colors.theme,
               }}>
               {labelName}
@@ -182,7 +188,7 @@ const JobProviderDashbord = () => {
           }
 
           return (
-            <Image style={{height: 25, width: 25}} source={{uri: iconName}} />
+            <Image style={{height: 22, width: 22}} source={{uri: iconName}} />
           );
         },
       })}>

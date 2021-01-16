@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create axios client, pre-configured with baseURL
 let APIKit = axios.create({
-  baseURL: 'http://127.0.0.1:8000/api/',
+  baseURL: 'http://127.0.0.1/api/',
   timeout: 10000,
   headers: {'Content-Type': 'application/json', Accept: "'application/json'"},
 });
@@ -15,4 +15,36 @@ export const setClientToken = (token) => {
   });
 };
 
-export default APIKit;
+export const postApi = (url, params, successtype, failType = 'default') => (
+  dispatch,
+) => {
+  console.log('=====POST=====', params, url);
+  APIKit.post(url, params)
+    .then(function (response) {
+      console.log('=====response====', response);
+      dispatch({type: successtype, payload: response});
+    })
+    .catch(function (error) {
+      console.log('=====POST--ERROR=====', error.response);
+      dispatch({type: failType, payload: error.response});
+    });
+};
+
+export const getApi = (dispatch = (
+  url,
+  params = {},
+  successtype,
+  failType = 'default',
+) => {
+  console.log('=====GET=====', url);
+  APIKit.get(url, params)
+    .then(function (response) {
+      dispatch({type: successtype, payload: response});
+    })
+    .catch(function (error) {
+      console.log('=====GET--ERROR=====', error);
+      dispatch({type: failType, payload: null});
+    });
+});
+
+// export default APIKit;

@@ -27,7 +27,7 @@ export default function CommonCard({...props}) {
       <View
         style={{
           flexDirection: 'row',
-          paddingVertical: 5,
+          paddingVertical: 3,
         }}>
         <Image style={{height: 18, width: 18}} source={{uri: icon}} />
         <Text
@@ -171,7 +171,7 @@ export default function CommonCard({...props}) {
                 isJobSeeker ? {} : setisMorePopupVisible(!isMorePopupVisible)
               }>
               <Image
-                style={{height: 22, width: 22}}
+                style={{height: 20, width: 20}}
                 source={{
                   uri: isJobSeeker
                     ? data.isSaved
@@ -259,7 +259,7 @@ const styles = StyleSheet.create({
   subTitle: {
     fontFamily: Theme.fontFamily.PoppinsRegular,
     fontSize: Theme.fontSizes.mini,
-    marginTop: 5,
+    marginTop: 2,
   },
   popupContainer: {
     borderRadius: 8,

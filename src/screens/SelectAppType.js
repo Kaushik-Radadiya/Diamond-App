@@ -49,10 +49,12 @@ export default function SelectAppType({navigation}) {
         source={{uri: 'bg'}}
         style={styles.image}>
         <View style={styles.topSubContainer}>
-          <Text style={styles.titleText}>Welcome To Diamond Jobs</Text>
-          <Text style={{fontFamily: Theme.fontFamily.PoppinsRegular}}>
-            You can now find the job that suits you
-          </Text>
+          <View>
+            <Text style={styles.titleText}>Welcome To Diamond Jobs</Text>
+            <Text style={{fontFamily: Theme.fontFamily.PoppinsRegular}}>
+              You can now find the job that suits you
+            </Text>
+          </View>
           <Image
             style={[
               styles.welcomeImage,
@@ -65,7 +67,7 @@ export default function SelectAppType({navigation}) {
           />
         </View>
         <View style={styles.bootomSubContainer}>
-          <Text style={[styles.titleText, {marginBottom: 15}]}>
+          <Text style={[styles.titleText, {marginBottom: 5}]}>
             Select Your Type
           </Text>
           <CommonButton
@@ -154,28 +156,32 @@ const styles = StyleSheet.create({
     fontFamily: Theme.fontFamily.PoppinsMedium,
   },
   welcomeImage: {
-    marginVertical: 15,
+    // marginVertical: 20,
   },
   topSubContainer: {
-    justifyContent: 'center',
+    justifyContent: 'space-around',
     alignItems: 'center',
-    marginTop: 40,
+    paddingVertical: 30,
+    flex: 6,
   },
   bootomSubContainer: {
     paddingHorizontal: 40,
+    flex: 4,
   },
   buttonStyle: {
-    height: 60,
+    height: 55,
     borderRadius: 10,
     alignItems: 'center',
     paddingHorizontal: 25,
     flexDirection: 'row',
     marginVertical: 5,
+    alignContent: 'center',
   },
-  buttonIconStyle: {height: 35, width: 35},
+  buttonIconStyle: {height: 30, width: 30},
   buttonTextStyle: {
     paddingHorizontal: 20,
     fontFamily: Theme.fontFamily.PoppinsRegular,
-    fontSize: Theme.fontSizes.large,
+    fontSize: Theme.fontSizes.medium,
+    textAlignVertical: 'center',
   },
 });

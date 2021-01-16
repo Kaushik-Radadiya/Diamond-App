@@ -116,7 +116,7 @@ export default function Register({navigation, route}) {
                 onChangeText={(text) => setFirstName(text)}
                 returnKeyType={'next'}
                 onSubmitEditing={() => refLastName.current.focus()}
-                width={'47%'}
+                width={'48%'}
               />
               <CommonTextInput
                 refs={refLastName}
@@ -129,7 +129,7 @@ export default function Register({navigation, route}) {
                     ? refCompanyName.current.focus()
                     : refEmailAddress.current.focus()
                 }
-                width={'47%'}
+                width={'48%'}
               />
             </View>
             {apptype == APPTYPE.JOBPROVIDER ? (
@@ -212,13 +212,13 @@ export default function Register({navigation, route}) {
                 justifyContent: 'center',
                 alignItems: 'center',
                 paddingHorizontal: 20,
-                paddingVertical: 30,
+                paddingVertical: 20,
               }}>
               <Text
                 style={{
                   textAlign: 'center',
                   fontFamily: Theme.fontFamily.PoppinsMedium,
-                  fontSize: Theme.fontSizes.small,
+                  fontSize: Theme.fontSizes.mini,
                 }}>
                 By Continuing Your Confirm That You Agree With Our Terms And
                 Condition
@@ -263,41 +263,31 @@ const styles = StyleSheet.create({
     marginVertical: 15,
   },
   topSubContainer: {
-    padding: 35,
+    padding: 30,
   },
   bootomSubContainer: {
     flex: 1,
     paddingHorizontal: 25,
   },
   buttonStyle: {
-    height: 60,
+    height: 55,
     borderRadius: 10,
     alignItems: 'center',
     paddingHorizontal: 15,
-    marginTop: 20,
+    marginTop: 15,
   },
-  buttonIconStyle: {height: 30, width: 30},
+  buttonIconStyle: {height: 25, width: 25},
   buttonTextStyle: {
     fontFamily: Theme.fontFamily.PoppinsMedium,
     fontSize: Theme.fontSizes.small,
     color: Theme.colors.theme,
     marginLeft: 10,
   },
-  textInputStyle: {
-    marginHorizontal: 15,
-    fontSize: Theme.fontSizes.small,
-    fontFamily: Theme.fontFamily.PoppinsRegular,
-  },
-  forgotPassText: {
-    color: Theme.colors.theme,
-    fontFamily: Theme.fontFamily.PoppinsMedium,
-    fontSize: Theme.fontSizes.small,
-  },
   continueWithText: {
     alignSelf: 'center',
-    marginTop: 25,
+    marginTop: 20,
     fontFamily: Theme.fontFamily.PoppinsMedium,
-    fontSize: Theme.fontSizes.small,
+    fontSize: Theme.fontSizes.small - 1,
   },
   socialButton: {
     backgroundColor: Theme.colors.categoryBg,
@@ -312,6 +302,6 @@ const styles = StyleSheet.create({
   },
   registerText: {
     fontFamily: Theme.fontFamily.PoppinsMedium,
-    fontSize: Theme.fontSizes.small,
+    fontSize: Theme.fontSizes.small - 1,
   },
 });
