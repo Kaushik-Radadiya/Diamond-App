@@ -82,6 +82,7 @@ export default function LookingFor({navigation}) {
           type={type}
           visible={dropDownVisible}
           onItemSelect={onDropDownItemSelect}
+          onCancel={() => showHideDropDown(false)}
           data={DATA}
         />
         <View style={styles.topSubContainer}>

@@ -51,7 +51,11 @@ export default function SelectAppType({navigation}) {
         <View style={styles.topSubContainer}>
           <View>
             <Text style={styles.titleText}>Welcome To Diamond Jobs</Text>
-            <Text style={{fontFamily: Theme.fontFamily.PoppinsRegular}}>
+            <Text
+              style={{
+                fontFamily: Theme.fontFamily.PoppinsRegular,
+                fontSize: Theme.fontSizes.mini,
+              }}>
               You can now find the job that suits you
             </Text>
           </View>
@@ -61,6 +65,7 @@ export default function SelectAppType({navigation}) {
               {
                 width: window.width * 0.8,
                 height: window.width * 0.8,
+                // backgroundColor: 'red',
               },
             ]}
             source={{uri: 'welcome_icon'}}
@@ -152,17 +157,18 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   titleText: {
-    fontSize: Theme.fontSizes.large,
+    fontSize: Theme.fontSizes.medium,
     fontFamily: Theme.fontFamily.PoppinsMedium,
   },
   welcomeImage: {
-    // marginVertical: 20,
+    right: 10,
   },
   topSubContainer: {
     justifyContent: 'space-around',
     alignItems: 'center',
-    paddingVertical: 30,
+    paddingVertical: 20,
     flex: 6,
+    // backgroundColor: 'blue',
   },
   bootomSubContainer: {
     paddingHorizontal: 40,

@@ -12,7 +12,7 @@ import {
 import Theme from '../utils/Theme';
 
 const DropDownModal = ({...props}) => {
-  const {visible, data, onItemSelect} = props;
+  const {visible, data, onItemSelect, onCancel} = props;
 
   const renderItem = ({item}) => {
     return (
@@ -47,6 +47,11 @@ const DropDownModal = ({...props}) => {
             keyExtractor={(item, index) => index.toString()}
             extraData={data}
           />
+          <TouchableOpacity
+            style={styles.cancelContainer}
+            onPress={() => onCancel()}>
+            <Text style={styles.cancelText}>Cancel</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </Modal>
@@ -71,7 +76,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    maxHeight: '50%',
+    maxHeight: '80%',
     width: '90%',
     padding: 20,
   },
@@ -83,6 +88,19 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: Theme.fontFamily.PoppinsRegular,
     fontSize: Theme.fontSizes.medium - 1,
+  },
+  cancelContainer: {
+    paddingHorizontal: 25,
+    paddingVertical: 5,
+    backgroundColor: Theme.colors.categoryBg,
+    borderRadius: 10,
+    alignSelf: 'center',
+    marginTop: 20,
+  },
+  cancelText: {
+    fontFamily: Theme.fontFamily.PoppinsRegular,
+    fontSize: Theme.fontSizes.small,
+    color: Theme.colors.theme,
   },
 });
 
