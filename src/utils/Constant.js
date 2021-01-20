@@ -1,4 +1,5 @@
-export const BASE_URL = 'http://127.0.0.1:8000/api/';
+export const BASE_URL =
+  'https://smartizinfosys.com/Projects/Diamond_job/public/api/';
 export const APPTYPE = {
   JOBSEEKER: 'Job Seeker',
   JOBPROVIDER: 'Job Provider',

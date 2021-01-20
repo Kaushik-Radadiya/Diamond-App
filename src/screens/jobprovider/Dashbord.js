@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -9,10 +9,17 @@ import {
 } from 'react-native';
 import Theme from '../../utils/Theme';
 import CommonHeader from '../../component/CommonHeader';
-import APIKit from '../../utils/APIKit';
+// import APIKit from '../../utils/APIKit';
 import {API_GET_JOB_PROVIDER_DATA} from '../../utils/Url';
 import Loader from '../../component/Loader';
 import {API_RESPONSE_STATUS} from '../../utils/Constant';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  PROVIDER_DASHBORD_ERROR,
+  PROVIDER_DASHBORD_SUCCESS,
+} from '../../redux/JobProviderReducer';
+import {postApi} from '../../utils/APIKit';
+import {RESET} from '../../redux/AuthReducer';
 
 export default function Dashboard({navigation}) {
   const onFilterPress = () => {
@@ -21,26 +28,59 @@ export default function Dashboard({navigation}) {
 
   const [jobProviderData, setProviderData] = useState(null);
   const [loading, setLoader] = useState(false);
+  const dispatch = useDispatch();
+  const {providerDashbordData, providerDashbordError} = useSelector(
+    (state) => state.jobProvider,
+  );
 
-  useEffect(() => {
-    // getProviderData();
-  }, []);
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      getProviderData();
+    });
 
-  getProviderData = () => {
+    if (providerDashbordData) {
+      console.log('====providerDashbordData====', providerDashbordData);
+      if (response.status == API_RESPONSE_STATUS.STATUS_200) {
+        const data = response.data.DATA.data;
+        setProviderData(data);
+      }
+      setLoader(false);
+    }
+
+    if (providerDashbordError) {
+      console.log('====providerDashbordData====', providerDashbordError);
+      setLoader(false);
+      // toast.current.show(providerDashbordError.message);
+      dispatch({type: RESET});
+    }
+
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [navigation, providerDashbordData, providerDashbordError]);
+
+  const getProviderData = () => {
     setLoader(true);
-    APIKit.post(API_GET_JOB_PROVIDER_DATA)
-      .then(function (response) {
-        console.log('===JobProviderData===', response.data);
-        if (response.status == API_RESPONSE_STATUS.STATUS_200) {
-          const data = response.data.DATA.data;
-          setProviderData(data);
-        }
-        setLoader(false);
-      })
-      .catch(function (error) {
-        setLoader(false);
-        console.log(error);
-      });
+    dispatch(
+      postApi(
+        API_GET_JOB_PROVIDER_DATA,
+        {},
+        PROVIDER_DASHBORD_SUCCESS,
+        PROVIDER_DASHBORD_ERROR,
+      ),
+    );
+    // APIKit.post(API_GET_JOB_PROVIDER_DATA)
+    //   .then(function (response) {
+    //     console.log('===JobProviderData===', response.data);
+    //     if (response.status == API_RESPONSE_STATUS.STATUS_200) {
+    //       const data = response.data.DATA.data;
+    //       setProviderData(data);
+    //     }
+    //     setLoader(false);
+    //   })
+    //   .catch(function (error) {
+    //     setLoader(false);
+    //     console.log(error);
+    //   });
   };
 
   const renderCard = (width, iconName, title, count, onButtonPress) => {

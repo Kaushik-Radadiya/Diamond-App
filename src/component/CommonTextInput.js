@@ -18,6 +18,7 @@ export default function CommonTextinput({...props}) {
     onChangeText,
     returnKeyType,
     onSubmitEditing,
+    keyboardType,
     width = '100%',
   } = props;
 
@@ -27,6 +28,7 @@ export default function CommonTextinput({...props}) {
     <TouchableOpacity style={[styles.textInputContainer, {width: width}]}>
       <Image style={styles.iconStyle} source={{uri: icon}} />
       <TextInput
+        keyboardType={keyboardType || 'default'}
         placeholderTextColor={Theme.colors.blackText}
         ref={refs}
         style={styles.textInputStyle}

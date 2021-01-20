@@ -3,7 +3,7 @@ import {View, Text, ImageBackground, StyleSheet} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import CommonButton from '../component/CommonButton';
 import CommonTextInput from '../component/CommonTextInput';
-import APIKit, {postApi, setClientToken} from '../utils/APIKit';
+import {postApi, setClientToken} from '../utils/APIKit';
 import {API_RESPONSE_STATUS, APPTYPE} from '../utils/Constant';
 import Theme from '../utils/Theme';
 import {API_LOGIN} from '../utils/Url';
@@ -17,7 +17,8 @@ import {
 import {GoogleSignin, statusCodes} from '@react-native-community/google-signin';
 import Toast from '../component/Toast';
 import Loader from '../component/Loader';
-import {LOGIN_ERROR, LOGIN_SUCCESS, RESET} from '../redux/LoginReducer';
+import {LOGIN_ERROR, LOGIN_SUCCESS, RESET} from '../redux/AuthReducer';
+import {showAlert} from '../utils/Utils';
 
 export default function Login({navigation, route}) {
   const {apptype} = route.params;
@@ -28,7 +29,7 @@ export default function Login({navigation, route}) {
   const passwordInput = useRef(null);
   const toast = useRef(null);
   const dispatch = useDispatch();
-  const {loginResponse, loginError} = useSelector((state) => state);
+  const {loginResponse, loginError} = useSelector((state) => state.auth);
 
   useEffect(() => {
     console.log('=====logout=====');
@@ -61,7 +62,6 @@ export default function Login({navigation, route}) {
 
     if (loginError) {
       setLoader(false);
-      toast.current.show(loginError.message);
       dispatch({type: RESET});
     }
   }, [loginResponse, loginError]);
@@ -109,7 +109,6 @@ export default function Login({navigation, route}) {
         routes: [{name: 'LookingFor'}],
       });
     }
-
     // setLoader(true);
     // const params = {
     //   email: email,
@@ -174,6 +173,7 @@ export default function Login({navigation, route}) {
             onChangeText={(text) => setEmail(text)}
             returnKeyType={'next'}
             onSubmitEditing={() => passwordInput.current.focus()}
+            keyboardType={'email-address'}
           />
           <CommonTextInput
             refs={passwordInput}
@@ -181,7 +181,7 @@ export default function Login({navigation, route}) {
             placeholder={'Password'}
             returnKeyType={'done'}
             onChangeText={(text) => setPassword(text)}
-            onSubmitEditing={() => {}}
+            onSubmitEditing={() => onLoginButtonPress()}
           />
           <TouchableOpacity
             activeOpacity={1}

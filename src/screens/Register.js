@@ -12,30 +12,82 @@ import {
   LoginManager,
 } from 'react-native-fbsdk';
 import {GoogleSignin, statusCodes} from '@react-native-community/google-signin';
+import {postApi} from '../utils/APIKit';
+import {useDispatch, useSelector} from 'react-redux';
+import {REGISTER_ERROR, REGISTER_SUCCESS, RESET} from '../redux/AuthReducer';
+import {API_REGISTER} from '../utils/Url';
+import Toast from '../component/Toast';
+import Loader from '../component/Loader';
 
 export default function Register({navigation, route}) {
   const {apptype} = route.params;
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [companyName, setCompnayName] = useState('');
-  const [email, setEmail] = useState('');
-  const [mobileNumber, setMobileNumber] = useState('');
+  const [firstName, setFirstName] = useState('Kaushik');
+  const [lastName, setLastName] = useState('Radadiya');
+  const [companyName, setCompnayName] = useState('RK');
+  const [email, setEmail] = useState('kaushikradadiya1995@gmail.com');
+  const [mobileNumber, setMobileNumber] = useState('1234567890');
+  const [loading, setLoader] = useState(false);
   const [password, setPassword] = useState('');
+  const dispatch = useDispatch();
 
   const refFirstName = useRef(null);
   const refLastName = useRef(null);
   const refEmailAddress = useRef(null);
   const refCompanyName = useRef(null);
   const refMobileNumber = useRef(null);
-  const refPassword = useRef(null);
+  const toast = useRef(null);
+  // const refPassword = useRef(null);
+  const {registerResponse, registerError} = useSelector((state) => state.auth);
 
-  const onRegisterButtonPress = (item) => {};
+  const onRegisterButtonPress = (item) => {
+    setLoader(true);
+    const params = {
+      firstName: firstName,
+      lastName: lastName,
+      mobile: mobileNumber,
+      type: apptype == APPTYPE.JOBPROVIDER ? 'JP' : 'JS',
+      email: email,
+      login_type: 'O',
+      companyName: apptype == APPTYPE.JOBPROVIDER ? companyName : undefined,
+    };
+
+    dispatch(postApi(API_REGISTER, params, REGISTER_SUCCESS, REGISTER_ERROR));
+  };
 
   useEffect(() => {
     console.log('=====logout=====');
     // LoginManager.logOut();
     GoogleSignin.configure();
   }, []);
+
+  useEffect(() => {
+    if (registerResponse) {
+      console.log('======registerResponse', registerResponse);
+      setLoader(false);
+      if (registerResponse.status == API_RESPONSE_STATUS.STATUS_200) {
+        setClientToken(registerResponse.DATA.token);
+        // if (apptype == APPTYPE.JOBPROVIDER) {
+        //   navigation.reset({
+        //     index: 0,
+        //     routes: [{name: 'Dashbord'}],
+        //   });
+        // } else {
+        //   navigation.reset({
+        //     index: 0,
+        //     routes: [{name: 'LookingFor'}],
+        //   });
+        // }
+      } else {
+        console.log('====response.MESSAGE===', registerResponse.MESSAGE);
+        toast.current.show(registerResponse.MESSAGE);
+      }
+    }
+
+    if (registerError) {
+      setLoader(false);
+      dispatch({type: RESET});
+    }
+  }, [registerResponse, registerError]);
 
   const getInfoFromToken = (token) => {
     const PROFILE_REQUEST_PARAMS = {
@@ -95,6 +147,8 @@ export default function Register({navigation, route}) {
 
   return (
     <View style={styles.container}>
+      <Toast ref={toast} duration={5000} />
+      <Loader loading={loading} />
       <ImageBackground
         resizeMode={'stretch'}
         source={{uri: 'bg'}}
@@ -149,23 +203,25 @@ export default function Register({navigation, route}) {
               onChangeText={(text) => setEmail(text)}
               returnKeyType={'next'}
               onSubmitEditing={() => refMobileNumber.current.focus()}
+              keyboardType={'email-address'}
             />
             <CommonTextInput
               refs={refMobileNumber}
               icon={'ic_mobile'}
               placeholder={'Mobile Number'}
               onChangeText={(text) => setMobileNumber(text)}
-              returnKeyType={'next'}
-              onSubmitEditing={() => refPassword.current.focus()}
+              returnKeyType={'done'}
+              keyboardType={'phone-pad'}
+              onSubmitEditing={() => onRegisterButtonPress()}
             />
-            <CommonTextInput
+            {/* <CommonTextInput
               refs={refPassword}
               icon={'ic_password'}
               placeholder="Password"
               returnKeyType={'done'}
               onChangeText={(text) => setPassword(text)}
               onSubmitEditing={() => {}}
-            />
+            /> */}
 
             <CommonButton
               buttonStyle={[
