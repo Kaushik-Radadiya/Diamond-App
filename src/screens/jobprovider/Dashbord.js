@@ -40,15 +40,15 @@ export default function Dashboard({navigation}) {
 
     if (providerDashbordData) {
       console.log('====providerDashbordData====', providerDashbordData);
-      if (response.status == API_RESPONSE_STATUS.STATUS_200) {
-        const data = response.data.DATA.data;
+      if (providerDashbordData.status == API_RESPONSE_STATUS.STATUS_200) {
+        const data = providerDashbordData.data.data;
         setProviderData(data);
       }
       setLoader(false);
     }
 
     if (providerDashbordError) {
-      console.log('====providerDashbordData====', providerDashbordError);
+      console.log('====providerDashbordError====', providerDashbordError);
       setLoader(false);
       // toast.current.show(providerDashbordError.message);
       dispatch({type: RESET});

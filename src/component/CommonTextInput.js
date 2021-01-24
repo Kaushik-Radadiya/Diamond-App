@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
   textInputStyle: {
     height: 55,
     flex: 1,
-    marginLeft: 8,
+    marginLeft: 12,
 
     fontSize: Theme.fontSizes.small,
     fontFamily: Theme.fontFamily.PoppinsRegular,

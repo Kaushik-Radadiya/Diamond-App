@@ -54,9 +54,9 @@ export default Theme = {
   },
   fontSizes: {
     mini: 13,
-    small: 16,
-    medium: 18,
-    large: 20,
+    small: 15,
+    medium: 17,
+    large: 19,
     xlarge: 24,
   },
 };

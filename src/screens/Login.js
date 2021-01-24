@@ -6,7 +6,7 @@ import CommonTextInput from '../component/CommonTextInput';
 import {postApi, setClientToken} from '../utils/APIKit';
 import {API_RESPONSE_STATUS, APPTYPE} from '../utils/Constant';
 import Theme from '../utils/Theme';
-import {API_LOGIN} from '../utils/Url';
+import {API_LOGIN, API_REGISTER} from '../utils/Url';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   AccessToken,
@@ -17,13 +17,21 @@ import {
 import {GoogleSignin, statusCodes} from '@react-native-community/google-signin';
 import Toast from '../component/Toast';
 import Loader from '../component/Loader';
-import {LOGIN_ERROR, LOGIN_SUCCESS, RESET} from '../redux/AuthReducer';
+import {
+  LOGIN_ERROR,
+  LOGIN_SUCCESS,
+  REGISTER_ERROR,
+  REGISTER_SUCCESS,
+  RESET,
+} from '../redux/AuthReducer';
 import {showAlert} from '../utils/Utils';
 
 export default function Login({navigation, route}) {
   const {apptype} = route.params;
-  const [email, setEmail] = useState('123@admin.com');
-  const [password, setPassword] = useState('1');
+  // const [email, setEmail] = useState('kaushikradadiya1995@gmail.com');
+  // const [password, setPassword] = useState('123456');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [loading, setLoader] = useState(false);
   const emailAddressInput = useRef(null);
   const passwordInput = useRef(null);
@@ -39,10 +47,9 @@ export default function Login({navigation, route}) {
 
   useEffect(() => {
     if (loginResponse) {
-      console.log('======loginResponse', loginResponse);
       setLoader(false);
       if (loginResponse.status == API_RESPONSE_STATUS.STATUS_200) {
-        setClientToken(loginResponse.DATA.token);
+        setClientToken(loginResponse.data.token);
         if (apptype == APPTYPE.JOBPROVIDER) {
           navigation.reset({
             index: 0,
@@ -55,7 +62,6 @@ export default function Login({navigation, route}) {
           });
         }
       } else {
-        console.log('====response.MESSAGE===', loginResponse.MESSAGE);
         toast.current.show(loginResponse.MESSAGE);
       }
     }
@@ -91,6 +97,15 @@ export default function Login({navigation, route}) {
           console.log('login info has error: ' + error);
         } else {
           console.log('result:', user);
+          const params = {
+            firstName: user.first_name,
+            lastName: user.last_name,
+            type: apptype == APPTYPE.JOBPROVIDER ? 'JP' : 'JS',
+            email: user.email,
+            login_type: 'F',
+          };
+
+          navigateToSocialRegister(params);
         }
       },
     );
@@ -98,24 +113,29 @@ export default function Login({navigation, route}) {
   };
 
   const onLoginButtonPress = () => {
-    if (apptype == APPTYPE.JOBPROVIDER) {
-      navigation.reset({
-        index: 0,
-        routes: [{name: 'Dashbord'}],
-      });
-    } else {
-      navigation.reset({
-        index: 0,
-        routes: [{name: 'LookingFor'}],
-      });
-    }
-    // setLoader(true);
-    // const params = {
-    //   email: email,
-    //   password: password,
-    // };
+    // if (apptype == APPTYPE.JOBPROVIDER) {
+    //   navigation.reset({
+    //     index: 0,
+    //     routes: [{name: 'Dashbord'}],
+    //   });
+    // } else {
+    //   navigation.reset({
+    //     index: 0,
+    //     routes: [{name: 'LookingFor'}],
+    //   });
+    // }
 
-    // dispatch(postApi(API_LOGIN, params, LOGIN_SUCCESS, LOGIN_ERROR));
+    setLoader(true);
+    const params = {
+      email: email,
+      password: password,
+    };
+
+    dispatch(postApi(API_LOGIN, params, LOGIN_SUCCESS, LOGIN_ERROR));
+  };
+
+  const navigateToSocialRegister = (data) => {
+    navigation.navigate('SocialRegister', {apptype: apptype, userData: data});
   };
 
   const onFacebookButtonPress = () => {
@@ -140,7 +160,17 @@ export default function Login({navigation, route}) {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
       console.log('==========+>', userInfo);
-      this.props.navigation.navigate('Home', userInfo.user);
+      const data = userInfo.user;
+
+      const params = {
+        firstName: data.givenName,
+        lastName: data.familyName,
+        type: apptype == APPTYPE.JOBPROVIDER ? 'JP' : 'JS',
+        email: data.email,
+        login_type: 'G',
+      };
+
+      navigateToSocialRegister(params);
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         // user cancelled the login flow
@@ -202,6 +232,7 @@ export default function Login({navigation, route}) {
               styles.buttonTextStyle,
               {
                 color: Theme.colors.whiteText,
+                marginLeft: 0,
               },
             ]}
             buttonPress={onLoginButtonPress}

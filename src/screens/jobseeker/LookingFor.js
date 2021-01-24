@@ -24,15 +24,15 @@ export default function LookingFor({navigation}) {
 
   const [type, setType] = useState('');
   const DATA = [
-    {title: 'Hello', isSelected: true},
-    {title: 'Hello1', isSelected: false},
-    {title: 'Hello2', isSelected: false},
-    {title: 'Hell3', isSelected: false},
-    {title: 'Hello4', isSelected: false},
-    {title: 'Hello5', isSelected: false},
+    {title: 'Hello'},
+    {title: 'Hello1'},
+    {title: 'Hello2'},
+    {title: 'Hell3'},
+    {title: 'Hello4'},
+    {title: 'Hello5'},
   ];
 
-  const onDropDownItemSelect = (item) => {
+  const onSave = (item) => {
     if (type == 'Category') {
       setCategory(item);
     } else if (type == 'Colour & Modify Cut') {
@@ -81,7 +81,7 @@ export default function LookingFor({navigation}) {
         <DropDownModal
           type={type}
           visible={dropDownVisible}
-          onItemSelect={onDropDownItemSelect}
+          onSave={onSave}
           onCancel={() => showHideDropDown(false)}
           data={DATA}
         />

@@ -3,7 +3,7 @@ import {View, Text, ImageBackground, StyleSheet} from 'react-native';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import CommonButton from '../component/CommonButton';
 import CommonTextInput from '../component/CommonTextInput';
-import {APPTYPE} from '../utils/Constant';
+import {API_RESPONSE_STATUS, APPTYPE} from '../utils/Constant';
 import Theme from '../utils/Theme';
 import {
   AccessToken,
@@ -21,11 +21,16 @@ import Loader from '../component/Loader';
 
 export default function Register({navigation, route}) {
   const {apptype} = route.params;
-  const [firstName, setFirstName] = useState('Kaushik');
-  const [lastName, setLastName] = useState('Radadiya');
-  const [companyName, setCompnayName] = useState('RK');
-  const [email, setEmail] = useState('kaushikradadiya1995@gmail.com');
-  const [mobileNumber, setMobileNumber] = useState('1234567890');
+  // const [firstName, setFirstName] = useState('Kaushik');
+  // const [lastName, setLastName] = useState('Radadiya');
+  // const [companyName, setCompnayName] = useState('RK');
+  // const [email, setEmail] = useState('kaushikradadiya112@gmail.com');
+  // const [mobileNumber, setMobileNumber] = useState('1234567890');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [companyName, setCompnayName] = useState('');
+  const [email, setEmail] = useState('');
+  const [mobileNumber, setMobileNumber] = useState('');
   const [loading, setLoader] = useState(false);
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
@@ -51,6 +56,10 @@ export default function Register({navigation, route}) {
       companyName: apptype == APPTYPE.JOBPROVIDER ? companyName : undefined,
     };
 
+    register(params);
+  };
+
+  const register = (params) => {
     dispatch(postApi(API_REGISTER, params, REGISTER_SUCCESS, REGISTER_ERROR));
   };
 
@@ -65,7 +74,7 @@ export default function Register({navigation, route}) {
       console.log('======registerResponse', registerResponse);
       setLoader(false);
       if (registerResponse.status == API_RESPONSE_STATUS.STATUS_200) {
-        setClientToken(registerResponse.DATA.token);
+        toast.current.show(registerResponse.message, 'SUCCESS');
         // if (apptype == APPTYPE.JOBPROVIDER) {
         //   navigation.reset({
         //     index: 0,
@@ -89,6 +98,10 @@ export default function Register({navigation, route}) {
     }
   }, [registerResponse, registerError]);
 
+  const navigateToSocialRegister = (data) => {
+    navigation.navigate('SocialRegister', {apptype: apptype, userData: data});
+  };
+
   const getInfoFromToken = (token) => {
     const PROFILE_REQUEST_PARAMS = {
       fields: {
@@ -103,6 +116,16 @@ export default function Register({navigation, route}) {
           console.log('login info has error: ' + error);
         } else {
           console.log('result:', user);
+
+          const params = {
+            firstName: user.first_name,
+            lastName: user.last_name,
+            type: apptype == APPTYPE.JOBPROVIDER ? 'JP' : 'JS',
+            email: user.email,
+            login_type: 'F',
+          };
+
+          navigateToSocialRegister(params);
         }
       },
     );
@@ -131,7 +154,16 @@ export default function Register({navigation, route}) {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
       console.log('==========+>', userInfo);
-      this.props.navigation.navigate('Home', userInfo.user);
+      const data = userInfo.user;
+      const params = {
+        firstName: data.givenName,
+        lastName: data.familyName,
+        type: apptype == APPTYPE.JOBPROVIDER ? 'JP' : 'JS',
+        email: data.email,
+        login_type: 'G',
+      };
+
+      navigateToSocialRegister(params);
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         // user cancelled the login flow
@@ -236,6 +268,7 @@ export default function Register({navigation, route}) {
                 styles.buttonTextStyle,
                 {
                   color: Theme.colors.whiteText,
+                  marginLeft: 0,
                 },
               ]}
               buttonPress={onRegisterButtonPress}

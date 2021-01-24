@@ -22,6 +22,7 @@ import PostedJobs from './src/screens/jobprovider/PostedJobs';
 import ProviderProfile from './src/screens/jobprovider/ProviderProfile';
 import JobPost from './src/screens/jobprovider/JobPost';
 import EmployeeApplied from './src/screens/jobprovider/EmployeeApplied';
+import SocialRegister from './src/screens/SocialRegister';
 
 const Stack = createStackNavigator();
 
@@ -207,6 +208,7 @@ const Route = () => {
         <Stack.Screen name="SelectAppType" component={SelectAppType} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Register" component={Register} />
+        <Stack.Screen name="SocialRegister" component={SocialRegister} />
         <Stack.Screen name="LookingFor" component={LookingFor} />
         <Stack.Screen name="Home" component={JobSeekerDashbord} />
         <Stack.Screen name="Dashbord" component={JobProviderDashbord} />

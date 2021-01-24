@@ -12,19 +12,31 @@ import {
 import Theme from '../utils/Theme';
 
 const DropDownModal = ({...props}) => {
-  const {visible, data, onItemSelect, onCancel} = props;
+  const {visible, data, onSave, onCancel} = props;
+  const [selectedItem, setselectedItem] = useState('');
 
+  const onSavePress = () => {
+    if (selectedItem != '') {
+      onSave(selectedItem);
+      setselectedItem('');
+    } else {
+      onCancel();
+      setselectedItem('');
+    }
+  };
   const renderItem = ({item}) => {
     return (
       <TouchableOpacity
         style={styles.itemContainer}
         onPress={() => {
-          onItemSelect(item.title);
+          setselectedItem(item.title);
         }}>
         <Text style={styles.title}>{item.title}</Text>
         <Image
           style={{height: 20, width: 20}}
-          source={{uri: item.isSelected ? 'ic_radiofill' : 'ic_radio'}}
+          source={{
+            uri: item.title == selectedItem ? 'ic_radiofill' : 'ic_radio',
+          }}
         />
       </TouchableOpacity>
     );
@@ -47,11 +59,21 @@ const DropDownModal = ({...props}) => {
             keyExtractor={(item, index) => index.toString()}
             extraData={data}
           />
-          <TouchableOpacity
-            style={styles.cancelContainer}
-            onPress={() => onCancel()}>
-            <Text style={styles.cancelText}>Cancel</Text>
-          </TouchableOpacity>
+          <View style={{flexDirection: 'row', marginTop: 10}}>
+            <TouchableOpacity
+              style={styles.cancelContainer}
+              onPress={() => {
+                onCancel();
+                setselectedItem('');
+              }}>
+              <Text style={styles.cancelText}>Cancel</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.cancelContainer}
+              onPress={() => onSavePress()}>
+              <Text style={styles.cancelText}>Save</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </Modal>
@@ -92,10 +114,12 @@ const styles = StyleSheet.create({
   cancelContainer: {
     paddingHorizontal: 25,
     paddingVertical: 5,
-    backgroundColor: Theme.colors.categoryBg,
     borderRadius: 10,
-    alignSelf: 'center',
-    marginTop: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+    backgroundColor: Theme.colors.categoryBg,
+    marginHorizontal: 10,
   },
   cancelText: {
     fontFamily: Theme.fontFamily.PoppinsRegular,

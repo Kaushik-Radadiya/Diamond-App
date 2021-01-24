@@ -11,7 +11,6 @@ const JobProviderReducer = (state = initialState, action) => {
     case PROVIDER_DASHBORD_SUCCESS:
       return {...state, providerDashbordData: action.payload.data};
     case PROVIDER_DASHBORD_ERROR:
-      console.log('======PROVIDER_DASHBORD_ERROR======', action.payload.data);
       return {...state, providerDashbordError: action.payload.data};
     case RESET:
       return {...state, providerDashbordError: null};
