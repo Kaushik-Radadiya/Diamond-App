@@ -39,5 +39,6 @@ const styles = StyleSheet.create({
     fontFamily: Theme.fontFamily.PoppinsRegular,
     fontSize: Theme.fontSizes.small,
     color: Theme.colors.LightBlack,
+    includeFontPadding: false,
   },
 });

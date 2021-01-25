@@ -63,6 +63,7 @@ export default function JobApplied({navigation}) {
                 style={{
                   flexDirection: 'row',
                   paddingVertical: 5,
+                  alignItems: 'center',
                 }}>
                 <Image
                   style={{height: 18, width: 18}}
@@ -73,6 +74,7 @@ export default function JobApplied({navigation}) {
                     fontFamily: Theme.fontFamily.PoppinsRegular,
                     fontSize: Theme.fontSizes.mini,
                     marginLeft: 10,
+                    includeFontPadding: false,
                   }}>
                   {data.postedDate}
                 </Text>
@@ -148,16 +150,19 @@ const styles = StyleSheet.create({
   subTitle: {
     fontFamily: Theme.fontFamily.PoppinsRegular,
     fontSize: Theme.fontSizes.mini,
-    marginTop: 5,
+    marginTop: 2,
   },
   statusBackground: {
     borderRadius: 5,
     paddingHorizontal: 10,
     // paddingVertical: 3,
-    justifyContent: 'center',
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   status: {
     fontFamily: Theme.fontFamily.PoppinsRegular,
-    fontSize: Theme.fontSizes.mini,
+    fontSize: Theme.fontSizes.mini - 1,
+    includeFontPadding: false,
+    textAlign: 'center',
   },
 });

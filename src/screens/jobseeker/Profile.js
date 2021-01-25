@@ -161,11 +161,13 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 30,
     top: 10,
+    justifyContent: 'center',
   },
   editProfileText: {
     fontFamily: Theme.fontFamily.PoppinsRegular,
     fontSize: Theme.fontSizes.mini,
     color: Theme.colors.whiteText,
+    includeFontPadding: false,
   },
   bodyTitle: {
     fontFamily: Theme.fontFamily.PoppinsMedium,
@@ -196,6 +198,7 @@ const styles = StyleSheet.create({
     fontFamily: Theme.fontFamily.PoppinsMedium,
     fontSize: Theme.fontSizes.small - 1,
     color: Theme.colors.theme,
+    textAlign: 'center',
   },
   skillContainer: {
     backgroundColor: Theme.colors.categoryBg,
@@ -208,6 +211,7 @@ const styles = StyleSheet.create({
     fontFamily: Theme.fontFamily.PoppinsRegular,
     fontSize: Theme.fontSizes.mini,
     color: Theme.colors.theme,
+    includeFontPadding: false,
   },
   subTitle: {
     fontFamily: Theme.fontFamily.PoppinsMedium,

@@ -371,6 +371,7 @@ const styles = StyleSheet.create({
     fontSize: Theme.fontSizes.small,
     color: Theme.colors.theme,
     marginLeft: 10,
+    includeFontPadding: false,
   },
   continueWithText: {
     alignSelf: 'center',

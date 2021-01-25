@@ -225,5 +225,6 @@ const styles = StyleSheet.create({
     fontFamily: Theme.fontFamily.PoppinsRegular,
     fontSize: Theme.fontSizes.mini,
     color: Theme.colors.theme,
+    includeFontPadding: false,
   },
 });

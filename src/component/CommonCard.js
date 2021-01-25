@@ -28,6 +28,7 @@ export default function CommonCard({...props}) {
         style={{
           flexDirection: 'row',
           paddingVertical: 3,
+          alignItems: 'center',
         }}>
         <Image style={{height: 18, width: 18}} source={{uri: icon}} />
         <Text
@@ -35,6 +36,8 @@ export default function CommonCard({...props}) {
             fontFamily: Theme.fontFamily.PoppinsRegular,
             fontSize: Theme.fontSizes.mini,
             marginLeft: 10,
+            includeFontPadding: false,
+            textAlign: 'center',
           }}>
           {title}
         </Text>
@@ -45,7 +48,12 @@ export default function CommonCard({...props}) {
   const renderStatusView = () => {
     if (isJobSeeker) {
       return (
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            paddingBottom: 10,
+          }}>
           <View style={styles.statusContainer}>
             <View
               style={[
@@ -76,7 +84,7 @@ export default function CommonCard({...props}) {
                   styles.statusBackground,
                   {
                     backgroundColor: Theme.colors.redBg,
-                    marginLeft: 10,
+                    marginLeft: 5,
                   },
                 ]}>
                 <Text
@@ -91,18 +99,24 @@ export default function CommonCard({...props}) {
               </View>
             ) : null}
           </View>
-          <TouchableOpacity style={{paddingVertical: 5, flexDirection: 'row'}}>
+          <TouchableOpacity
+            style={{
+              // paddingVertical: 5,
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
             <Text
               style={{
                 fontFamily: Theme.fontFamily.PoppinsMedium,
                 fontSize: Theme.fontSizes.mini,
                 color: Theme.colors.theme,
-                marginRight: 5,
+                marginRight: 2,
+                includeFontPadding: false,
               }}>
               Apply Now
             </Text>
             <Image
-              style={{height: 22, width: 22}}
+              style={{height: 15, width: 22}}
               source={{uri: 'ic_apply_arow'}}
             />
           </TouchableOpacity>
@@ -110,7 +124,7 @@ export default function CommonCard({...props}) {
       );
     } else {
       return (
-        <View style={styles.statusContainer}>
+        <View style={[styles.statusContainer, {paddingBottom: 10}]}>
           <Text style={[styles.status, {marginRight: 10}]}>Status</Text>
 
           <View
@@ -297,6 +311,7 @@ const styles = StyleSheet.create({
     fontFamily: Theme.fontFamily.PoppinsRegular,
     fontSize: Theme.fontSizes.mini + 1,
     color: Theme.colors.theme,
+    includeFontPadding: false,
   },
   bottomSeprator: {
     width: 0.5,
@@ -315,15 +330,15 @@ const styles = StyleSheet.create({
   statusContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingBottom: 10,
   },
   status: {
     fontFamily: Theme.fontFamily.PoppinsRegular,
-    fontSize: Theme.fontSizes.mini,
+    fontSize: Theme.fontSizes.mini - 1,
+    includeFontPadding: false,
   },
   statusBackground: {
     borderRadius: 5,
-    paddingHorizontal: 10,
+    paddingHorizontal: 8,
     paddingVertical: 3,
     justifyContent: 'center',
   },

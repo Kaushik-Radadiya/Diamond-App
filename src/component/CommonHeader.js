@@ -85,6 +85,8 @@ const styles = StyleSheet.create({
     fontFamily: Theme.fontFamily.PoppinsMedium,
     fontSize: Theme.fontSizes.medium,
     color: Theme.colors.whiteText,
+    textAlign: 'center',
+    padding: 0,
   },
   jobBadge: {
     backgroundColor: 'red',

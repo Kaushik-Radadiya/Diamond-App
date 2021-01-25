@@ -33,7 +33,7 @@ export default function CommonRadio({...props}) {
 
 const styles = StyleSheet.create({
   buttonStyle: {
-    height: 60,
+    height: 55,
     borderRadius: 10,
     alignItems: 'center',
     paddingHorizontal: 10,
@@ -49,5 +49,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     fontFamily: Theme.fontFamily.PoppinsRegular,
     fontSize: Theme.fontSizes.mini + 2,
+    includeFontPadding: false,
   },
 });

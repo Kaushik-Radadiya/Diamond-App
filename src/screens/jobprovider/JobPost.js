@@ -159,5 +159,7 @@ const styles = StyleSheet.create({
     fontFamily: Theme.fontFamily.PoppinsMedium,
     fontSize: Theme.fontSizes.small,
     color: Theme.colors.theme,
+    includeFontPadding: false,
+    alignItems: 'center',
   },
 });

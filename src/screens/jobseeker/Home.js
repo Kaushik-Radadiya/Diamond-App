@@ -124,8 +124,8 @@ const styles = StyleSheet.create({
     flex: 8,
     fontFamily: Theme.fontFamily.PoppinsRegular,
     fontSize: Theme.fontSizes.small,
-    marginTop: 5,
-    height: 40,
+    includeFontPadding: false,
+    padding: 0,
   },
   bodyTitle: {
     fontFamily: Theme.fontFamily.PoppinsRegular,
@@ -138,12 +138,17 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     borderRadius: 10,
     marginRight: 10,
+    alignItems: 'center',
     // height: 40,
   },
   categoryText: {
     fontFamily: Theme.fontFamily.PoppinsMedium,
     fontSize: Theme.fontSizes.mini + 1,
     color: Theme.colors.theme,
+    textAlignVertical: 'center',
+
+    includeFontPadding: false,
+
     height: 20,
   },
 });

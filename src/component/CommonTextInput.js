@@ -6,7 +6,6 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
-  Platform,
 } from 'react-native';
 import Theme from '../utils/Theme';
 
@@ -48,20 +47,20 @@ const styles = StyleSheet.create({
   textInputContainer: {
     alignItems: 'center',
     flexDirection: 'row',
-    paddingHorizontal: 15,
+    paddingHorizontal: 13,
     height: 55,
     backgroundColor: Theme.colors.categoryBg,
     borderRadius: 10,
     marginVertical: 8,
   },
-  iconStyle: {height: 25, width: 25},
+  iconStyle: {height: 23, width: 23},
   textInputStyle: {
     height: 55,
     flex: 1,
     marginLeft: 12,
 
-    fontSize: Theme.fontSizes.small,
+    fontSize: Theme.fontSizes.small - 1,
     fontFamily: Theme.fontFamily.PoppinsRegular,
-    marginTop: Platform.OS == 'ios' ? 0 : 5,
+    includeFontPadding: false,
   },
 });

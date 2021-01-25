@@ -60,8 +60,8 @@ export class AlertDialog extends Component {
             backgroundColor: '#00000099',
           }}>
           <View style={styles.Alert_Main_View}>
-            <Text style={styles.Alert_Title}>{alertData.title}</Text>
-            <View style={styles.dividerLine} />
+            {/* <Text style={styles.Alert_Title}>{alertData.title}</Text>
+            <View style={styles.dividerLine} /> */}
             <View
               style={{
                 minHeight: 80,

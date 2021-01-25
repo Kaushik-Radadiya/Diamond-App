@@ -5,7 +5,6 @@ import {
   ImageBackground,
   StyleSheet,
   TouchableOpacity,
-  Image,
 } from 'react-native';
 import Theme from '../../utils/Theme';
 import DropDownModal from '../../component/DropDownModal';
@@ -66,6 +65,23 @@ export default function LookingFor({navigation}) {
   };
 
   onSkip = () => {
+    navigation.reset({
+      index: 0,
+      routes: [{name: 'Home'}],
+    });
+  };
+
+  const onClear = () => {
+    setCategory('Select Category');
+    setColour('Select Type');
+    setShape('Select Type');
+    set3XSelected(false);
+    set3XGiaSelected(false);
+    setVXSelected(false);
+    setVXGiaSelected(false);
+  };
+
+  const OnSubmit = () => {
     navigation.reset({
       index: 0,
       routes: [{name: 'Home'}],
@@ -135,7 +151,7 @@ export default function LookingFor({navigation}) {
             <View>
               <CommonDropDown
                 title={'Shape & Colour'}
-                buttonText={selectedColour}
+                buttonText={selectedShape}
                 buttonIcon={'ic_diamond'}
                 onDropDwonPress={showDropDown}
               />
@@ -161,6 +177,22 @@ export default function LookingFor({navigation}) {
               ) : null}
             </View>
           ) : null}
+          <View style={{flexDirection: 'row', marginTop: 10}}>
+            <TouchableOpacity
+              style={styles.cancelContainer}
+              onPress={() => {
+                onClear();
+              }}>
+              <Text style={styles.skipText}>Clear</Text>
+            </TouchableOpacity>
+            {isVXSelected || isVXGiaSelected ? (
+              <TouchableOpacity
+                style={styles.cancelContainer}
+                onPress={() => OnSubmit()}>
+                <Text style={styles.skipText}>Submit</Text>
+              </TouchableOpacity>
+            ) : null}
+          </View>
         </View>
       </ImageBackground>
     </View>
@@ -196,10 +228,26 @@ const styles = StyleSheet.create({
     fontFamily: Theme.fontFamily.PoppinsRegular,
     fontSize: Theme.fontSizes.medium,
     color: Theme.colors.theme,
+    includeFontPadding: false,
   },
   bootomSubContainer: {
     flex: 1,
     paddingHorizontal: 20,
     justifyContent: 'center',
+  },
+  cancelContainer: {
+    paddingHorizontal: 25,
+    paddingVertical: 5,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+    backgroundColor: Theme.colors.categoryBg,
+    marginHorizontal: 10,
+  },
+  cancelText: {
+    fontFamily: Theme.fontFamily.PoppinsRegular,
+    fontSize: Theme.fontSizes.small,
+    color: Theme.colors.theme,
   },
 });
