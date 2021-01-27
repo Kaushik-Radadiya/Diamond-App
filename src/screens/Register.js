@@ -202,7 +202,7 @@ export default function Register({navigation, route}) {
                 onChangeText={(text) => setFirstName(text)}
                 returnKeyType={'next'}
                 onSubmitEditing={() => refLastName.current.focus()}
-                width={'48%'}
+                width={'49%'}
               />
               <CommonTextInput
                 refs={refLastName}
@@ -215,7 +215,7 @@ export default function Register({navigation, route}) {
                     ? refCompanyName.current.focus()
                     : refEmailAddress.current.focus()
                 }
-                width={'48%'}
+                width={'49%'}
               />
             </View>
             {apptype == APPTYPE.JOBPROVIDER ? (
@@ -307,7 +307,7 @@ export default function Register({navigation, route}) {
                 style={{
                   textAlign: 'center',
                   fontFamily: Theme.fontFamily.PoppinsMedium,
-                  fontSize: Theme.fontSizes.mini,
+                  fontSize: Theme.fontSizes.mini - 1,
                 }}>
                 By Continuing Your Confirm That You Agree With Our Terms And
                 Condition
@@ -356,7 +356,7 @@ const styles = StyleSheet.create({
   },
   bootomSubContainer: {
     flex: 1,
-    paddingHorizontal: 25,
+    paddingHorizontal: 20,
   },
   buttonStyle: {
     height: 55,
@@ -377,12 +377,12 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: 20,
     fontFamily: Theme.fontFamily.PoppinsMedium,
-    fontSize: Theme.fontSizes.small - 1,
+    fontSize: Theme.fontSizes.mini,
   },
   socialButton: {
     backgroundColor: Theme.colors.categoryBg,
     flexDirection: 'row',
-    width: '45%',
+    width: '48%',
   },
   registerContainer: {
     flexDirection: 'row',

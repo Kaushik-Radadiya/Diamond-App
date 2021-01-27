@@ -32,10 +32,11 @@ export default function CommonCard({...props}) {
         }}>
         <Image style={{height: 18, width: 18}} source={{uri: icon}} />
         <Text
+          numberOfLines={1}
           style={{
             fontFamily: Theme.fontFamily.PoppinsRegular,
             fontSize: Theme.fontSizes.mini,
-            marginLeft: 10,
+            marginHorizontal: 10,
             includeFontPadding: false,
             textAlign: 'center',
           }}>
@@ -104,6 +105,7 @@ export default function CommonCard({...props}) {
               // paddingVertical: 5,
               flexDirection: 'row',
               alignItems: 'center',
+              flex: 3,
             }}>
             <Text
               style={{
@@ -163,7 +165,7 @@ export default function CommonCard({...props}) {
       <View style={styles.cardContainer}>
         <View style={{paddingHorizontal: 10, marginTop: 10}}>
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-            <View style={{flexDirection: 'row'}}>
+            <View style={{flexDirection: 'row', flex: 9}}>
               <View
                 style={[
                   styles.imageContainer,
@@ -179,7 +181,13 @@ export default function CommonCard({...props}) {
               </View>
             </View>
             <TouchableOpacity
-              style={{paddingVertical: 5}}
+              style={{
+                paddingVertical: 5,
+                flex: 1,
+                height: 25,
+                justifyContent: 'center',
+                alignItems: 'flex-end',
+              }}
               activeOpacity={1}
               onPress={() =>
                 isJobSeeker ? {} : setisMorePopupVisible(!isMorePopupVisible)
@@ -309,7 +317,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontFamily: Theme.fontFamily.PoppinsRegular,
-    fontSize: Theme.fontSizes.mini + 1,
+    fontSize: Theme.fontSizes.mini,
     color: Theme.colors.theme,
     includeFontPadding: false,
   },
@@ -330,6 +338,7 @@ const styles = StyleSheet.create({
   statusContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    flex: 7,
   },
   status: {
     fontFamily: Theme.fontFamily.PoppinsRegular,

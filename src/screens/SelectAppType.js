@@ -49,104 +49,102 @@ export default function SelectAppType({navigation}) {
         resizeMode={'stretch'}
         source={{uri: 'bg'}}
         style={styles.image}>
-        <ScrollView alwaysBounceVertical={false}>
-          <View style={styles.topSubContainer}>
-            <View>
-              <Text style={styles.titleText}>Welcome To Diamond Jobs</Text>
-              <Text
-                style={{
-                  fontFamily: Theme.fontFamily.PoppinsRegular,
-                  fontSize: Theme.fontSizes.mini,
-                }}>
-                You can now find the job that suits you
-              </Text>
-            </View>
-            <Image
-              style={[
-                styles.welcomeImage,
-                {
-                  width: window.width * 0.8,
-                  height: window.width * 0.8,
-                  // backgroundColor: 'red',
-                },
-              ]}
-              source={{uri: 'welcome_icon'}}
-            />
-          </View>
-          <View style={styles.bootomSubContainer}>
-            <Text style={[styles.titleText, {marginBottom: 5}]}>
-              Select Your Type
+        <View style={styles.topSubContainer}>
+          <View>
+            <Text style={styles.titleText}>Welcome To Diamond Jobs</Text>
+            <Text
+              style={{
+                fontFamily: Theme.fontFamily.PoppinsRegular,
+                fontSize: Theme.fontSizes.mini,
+              }}>
+              You can now find the job that suits you
             </Text>
-            <CommonButton
-              buttonStyle={[
-                styles.buttonStyle,
-                {
-                  backgroundColor: isJobSeekerSelected
-                    ? Theme.colors.theme
-                    : Theme.colors.categoryBg,
-                },
-              ]}
-              icon={isJobSeekerSelected ? 'ic_jobseekerfill' : 'ic_jobseeker'}
-              iconStyle={[styles.buttonIconStyle]}
-              text={APPTYPE.JOBSEEKER}
-              textStyle={[
-                styles.buttonTextStyle,
-                {
-                  color: isJobSeekerSelected
-                    ? Theme.colors.whiteText
-                    : Theme.colors.blackText,
-                },
-              ]}
-              buttonPress={commonButtonPress}
-            />
-            <CommonButton
-              buttonStyle={[
-                styles.buttonStyle,
-                {
-                  backgroundColor: isJobProviderSelected
-                    ? Theme.colors.theme
-                    : Theme.colors.categoryBg,
-                },
-              ]}
-              icon={
-                isJobProviderSelected ? 'ic_jobproviderfill' : 'ic_jobprovider'
-              }
-              iconStyle={styles.buttonIconStyle}
-              text={APPTYPE.JOBPROVIDER}
-              textStyle={[
-                styles.buttonTextStyle,
-                {
-                  color: isJobProviderSelected
-                    ? Theme.colors.whiteText
-                    : Theme.colors.blackText,
-                },
-              ]}
-              buttonPress={commonButtonPress}
-            />
-            <CommonButton
-              buttonStyle={[
-                styles.buttonStyle,
-                {
-                  backgroundColor: isSellerSelected
-                    ? Theme.colors.theme
-                    : Theme.colors.categoryBg,
-                },
-              ]}
-              icon={isSellerSelected ? 'ic_sellerfill' : 'ic_seller'}
-              iconStyle={styles.buttonIconStyle}
-              text={APPTYPE.SELLER}
-              textStyle={[
-                styles.buttonTextStyle,
-                {
-                  color: isSellerSelected
-                    ? Theme.colors.whiteText
-                    : Theme.colors.blackText,
-                },
-              ]}
-              buttonPress={commonButtonPress}
-            />
           </View>
-        </ScrollView>
+          <Image
+            style={[
+              styles.welcomeImage,
+              {
+                width: window.width * 0.8,
+                height: window.width * 0.8,
+                // backgroundColor: 'red',
+              },
+            ]}
+            source={{uri: 'welcome_icon'}}
+          />
+        </View>
+        <View style={styles.bootomSubContainer}>
+          <Text style={[styles.titleText, {marginBottom: 5}]}>
+            Select Your Type
+          </Text>
+          <CommonButton
+            buttonStyle={[
+              styles.buttonStyle,
+              {
+                backgroundColor: isJobSeekerSelected
+                  ? Theme.colors.theme
+                  : Theme.colors.categoryBg,
+              },
+            ]}
+            icon={isJobSeekerSelected ? 'ic_jobseekerfill' : 'ic_jobseeker'}
+            iconStyle={[styles.buttonIconStyle]}
+            text={APPTYPE.JOBSEEKER}
+            textStyle={[
+              styles.buttonTextStyle,
+              {
+                color: isJobSeekerSelected
+                  ? Theme.colors.whiteText
+                  : Theme.colors.blackText,
+              },
+            ]}
+            buttonPress={commonButtonPress}
+          />
+          <CommonButton
+            buttonStyle={[
+              styles.buttonStyle,
+              {
+                backgroundColor: isJobProviderSelected
+                  ? Theme.colors.theme
+                  : Theme.colors.categoryBg,
+              },
+            ]}
+            icon={
+              isJobProviderSelected ? 'ic_jobproviderfill' : 'ic_jobprovider'
+            }
+            iconStyle={styles.buttonIconStyle}
+            text={APPTYPE.JOBPROVIDER}
+            textStyle={[
+              styles.buttonTextStyle,
+              {
+                color: isJobProviderSelected
+                  ? Theme.colors.whiteText
+                  : Theme.colors.blackText,
+              },
+            ]}
+            buttonPress={commonButtonPress}
+          />
+          <CommonButton
+            buttonStyle={[
+              styles.buttonStyle,
+              {
+                backgroundColor: isSellerSelected
+                  ? Theme.colors.theme
+                  : Theme.colors.categoryBg,
+              },
+            ]}
+            icon={isSellerSelected ? 'ic_sellerfill' : 'ic_seller'}
+            iconStyle={styles.buttonIconStyle}
+            text={APPTYPE.SELLER}
+            textStyle={[
+              styles.buttonTextStyle,
+              {
+                color: isSellerSelected
+                  ? Theme.colors.whiteText
+                  : Theme.colors.blackText,
+              },
+            ]}
+            buttonPress={commonButtonPress}
+          />
+        </View>
       </ImageBackground>
     </View>
   );
@@ -171,14 +169,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 20,
     flex: 6,
-    // backgroundColor: 'blue',
   },
   bootomSubContainer: {
     paddingHorizontal: 40,
     flex: 4,
+    justifyContent: 'center',
   },
   buttonStyle: {
-    height: 55,
+    height: 50,
     borderRadius: 10,
     alignItems: 'center',
     paddingHorizontal: 25,

@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   skipContainer: {
-    paddingHorizontal: 25,
+    paddingHorizontal: 15,
     paddingVertical: 5,
     backgroundColor: Theme.colors.categoryBg,
     borderRadius: 10,

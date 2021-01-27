@@ -113,25 +113,25 @@ export default function Login({navigation, route}) {
   };
 
   const onLoginButtonPress = () => {
-    // if (apptype == APPTYPE.JOBPROVIDER) {
-    //   navigation.reset({
-    //     index: 0,
-    //     routes: [{name: 'Dashbord'}],
-    //   });
-    // } else {
-    //   navigation.reset({
-    //     index: 0,
-    //     routes: [{name: 'LookingFor'}],
-    //   });
-    // }
+    if (apptype == APPTYPE.JOBPROVIDER) {
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'Dashbord'}],
+      });
+    } else {
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'LookingFor'}],
+      });
+    }
 
-    setLoader(true);
-    const params = {
-      email: email,
-      password: password,
-    };
+    // setLoader(true);
+    // const params = {
+    //   email: email,
+    //   password: password,
+    // };
 
-    dispatch(postApi(API_LOGIN, params, LOGIN_SUCCESS, LOGIN_ERROR));
+    // dispatch(postApi(API_LOGIN, params, LOGIN_SUCCESS, LOGIN_ERROR));
   };
 
   const navigateToSocialRegister = (data) => {
@@ -298,12 +298,12 @@ const styles = StyleSheet.create({
     marginVertical: 15,
   },
   topSubContainer: {
-    padding: 35,
+    padding: 30,
   },
   bootomSubContainer: {
     flex: 1,
     justifyContent: 'center',
-    paddingHorizontal: 25,
+    paddingHorizontal: 20,
   },
   buttonStyle: {
     height: 55,
@@ -329,7 +329,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginVertical: 15,
     fontFamily: Theme.fontFamily.PoppinsMedium,
-    fontSize: Theme.fontSizes.small - 1,
+    fontSize: Theme.fontSizes.mini,
   },
   socialButton: {
     backgroundColor: Theme.colors.categoryBg,
