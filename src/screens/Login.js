@@ -113,25 +113,25 @@ export default function Login({navigation, route}) {
   };
 
   const onLoginButtonPress = () => {
-    if (apptype == APPTYPE.JOBPROVIDER) {
-      navigation.reset({
-        index: 0,
-        routes: [{name: 'Dashbord'}],
-      });
-    } else {
-      navigation.reset({
-        index: 0,
-        routes: [{name: 'LookingFor'}],
-      });
-    }
+    // if (apptype == APPTYPE.JOBPROVIDER) {
+    //   navigation.reset({
+    //     index: 0,
+    //     routes: [{name: 'Dashbord'}],
+    //   });
+    // } else {
+    //   navigation.reset({
+    //     index: 0,
+    //     routes: [{name: 'LookingFor'}],
+    //   });
+    // }
 
-    // setLoader(true);
-    // const params = {
-    //   email: email,
-    //   password: password,
-    // };
+    setLoader(true);
+    const params = {
+      email: email,
+      password: password,
+    };
 
-    // dispatch(postApi(API_LOGIN, params, LOGIN_SUCCESS, LOGIN_ERROR));
+    dispatch(postApi(API_LOGIN, params, LOGIN_SUCCESS, LOGIN_ERROR));
   };
 
   const navigateToSocialRegister = (data) => {

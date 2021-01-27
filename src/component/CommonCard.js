@@ -33,9 +33,10 @@ export default function CommonCard({...props}) {
         <Image style={{height: 18, width: 18}} source={{uri: icon}} />
         <Text
           numberOfLines={1}
+          ellipsizeMode="tail"
           style={{
             fontFamily: Theme.fontFamily.PoppinsRegular,
-            fontSize: Theme.fontSizes.mini,
+            fontSize: Theme.fontSizes.mini - 1,
             marginHorizontal: 10,
             includeFontPadding: false,
             textAlign: 'center',
@@ -105,12 +106,12 @@ export default function CommonCard({...props}) {
               // paddingVertical: 5,
               flexDirection: 'row',
               alignItems: 'center',
-              flex: 3,
             }}>
             <Text
+              numberOfLines={2}
               style={{
                 fontFamily: Theme.fontFamily.PoppinsMedium,
-                fontSize: Theme.fontSizes.mini,
+                fontSize: Theme.fontSizes.mini - 1,
                 color: Theme.colors.theme,
                 marginRight: 2,
                 includeFontPadding: false,
@@ -118,7 +119,7 @@ export default function CommonCard({...props}) {
               Apply Now
             </Text>
             <Image
-              style={{height: 15, width: 22}}
+              style={{height: 15, width: 16}}
               source={{uri: 'ic_apply_arow'}}
             />
           </TouchableOpacity>
@@ -338,11 +339,11 @@ const styles = StyleSheet.create({
   statusContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    flex: 7,
+    // flex: 7,
   },
   status: {
     fontFamily: Theme.fontFamily.PoppinsRegular,
-    fontSize: Theme.fontSizes.mini - 1,
+    fontSize: Theme.fontSizes.mini - 2,
     includeFontPadding: false,
   },
   statusBackground: {
