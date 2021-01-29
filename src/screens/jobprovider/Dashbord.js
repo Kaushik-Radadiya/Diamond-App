@@ -44,12 +44,12 @@ export default function Dashboard({navigation}) {
         const data = providerDashbordData.data.data;
         setProviderData(data);
       }
-      setLoader(false);
+      // setLoader(false);
     }
 
     if (providerDashbordError) {
       console.log('====providerDashbordError====', providerDashbordError);
-      setLoader(false);
+      // setLoader(false);
       // toast.current.show(providerDashbordError.message);
       dispatch({type: RESET});
     }
@@ -59,7 +59,7 @@ export default function Dashboard({navigation}) {
   }, [navigation, providerDashbordData, providerDashbordError]);
 
   const getProviderData = () => {
-    setLoader(true);
+    // setLoader(true);
     dispatch(
       postApi(
         API_GET_JOB_PROVIDER_DATA,

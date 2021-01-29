@@ -5,6 +5,8 @@ import {
   ImageBackground,
   ScrollView,
   StyleSheet,
+  Image,
+  useWindowDimensions,
 } from 'react-native';
 import CommonButton from '../../component/CommonButton';
 import CommonDropDown from '../../component/CommonDropDown';
@@ -12,14 +14,42 @@ import CommonDropDown from '../../component/CommonDropDown';
 import CommonHeader from '../../component/CommonHeader';
 import CommonTextinput from '../../component/CommonTextInput';
 import DropDownModal from '../../component/DropDownModal';
+import {useDispatch, useSelector} from 'react-redux';
+import {postApi} from '../../utils/APIKit';
+import {API_GET_JOB_CATEGORY, API_POST_JOB} from '../../utils/Url';
+import {
+  GET_JOB_CATEGORY_ERROR,
+  GET_JOB_CATEGORY_SUCCESS,
+  POST_JOB_ERROR,
+  POST_JOB_RESET,
+  POST_JOB_SUCCESS,
+} from '../../redux/JobProviderReducer';
+import {RESET} from '../../redux/AuthReducer';
+import Loader from '../../component/Loader';
+import Toast from '../../component/Toast';
+import {API_RESPONSE_STATUS} from '../../utils/Constant';
+import Theme from '../../utils/Theme';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 export default function JobPost({navigation}) {
+  const width = useWindowDimensions().width;
+  const dispatch = useDispatch();
+  const {
+    postJobData,
+    postJobError,
+    jobcategoryData,
+    jobcategoryError,
+  } = useSelector((state) => state.jobProvider);
   const [type, setType] = useState('');
   const [dropDownVisible, showHideDropDown] = useState(false);
-  const [selectedCategory, setCategory] = useState('Select Category');
-  const [selectedEmployemnetType, setEmployementType] = useState(
-    'Select employement type',
-  );
+  const [selectedCategory, setCategory] = useState({
+    id: 0,
+    name: 'Select Category',
+  });
+  const [selectedEmployemnetType, setEmployementType] = useState({
+    id: 0,
+    name: 'Select employement type',
+  });
   const [jobTitle, setjobTitle] = useState('Job Title (Designation)');
   const [experience, setExperience] = useState('Work experience you need');
   const [sallery, setSallery] = useState('10000 - 100000');
@@ -33,15 +63,55 @@ export default function JobPost({navigation}) {
   );
   const [vacancy, setVacancy] = useState('How many employees you recruit');
   const [location, setLocation] = useState('Job location (City)');
+  const [loading, setLoader] = useState(false);
+  const [categoryData, setCategoryData] = useState([]);
+  const [saveForlater, setSaveForlater] = useState(false);
+  const toast = React.useRef(null);
 
-  const DATA = [
-    {title: 'Hello'},
-    {title: 'Hello1'},
-    {title: 'Hello2'},
-    {title: 'Hell3'},
-    {title: 'Hello4'},
-    {title: 'Hello5'},
-  ];
+  React.useEffect(() => {
+    setLoader(true);
+    dispatch(
+      postApi(
+        API_GET_JOB_CATEGORY,
+        {},
+        GET_JOB_CATEGORY_SUCCESS,
+        GET_JOB_CATEGORY_ERROR,
+      ),
+    );
+  }, []);
+  React.useEffect(() => {
+    if (postJobData) {
+      console.log('====postJobData====', postJobData);
+      if (postJobData.status == API_RESPONSE_STATUS.STATUS_200) {
+        toast.current.show(postJobData.message, 'SUCCESS');
+        dispatch({type: POST_JOB_RESET});
+      }
+      setLoader(false);
+    }
+
+    if (postJobError) {
+      console.log('====postJobError====', postJobError);
+      setLoader(false);
+      dispatch({type: POST_JOB_RESET});
+    }
+
+    if (jobcategoryData) {
+      if (
+        jobcategoryData.status == API_RESPONSE_STATUS.STATUS_200 &&
+        jobcategoryData.data &&
+        jobcategoryData.data.category.length
+      ) {
+        setCategoryData(jobcategoryData.data.category);
+      } else {
+        toast.current.show(jobcategoryData.message);
+      }
+      setLoader(false);
+    }
+    if (jobcategoryError) {
+      setLoader(false);
+      dispatch({type: RESET});
+    }
+  }, [postJobData, postJobError, jobcategoryData, jobcategoryError]);
 
   const onSave = (item) => {
     if (type == 'Category') {
@@ -57,6 +127,25 @@ export default function JobPost({navigation}) {
   const showDropDown = (type) => {
     setType(type);
     showHideDropDown(true);
+  };
+
+  const postJob = () => {
+    setLoader(true);
+    const params = {
+      category_id: 1,
+      title: 'test',
+      description: 'test',
+      experience: '3 yr',
+      salary: '20,0000',
+      employment_type: 'FT',
+      employee_role: 'manager',
+      employee_skills: 'skill',
+      qualification: 'B.E',
+      vacancy: 5,
+      location: 'test',
+      image: 'test',
+    };
+    dispatch(postApi(API_POST_JOB, params, POST_JOB_SUCCESS, POST_JOB_ERROR));
   };
 
   const renderTextInput = (
@@ -86,6 +175,8 @@ export default function JobPost({navigation}) {
       resizeMode={'stretch'}
       source={{uri: 'bg'}}
       style={{flex: 1}}>
+      <Loader loading={loading} />
+      <Toast ref={toast} duration={5000} />
       <CommonHeader
         isBack={true}
         title={'Post Job'}
@@ -98,13 +189,13 @@ export default function JobPost({navigation}) {
         visible={dropDownVisible}
         onSave={onSave}
         onCancel={() => showHideDropDown(false)}
-        data={DATA}
+        data={categoryData}
       />
       <ScrollView>
         <View style={{padding: 15}}>
           <CommonDropDown
             title={'Category'}
-            buttonText={selectedCategory}
+            buttonText={selectedCategory.name}
             buttonIcon={'ic_category'}
             onDropDwonPress={showDropDown}
           />
@@ -114,7 +205,7 @@ export default function JobPost({navigation}) {
           {renderTextInput('Job Description', description, setDescription)}
           <CommonDropDown
             title={'Employement Type'}
-            buttonText={selectedEmployemnetType}
+            buttonText={selectedEmployemnetType.name}
             buttonIcon={'ic_category'}
             onDropDwonPress={showDropDown}
           />
@@ -124,6 +215,26 @@ export default function JobPost({navigation}) {
           {renderTextInput('Vacancy', vacancy, setVacancy)}
           {renderTextInput('Location', location, setLocation)}
 
+          <View style={styles.chooseImageContainer}>
+            <View style={styles.imageContainer}>
+              {/* <Image style={{}} /> */}
+            </View>
+            <TouchableOpacity
+              style={[styles.chooseImageButton, {width: width - 120}]}>
+              <Text style={styles.chooseImageText}>Choose Image</Text>
+            </TouchableOpacity>
+          </View>
+          <TouchableOpacity
+            style={styles.saveForLaterButton}
+            onPress={() => setSaveForlater(!saveForlater)}>
+            <Image
+              style={{height: 20, width: 20}}
+              source={{
+                uri: saveForlater ? 'ic_radiofill' : 'ic_radio',
+              }}
+            />
+            <Text style={styles.saveForLaterText}>Save for later</Text>
+          </TouchableOpacity>
           <CommonButton
             buttonStyle={[
               styles.buttonStyle,
@@ -139,7 +250,7 @@ export default function JobPost({navigation}) {
                 color: Theme.colors.whiteText,
               },
             ]}
-            buttonPress={() => {}}
+            buttonPress={() => postJob()}
           />
         </View>
       </ScrollView>
@@ -161,5 +272,50 @@ const styles = StyleSheet.create({
     color: Theme.colors.theme,
     includeFontPadding: false,
     alignItems: 'center',
+  },
+  chooseImageContainer: {
+    height: 65,
+    width: '100%',
+    borderRadius: 10,
+    alignItems: 'center',
+    paddingHorizontal: 15,
+    flexDirection: 'row',
+    marginVertical: 5,
+    backgroundColor: Theme.colors.categoryBg,
+
+    borderStyle: 'dashed',
+    borderWidth: 1,
+    borderColor: Theme.colors.theme,
+  },
+  imageContainer: {
+    height: 50,
+    width: 50,
+    borderRadius: 10,
+    backgroundColor: Theme.colors.whiteText,
+    alignContent: 'center',
+  },
+  chooseImageButton: {
+    marginLeft: 10,
+    height: 50,
+    justifyContent: 'center',
+  },
+  chooseImageText: {
+    fontFamily: Theme.fontFamily.PoppinsRegular,
+    fontSize: Theme.fontSizes.medium,
+    color: Theme.colors.theme,
+    textAlign: 'center',
+  },
+  saveForLaterButton: {
+    marginVertical: 5,
+    height: 30,
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+  saveForLaterText: {
+    fontFamily: Theme.fontFamily.PoppinsRegular,
+    fontSize: Theme.fontSizes.mini,
+    marginLeft: 5,
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
 });

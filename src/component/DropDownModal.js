@@ -29,13 +29,13 @@ const DropDownModal = ({...props}) => {
       <TouchableOpacity
         style={styles.itemContainer}
         onPress={() => {
-          setselectedItem(item.title);
+          setselectedItem(item);
         }}>
-        <Text style={styles.title}>{item.title}</Text>
+        <Text style={styles.title}>{item.name}</Text>
         <Image
           style={{height: 20, width: 20}}
           source={{
-            uri: item.title == selectedItem ? 'ic_radiofill' : 'ic_radio',
+            uri: item == selectedItem ? 'ic_radiofill' : 'ic_radio',
           }}
         />
       </TouchableOpacity>

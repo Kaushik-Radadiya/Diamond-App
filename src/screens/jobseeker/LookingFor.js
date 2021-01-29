@@ -13,9 +13,18 @@ import CommonRadio from '../../component/CommonRadio';
 
 export default function LookingFor({navigation}) {
   const [dropDownVisible, showHideDropDown] = useState(false);
-  const [selectedCategory, setCategory] = useState('Select Category');
-  const [selectedColour, setColour] = useState('Select Type');
-  const [selectedShape, setShape] = useState('Select Type');
+  const [selectedCategory, setCategory] = useState({
+    id: 0,
+    name: 'Select Category',
+  });
+  const [selectedColour, setColour] = useState({
+    id: 0,
+    name: 'Select Type',
+  });
+  const [selectedShape, setShape] = useState({
+    id: 0,
+    name: 'Select Type',
+  });
   const [is3XSelected, set3XSelected] = useState(false);
   const [is3XGiaSelected, set3XGiaSelected] = useState(false);
   const [isVXSelected, setVXSelected] = useState(false);
@@ -23,12 +32,10 @@ export default function LookingFor({navigation}) {
 
   const [type, setType] = useState('');
   const DATA = [
-    {title: 'Hello'},
-    {title: 'Hello1'},
-    {title: 'Hello2'},
-    {title: 'Hell3'},
-    {title: 'Hello4'},
-    {title: 'Hello5'},
+    {
+      id: 1,
+      name: 'Test',
+    },
   ];
 
   const onSave = (item) => {
