@@ -1,6 +1,7 @@
 import axios from 'axios';
-import {BASE_URL} from './Constant';
+import {BASE_URL, TOKEN} from './Constant';
 import errorAlert from './ExceptionHandler';
+import {getData} from './Utils';
 
 // Create axios client, pre-configured with baseURL
 let APIKit = axios.create({
@@ -11,10 +12,11 @@ let APIKit = axios.create({
 
 // Set JSON Web Token in Client to be included in all calls
 export const setClientToken = (token) => {
-  APIKit.interceptors.request.use(function (config) {
-    config.headers.Authorization = `Bearer ${token}`;
-    return config;
-  });
+  APIKit.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+};
+
+export const clearToken = () => {
+  delete APIKit.defaults.headers.common['Authorization'];
 };
 
 export const postApi = (url, params, successtype, failType = 'default') => (

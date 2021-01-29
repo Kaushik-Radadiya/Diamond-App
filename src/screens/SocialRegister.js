@@ -2,13 +2,20 @@ import React, {useState, useRef, useEffect} from 'react';
 import {View, Text, ImageBackground, StyleSheet} from 'react-native';
 import Theme from '../utils/Theme';
 import {useDispatch, useSelector} from 'react-redux';
-import {API_RESPONSE_STATUS, APPTYPE} from '../utils/Constant';
+import {
+  API_RESPONSE_STATUS,
+  APPTYPE,
+  LOGINTYPE,
+  TOKEN,
+} from '../utils/Constant';
 import CommonTextInput from '../component/CommonTextInput';
 import CommonButton from '../component/CommonButton';
 import {postApi, setClientToken} from '../utils/APIKit';
 import {API_REGISTER} from '../utils/Url';
 import {REGISTER_ERROR, REGISTER_SUCCESS, RESET} from '../redux/AuthReducer';
 import Loader from '../component/Loader';
+import Toast from '../component/Toast';
+import {storeData} from '../utils/Utils';
 
 export default function SocialRegister({navigation, route}) {
   const {apptype, userData} = route.params;
@@ -33,6 +40,11 @@ export default function SocialRegister({navigation, route}) {
       setLoader(false);
       if (registerResponse.status == API_RESPONSE_STATUS.STATUS_200) {
         setClientToken(registerResponse.data.token);
+        storeData(TOKEN, registerResponse.data.token);
+        storeData(
+          LOGINTYPE.Type,
+          userData.login_type == 'F' ? LOGINTYPE.Facebook : LOGINTYPE.Google,
+        );
         if (apptype == APPTYPE.JOBPROVIDER) {
           navigation.reset({
             index: 0,
@@ -52,23 +64,32 @@ export default function SocialRegister({navigation, route}) {
   }, [registerResponse, registerError]);
 
   const onNextPress = () => {
-    setLoader(true);
-    const params = {
-      firstName: userData.firstName,
-      lastName: userData.lastName,
-      mobile: mobileNumber,
-      type: apptype == APPTYPE.JOBPROVIDER ? 'JP' : 'JS',
-      email: userData.email,
-      login_type: userData.login_type,
-      companyName: apptype == APPTYPE.JOBPROVIDER ? companyName : undefined,
-    };
+    let message = null;
+    if (apptype == APPTYPE.JOBPROVIDER && companyName == '')
+      message = 'Please Enter CompnayName';
+    else if (mobileNumber == '') message = 'Please Enter Mobile Number';
+    else {
+      setLoader(true);
+      const params = {
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+        mobile: mobileNumber,
+        type: apptype == APPTYPE.JOBPROVIDER ? 'JP' : 'JS',
+        email: userData.email,
+        login_type: userData.login_type,
+        companyName: apptype == APPTYPE.JOBPROVIDER ? companyName : undefined,
+      };
 
-    dispatch(postApi(API_REGISTER, params, REGISTER_SUCCESS, REGISTER_ERROR));
+      dispatch(postApi(API_REGISTER, params, REGISTER_SUCCESS, REGISTER_ERROR));
+    }
+
+    if (message) toast.current.show(message);
   };
 
   return (
     <View style={styles.container}>
       <Loader loading={loading} />
+      <Toast ref={toast} duration={5000} />
       <ImageBackground
         resizeMode={'stretch'}
         source={{uri: 'bg'}}

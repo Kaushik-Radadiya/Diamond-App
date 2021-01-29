@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {EventRegister} from 'react-native-event-listeners';
+import {LOGINTYPE, TOKEN} from './Constant';
 
 export const storeData = async (key, value) => {
   try {

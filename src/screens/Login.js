@@ -4,7 +4,12 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import CommonButton from '../component/CommonButton';
 import CommonTextInput from '../component/CommonTextInput';
 import {postApi, setClientToken} from '../utils/APIKit';
-import {API_RESPONSE_STATUS, APPTYPE} from '../utils/Constant';
+import {
+  API_RESPONSE_STATUS,
+  APPTYPE,
+  LOGINTYPE,
+  TOKEN,
+} from '../utils/Constant';
 import Theme from '../utils/Theme';
 import {API_LOGIN, API_REGISTER} from '../utils/Url';
 import {useDispatch, useSelector} from 'react-redux';
@@ -24,14 +29,14 @@ import {
   REGISTER_SUCCESS,
   RESET,
 } from '../redux/AuthReducer';
-import {showAlert} from '../utils/Utils';
+import {showAlert, storeData} from '../utils/Utils';
 
 export default function Login({navigation, route}) {
   const {apptype} = route.params;
-  // const [email, setEmail] = useState('kaushikradadiya1995@gmail.com');
-  // const [password, setPassword] = useState('123456');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('kaushikradadiya1995@gmail.com');
+  const [password, setPassword] = useState('123456');
+  // const [email, setEmail] = useState('');
+  // const [password, setPassword] = useState('');
   const [loading, setLoader] = useState(false);
   const emailAddressInput = useRef(null);
   const passwordInput = useRef(null);
@@ -41,7 +46,7 @@ export default function Login({navigation, route}) {
 
   useEffect(() => {
     console.log('=====logout=====');
-    // LoginManager.logOut();
+
     GoogleSignin.configure();
   }, []);
 
@@ -50,6 +55,8 @@ export default function Login({navigation, route}) {
       setLoader(false);
       if (loginResponse.status == API_RESPONSE_STATUS.STATUS_200) {
         setClientToken(loginResponse.data.token);
+        storeData(TOKEN, loginResponse.data.token);
+        storeData(LOGINTYPE.Type, LOGINTYPE.Other);
         if (apptype == APPTYPE.JOBPROVIDER) {
           navigation.reset({
             index: 0,
@@ -71,17 +78,6 @@ export default function Login({navigation, route}) {
       dispatch({type: RESET});
     }
   }, [loginResponse, loginError]);
-
-  // signOut = async () => {
-  //   try {
-  //     await GoogleSignin.revokeAccess();
-  //     await GoogleSignin.signOut();
-  //     setloggedIn(false);
-  //     setuserInfo([]);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
 
   const getInfoFromToken = (token) => {
     const PROFILE_REQUEST_PARAMS = {
@@ -125,13 +121,17 @@ export default function Login({navigation, route}) {
     //   });
     // }
 
-    setLoader(true);
-    const params = {
-      email: email,
-      password: password,
-    };
+    if (email == '') toast.current.show('Please Enter Email');
+    else if (password == '') toast.current.show('Please Enter Password');
+    else {
+      setLoader(true);
+      const params = {
+        email: email,
+        password: password,
+      };
 
-    dispatch(postApi(API_LOGIN, params, LOGIN_SUCCESS, LOGIN_ERROR));
+      dispatch(postApi(API_LOGIN, params, LOGIN_SUCCESS, LOGIN_ERROR));
+    }
   };
 
   const navigateToSocialRegister = (data) => {

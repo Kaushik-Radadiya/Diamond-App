@@ -23,6 +23,7 @@ import ProviderProfile from './src/screens/jobprovider/ProviderProfile';
 import JobPost from './src/screens/jobprovider/JobPost';
 import EmployeeApplied from './src/screens/jobprovider/EmployeeApplied';
 import SocialRegister from './src/screens/SocialRegister';
+import Splash from './src/screens/Splash';
 
 const Stack = createStackNavigator();
 
@@ -204,7 +205,8 @@ const JobProviderDashbord = () => {
 const Route = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator headerMode={'none'} initialRouteName={'SelectAppType'}>
+      <Stack.Navigator headerMode={'none'} initialRouteName={'Splash'}>
+        <Stack.Screen name="Splash" component={Splash} />
         <Stack.Screen name="SelectAppType" component={SelectAppType} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Register" component={Register} />

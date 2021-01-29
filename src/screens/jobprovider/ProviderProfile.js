@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useState, useRef} from 'react';
+
 import {
   View,
   Text,
@@ -12,7 +13,62 @@ import {
 import CommonHeader from '../../component/CommonHeader';
 import Theme from '../../utils/Theme';
 
+import {useDispatch, useSelector} from 'react-redux';
+import {clearToken, postApi} from '../../utils/APIKit';
+import {API_LOGOUT} from '../../utils/Url';
+import {LOGOUT_ERROR, LOGOUT_SUCCESS, RESET} from '../../redux/AuthReducer';
+import {getData, storeData} from '../../utils/Utils';
+import {API_RESPONSE_STATUS, LOGINTYPE, TOKEN} from '../../utils/Constant';
+import {LoginManager} from 'react-native-fbsdk';
+import {GoogleSignin} from '@react-native-community/google-signin';
+import Toast from '../../component/Toast';
+import Loader from '../../component/Loader';
+import {RESET_REDUCER} from '../../redux/Store';
+
 export default function ProviderProfile({navigation}) {
+  const dispatch = useDispatch();
+  const [loading, setLoader] = useState(false);
+  const toast = useRef(null);
+  const {logoutResponse, logoutError} = useSelector((state) => state.auth);
+
+  const googleSignOut = async () => {
+    try {
+      await GoogleSignin.revokeAccess();
+      await GoogleSignin.signOut();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  React.useEffect(() => {
+    if (logoutResponse) {
+      setLoader(false);
+      if (logoutResponse.status == API_RESPONSE_STATUS.STATUS_200) {
+        console.log('======logoutResponse===', logoutResponse);
+        getData(LOGINTYPE.Type).then((value) => {
+          if (value == LOGINTYPE.Facebook) LoginManager.logOut();
+          else if (value == LOGINTYPE.Google) googleSignOut();
+
+          storeData(TOKEN, '');
+          storeData(LOGINTYPE.Type, '');
+          dispatch({type: RESET_REDUCER});
+          clearToken();
+          navigation.reset({
+            index: 0,
+            routes: [{name: 'SelectAppType'}],
+          });
+        });
+      } else {
+        toast.current.show(logoutResponse.message);
+      }
+    }
+
+    if (logoutError) {
+      setLoader(false);
+      dispatch({type: RESET});
+    }
+  }, [logoutResponse, logoutError]);
+
   const renderBodyText = (title, value) => {
     return (
       <View style={{paddingBottom: 5, flex: 1}}>
@@ -57,8 +113,8 @@ export default function ProviderProfile({navigation}) {
   };
 
   const onLogout = () => {
-    console.log('Logout');
-    navigation.navigate('SelectAppType');
+    setLoader(true);
+    dispatch(postApi(API_LOGOUT, {}, LOGOUT_SUCCESS, LOGOUT_ERROR));
   };
 
   const onEditProfile = () => {
@@ -69,6 +125,8 @@ export default function ProviderProfile({navigation}) {
       resizeMode={'stretch'}
       source={{uri: 'bg'}}
       style={{flex: 1}}>
+      <Toast ref={toast} duration={5000} />
+      <Loader loading={loading} />
       <CommonHeader title={'Profile'} isJobProvider navigation={navigation} />
       <View style={styles.headerContainer}>
         <View style={styles.profileBgContainer}>

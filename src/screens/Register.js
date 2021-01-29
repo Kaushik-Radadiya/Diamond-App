@@ -45,18 +45,29 @@ export default function Register({navigation, route}) {
   const {registerResponse, registerError} = useSelector((state) => state.auth);
 
   const onRegisterButtonPress = (item) => {
-    setLoader(true);
-    const params = {
-      firstName: firstName,
-      lastName: lastName,
-      mobile: mobileNumber,
-      type: apptype == APPTYPE.JOBPROVIDER ? 'JP' : 'JS',
-      email: email,
-      login_type: 'O',
-      companyName: apptype == APPTYPE.JOBPROVIDER ? companyName : undefined,
-    };
+    let message = null;
+    if (firstName == '') message = 'Please Enter FirstName';
+    else if (lastName == '') message = 'Please Enter LastName';
+    else if (apptype == APPTYPE.JOBPROVIDER && companyName == '')
+      message = 'Please Enter CompnayName';
+    else if (email == '') message = 'Please Enter Email';
+    else if (mobileNumber == '') message = 'Please Enter Mobile Number';
+    else {
+      setLoader(true);
+      const params = {
+        firstName: firstName,
+        lastName: lastName,
+        mobile: mobileNumber,
+        type: apptype == APPTYPE.JOBPROVIDER ? 'JP' : 'JS',
+        email: email,
+        login_type: 'O',
+        companyName: apptype == APPTYPE.JOBPROVIDER ? companyName : undefined,
+      };
 
-    register(params);
+      register(params);
+    }
+
+    if (message) toast.current.show(message);
   };
 
   const register = (params) => {
