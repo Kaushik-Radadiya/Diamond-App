@@ -119,19 +119,19 @@ export default function LookingFor({navigation}) {
         <View style={styles.bootomSubContainer}>
           <CommonDropDown
             title={'Category'}
-            buttonText={selectedCategory}
+            buttonText={selectedCategory.name}
             buttonIcon={'ic_category'}
             onDropDwonPress={showDropDown}
           />
-          {selectedCategory != 'Select Category' ? (
+          {selectedCategory.name != 'Select Category' ? (
             <View>
               <CommonDropDown
                 title={'Colour & Modify Cut'}
-                buttonText={selectedColour}
+                buttonText={selectedColour.name}
                 buttonIcon={'ic_diamond'}
                 onDropDwonPress={showDropDown}
               />
-              {selectedColour != 'Select Type' ? (
+              {selectedColour.name != 'Select Type' ? (
                 <View
                   style={{
                     flexDirection: 'row',
@@ -158,11 +158,11 @@ export default function LookingFor({navigation}) {
             <View>
               <CommonDropDown
                 title={'Shape & Colour'}
-                buttonText={selectedShape}
+                buttonText={selectedShape.name}
                 buttonIcon={'ic_diamond'}
                 onDropDwonPress={showDropDown}
               />
-              {selectedShape != 'Select Type' ? (
+              {selectedShape.name != 'Select Type' ? (
                 <View
                   style={{
                     flexDirection: 'row',

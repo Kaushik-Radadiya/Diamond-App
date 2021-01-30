@@ -21,7 +21,7 @@ export default function CommonTextinput({...props}) {
     width = '100%',
   } = props;
 
-  const [text, setText] = useState('');
+  // const [text, setText] = useState('');
 
   return (
     <TouchableOpacity style={[styles.textInputContainer, {width: width}]}>
@@ -33,11 +33,12 @@ export default function CommonTextinput({...props}) {
         style={styles.textInputStyle}
         placeholder={placeholder}
         onChangeText={(text) => {
-          setText(text);
+          // setText(text);
           onChangeText(text);
         }}
         returnKeyType={returnKeyType}
         onSubmitEditing={onSubmitEditing}
+        secureTextEntry={placeholder == 'Password' ? true : false}
       />
     </TouchableOpacity>
   );

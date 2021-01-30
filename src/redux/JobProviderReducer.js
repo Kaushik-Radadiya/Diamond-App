@@ -5,6 +5,9 @@ export const POST_JOB_ERROR = 'post_job_error';
 export const POST_JOB_RESET = 'post_job_reset';
 export const GET_JOB_CATEGORY_SUCCESS = 'get_job_category_success';
 export const GET_JOB_CATEGORY_ERROR = 'get_job_category_error';
+export const GET_POSTED_JOB_SUCCESS = 'get_posted_job_success';
+export const GET_POSTED_JOB_ERROR = 'get_posted_job_error';
+export const POSTED_JOB_RESET = 'posted_job_reset';
 export const RESET = 'reset';
 const initialState = {
   providerDashbordData: null,
@@ -13,6 +16,8 @@ const initialState = {
   postJobError: null,
   jobcategoryData: null,
   jobcategoryError: null,
+  postedJobsData: null,
+  postedJobError: null,
 };
 
 const JobProviderReducer = (state = initialState, action) => {
@@ -37,7 +42,12 @@ const JobProviderReducer = (state = initialState, action) => {
       };
     case POST_JOB_RESET:
       return {...state, postJobData: null, postJobError: null};
-
+    case GET_POSTED_JOB_SUCCESS:
+      return {...state, postedJobsData: action.payload.data};
+    case GET_POSTED_JOB_ERROR:
+      return {...state, postedJobError: action.payload.data};
+    case POSTED_JOB_RESET:
+      return {...state, postedJobError: null};
     case RESET:
       return {...state, providerDashbordError: null, jobcategoryError: null};
   }

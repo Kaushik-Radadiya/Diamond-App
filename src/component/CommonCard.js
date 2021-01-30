@@ -174,11 +174,11 @@ export default function CommonCard({...props}) {
                 ]}>
                 <Image
                   style={{height: width * 0.11, width: width * 0.11}}
-                  source={{uri: data.image}}></Image>
+                  source={{uri: 'ic_user'}}></Image>
               </View>
               <View style={{paddingHorizontal: 10}}>
                 <Text style={styles.title}>{data.title}</Text>
-                <Text style={styles.subTitle}>{data.subTitle}</Text>
+                <Text style={styles.subTitle}>{data.description}</Text>
               </View>
             </View>
             <TouchableOpacity
@@ -208,11 +208,14 @@ export default function CommonCard({...props}) {
 
           <View style={{paddingVertical: 10}}>
             {renderImageAndText('ic_sm_location', data.location)}
-            {renderImageAndText('ic_sm_experiance', data.experiance)}
+            {renderImageAndText(
+              'ic_sm_experiance',
+              `Experiance ${data.experience}`,
+            )}
             {isJobSeeker
               ? renderImageAndText('ic_sm_experiance', data.note)
               : null}
-            {renderImageAndText('ic_sm_calendar', data.postedData)}
+            {renderImageAndText('ic_sm_calendar', `Posted ${data.created_at}`)}
           </View>
           {data.status ? renderStatusView() : null}
         </View>
@@ -220,7 +223,7 @@ export default function CommonCard({...props}) {
           <View style={styles.bottomContainer}>
             <CommonButton
               buttonStyle={styles.bottomButtom}
-              text={`Employee Applied (${data.employApplied})`}
+              text={`Employee Applied (${data.applied_count})`}
               textStyle={styles.buttonText}
               buttonPress={() => onEmployeeApplied(data.id)}
             />

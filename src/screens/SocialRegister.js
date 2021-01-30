@@ -77,7 +77,7 @@ export default function SocialRegister({navigation, route}) {
         type: apptype == APPTYPE.JOBPROVIDER ? 'JP' : 'JS',
         email: userData.email,
         login_type: userData.login_type,
-        companyName: apptype == APPTYPE.JOBPROVIDER ? companyName : undefined,
+        company_name: apptype == APPTYPE.JOBPROVIDER ? companyName : undefined,
       };
 
       dispatch(postApi(API_REGISTER, params, REGISTER_SUCCESS, REGISTER_ERROR));

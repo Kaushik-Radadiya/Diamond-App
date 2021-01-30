@@ -50,23 +50,30 @@ export default function JobPost({navigation}) {
     id: 0,
     name: 'Select employement type',
   });
-  const [jobTitle, setjobTitle] = useState('Job Title (Designation)');
-  const [experience, setExperience] = useState('Work experience you need');
-  const [sallery, setSallery] = useState('10000 - 100000');
-  const [description, setDescription] = useState(
-    'Describe your job post, What you need',
-  );
-  const [role, setRole] = useState('Employee role');
-  const [skill, setSkill] = useState('Skills you need for work');
-  const [qualificaiton, setQualificaiton] = useState(
-    'Qualification (Optional)',
-  );
-  const [vacancy, setVacancy] = useState('How many employees you recruit');
-  const [location, setLocation] = useState('Job location (City)');
+  const [jobTitle, setjobTitle] = useState('');
+  const [experience, setExperience] = useState('');
+  const [sallery, setSallery] = useState('');
+  const [description, setDescription] = useState('');
+  const [role, setRole] = useState('');
+  const [skill, setSkill] = useState('');
+  const [qualificaiton, setQualificaiton] = useState('');
+  const [vacancy, setVacancy] = useState('');
+  const [location, setLocation] = useState('');
   const [loading, setLoader] = useState(false);
   const [categoryData, setCategoryData] = useState([]);
   const [saveForlater, setSaveForlater] = useState(false);
   const toast = React.useRef(null);
+
+  const employmentData = [
+    {
+      id: 'PT',
+      name: 'Part Time',
+    },
+    {
+      id: 'FT',
+      name: 'Full Time',
+    },
+  ];
 
   React.useEffect(() => {
     setLoader(true);
@@ -130,22 +137,65 @@ export default function JobPost({navigation}) {
   };
 
   const postJob = () => {
-    setLoader(true);
-    const params = {
-      category_id: 1,
-      title: 'test',
-      description: 'test',
-      experience: '3 yr',
-      salary: '20,0000',
-      employment_type: 'FT',
-      employee_role: 'manager',
-      employee_skills: 'skill',
-      qualification: 'B.E',
-      vacancy: 5,
-      location: 'test',
-      image: 'test',
-    };
-    dispatch(postApi(API_POST_JOB, params, POST_JOB_SUCCESS, POST_JOB_ERROR));
+    let errorMsg = '';
+
+    if (selectedCategory.id == 0) {
+      errorMsg = 'Please select category';
+    } else if (jobTitle == '') {
+      errorMsg = 'Please enter job title';
+    } else if (experience == '') {
+      errorMsg = 'Please enter work experience';
+    } else if (sallery == '') {
+      errorMsg = 'Please enter sallery';
+    } else if (description == '') {
+      errorMsg = 'Please enter job description';
+    } else if (selectedEmployemnetType.id == 0) {
+      errorMsg = 'Please select employment type';
+    } else if (role == '') {
+      errorMsg = 'Please enter employee role';
+    } else if (skill == '') {
+      errorMsg = 'Please enter skills';
+    } else if (vacancy == '') {
+      errorMsg = 'Please enter number of vacancy';
+    } else if (location == '') {
+      errorMsg = 'Please enter job location';
+    }
+
+    if (errorMsg == '') {
+      setLoader(true);
+      const params = {
+        category_id: selectedCategory.id,
+        title: jobTitle,
+        description: description,
+        experience: `${experience} Year`,
+        salary: sallery,
+        employment_type: selectedEmployemnetType.id,
+        employee_role: role,
+        employee_skills: skill,
+        qualification:
+          qualificaiton == 'Qualification (Optional)' ? '' : qualificaiton,
+        vacancy: vacancy,
+        location: location,
+        image: 'test',
+      };
+      // const params = {
+      //   category_id: 1,
+      //   title: 'test',
+      //   description: 'test',
+      //   experience: '3 yr',
+      //   salary: '20,0000',
+      //   employment_type: 'FT',
+      //   employee_role: 'manager',
+      //   employee_skills: 'skill',
+      //   qualification: 'B.E',
+      //   vacancy: 5,
+      //   location: 'test',
+      //   image: 'test',
+      // };
+      dispatch(postApi(API_POST_JOB, params, POST_JOB_SUCCESS, POST_JOB_ERROR));
+    } else {
+      toast.current.show(errorMsg);
+    }
   };
 
   const renderTextInput = (
@@ -189,7 +239,7 @@ export default function JobPost({navigation}) {
         visible={dropDownVisible}
         onSave={onSave}
         onCancel={() => showHideDropDown(false)}
-        data={categoryData}
+        data={type == 'Category' ? categoryData : employmentData}
       />
       <ScrollView>
         <View style={{padding: 15}}>
@@ -199,21 +249,52 @@ export default function JobPost({navigation}) {
             buttonIcon={'ic_category'}
             onDropDwonPress={showDropDown}
           />
-          {renderTextInput('Job Title (Designation)', jobTitle, setjobTitle)}
-          {renderTextInput('Experience', experience, setExperience)}
-          {renderTextInput('Sallery', sallery, setSallery)}
-          {renderTextInput('Job Description', description, setDescription)}
+          {renderTextInput(
+            'Job Title (Designation)',
+            'Job Title (Designation)',
+            setjobTitle,
+          )}
+          {renderTextInput(
+            'Experience',
+            'Work experience you need',
+            setExperience,
+            'number-pad',
+          )}
+          {renderTextInput(
+            'Sallery',
+            '10000 - 100000',
+            setSallery,
+            'number-pad',
+          )}
+          {renderTextInput(
+            'Job Description',
+            'Describe your job post, What you need',
+            setDescription,
+          )}
           <CommonDropDown
             title={'Employement Type'}
             buttonText={selectedEmployemnetType.name}
             buttonIcon={'ic_category'}
             onDropDwonPress={showDropDown}
           />
-          {renderTextInput('Employee Role', role, setRole)}
-          {renderTextInput('Employee Skills', skill, setSkill)}
-          {renderTextInput('Qualification', qualificaiton, setQualificaiton)}
-          {renderTextInput('Vacancy', vacancy, setVacancy)}
-          {renderTextInput('Location', location, setLocation)}
+          {renderTextInput('Employee Role', 'Employee role', setRole)}
+          {renderTextInput(
+            'Employee Skills',
+            'Skills you need for work',
+            setSkill,
+          )}
+          {renderTextInput(
+            'Qualification',
+            'Qualification (Optional)',
+            setQualificaiton,
+          )}
+          {renderTextInput(
+            'Vacancy',
+            'How many employees you recruit',
+            setVacancy,
+            'number-pad',
+          )}
+          {renderTextInput('Location', 'Job location (City)', setLocation)}
 
           <View style={styles.chooseImageContainer}>
             <View style={styles.imageContainer}>

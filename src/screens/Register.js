@@ -61,7 +61,7 @@ export default function Register({navigation, route}) {
         type: apptype == APPTYPE.JOBPROVIDER ? 'JP' : 'JS',
         email: email,
         login_type: 'O',
-        companyName: apptype == APPTYPE.JOBPROVIDER ? companyName : undefined,
+        company_name: apptype == APPTYPE.JOBPROVIDER ? companyName : undefined,
       };
 
       register(params);
@@ -86,17 +86,7 @@ export default function Register({navigation, route}) {
       setLoader(false);
       if (registerResponse.status == API_RESPONSE_STATUS.STATUS_200) {
         toast.current.show(registerResponse.message, 'SUCCESS');
-        // if (apptype == APPTYPE.JOBPROVIDER) {
-        //   navigation.reset({
-        //     index: 0,
-        //     routes: [{name: 'Dashbord'}],
-        //   });
-        // } else {
-        //   navigation.reset({
-        //     index: 0,
-        //     routes: [{name: 'LookingFor'}],
-        //   });
-        // }
+        navigation.goBack();
       } else {
         console.log('====response.MESSAGE===', registerResponse.MESSAGE);
         toast.current.show(registerResponse.MESSAGE);
