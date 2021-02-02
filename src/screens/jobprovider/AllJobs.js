@@ -1,43 +1,61 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Text, ImageBackground, StyleSheet, FlatList} from 'react-native';
 import CommonButton from '../../component/CommonButton';
 import CommonHeader from '../../component/CommonHeader';
 import Theme from '../../utils/Theme';
 import CommonCard from '../../component/CommonCard';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  GET_ALL_JOB_ERROR,
+  GET_ALL_JOB_SUCCESS,
+} from '../../redux/JobProviderReducer';
+import {API_RESPONSE_STATUS} from '../../utils/Constant';
+import Loader from '../../component/Loader';
+import {postApi} from '../../utils/APIKit';
+import {API_GET_POSTED_JOB} from '../../utils/Url';
 
 export default function AllJobs({navigation}) {
-  const [postedJobsData, setpostedJobsData] = useState([
-    {
-      id: 1,
-      image: 'ic_user',
-      title: 'Syner (Planer)',
-      description: 'Hari Krishna Diamond PVT. LTD.',
-      location: 'Surat, Gujarat',
-      experience: 'Experiance 1 to 5 years',
-      created_at: 'Posted 02-10-2020',
-      status: 'OPEN',
-    },
-    {
-      id: 2,
-      image: 'ic_user',
-      title: 'Syner (Planer)',
-      description: 'Hari Krishna Diamond PVT. LTD.',
-      location: 'Surat, Gujarat',
-      experience: 'Experiance 1 to 5 years',
-      created_at: 'Posted 02-10-2020',
-      status: 'CLOSED',
-    },
-    {
-      id: 3,
-      image: 'ic_user',
-      title: 'Syner (Planer)',
-      description: 'Hari Krishna Diamond PVT. LTD.',
-      location: 'Surat, Gujarat',
-      experience: 'Experiance 1 to 5 years',
-      created_at: 'Posted 02-10-2020',
-      status: 'DEACTIVE',
-    },
-  ]);
+  const [allJobs, setAllJObsData] = useState([]);
+  const dispatch = useDispatch();
+  const [loading, setLoader] = useState(false);
+  const {allJobsData, allJobError} = useSelector((state) => state.jobProvider);
+
+  const getAllJobs = () => {
+    setLoader(true);
+    const params = {
+      all: 0,
+      page: 1,
+      perPage: 10,
+      search: '',
+    };
+    dispatch(
+      postApi(
+        API_GET_POSTED_JOB,
+        params,
+        GET_ALL_JOB_SUCCESS,
+        GET_ALL_JOB_ERROR,
+      ),
+    );
+  };
+  useEffect(() => {
+    getAllJobs();
+  }, []);
+  useEffect(() => {
+    if (allJobsData) {
+      console.log('====allJobsData====', allJobsData);
+      if (allJobsData.status == API_RESPONSE_STATUS.STATUS_200) {
+        const data = allJobsData.data.jobs;
+        setAllJObsData(data);
+      }
+      setLoader(false);
+    }
+
+    if (allJobError) {
+      console.log('====postedJobError====', allJobError);
+      setLoader(false);
+      dispatch({type: POSTED_JOB_RESET});
+    }
+  }, [allJobsData, allJobError]);
 
   const onFilterPress = () => {
     console.log('===onFilterPress==');
@@ -53,19 +71,20 @@ export default function AllJobs({navigation}) {
       resizeMode={'stretch'}
       source={{uri: 'bg'}}
       style={{flex: 1}}>
+      <Loader loading={loading} />
       <CommonHeader
         title={'All Jobs'}
         isJobProvider
         filterPress={onFilterPress}
         navigation={navigation}
       />
-      {postedJobsData.length ? (
+      {allJobs.length ? (
         <View style={{paddingHorizontal: 15, flex: 1}}>
           <FlatList
             contentContainerStyle={{paddingBottom: 10}}
             showsVerticalScrollIndicator={false}
-            data={postedJobsData}
-            extraData={postedJobsData}
+            data={allJobs}
+            extraData={allJobs}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({item}) => (
               <CommonCard
@@ -76,7 +95,7 @@ export default function AllJobs({navigation}) {
             )}
           />
         </View>
-      ) : (
+      ) : !loading ? (
         <View style={styles.noJobContainer}>
           <Text style={styles.noJobText}>Not yet any job post.</Text>
           <CommonButton
@@ -86,7 +105,7 @@ export default function AllJobs({navigation}) {
             buttonPress={() => navigation.navigate('JobPost')}
           />
         </View>
-      )}
+      ) : null}
     </ImageBackground>
   );
 }

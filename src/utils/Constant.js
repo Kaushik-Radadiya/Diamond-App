@@ -20,3 +20,5 @@ export const TOKEN = 'token';
 export const API_RESPONSE_STATUS = {
   STATUS_200: '200',
 };
+
+export const SAVED_POST_DATA = 'saved_post_data';

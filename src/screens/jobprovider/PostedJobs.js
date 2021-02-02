@@ -106,6 +106,7 @@ export default function PostedJobs({navigation}) {
                 onClosedRecruitment={onClosedRecruitment}
                 onDeactivePost={onDeactivePost}
                 OnDeletePost={OnDeletePost}
+                isPostedJobs={true}
               />
             )}
           />

@@ -27,9 +27,11 @@ import {
 import {RESET} from '../../redux/AuthReducer';
 import Loader from '../../component/Loader';
 import Toast from '../../component/Toast';
-import {API_RESPONSE_STATUS} from '../../utils/Constant';
+import {API_RESPONSE_STATUS, SAVED_POST_DATA} from '../../utils/Constant';
 import Theme from '../../utils/Theme';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {getData, storeData} from '../../utils/Utils';
 
 export default function JobPost({navigation}) {
   const width = useWindowDimensions().width;
@@ -62,6 +64,7 @@ export default function JobPost({navigation}) {
   const [loading, setLoader] = useState(false);
   const [categoryData, setCategoryData] = useState([]);
   const [saveForlater, setSaveForlater] = useState(false);
+  const [selectedImageUri, setSlectedImage] = useState(null);
   const toast = React.useRef(null);
 
   const employmentData = [
@@ -109,11 +112,30 @@ export default function JobPost({navigation}) {
         jobcategoryData.data.category.length
       ) {
         setCategoryData(jobcategoryData.data.category);
+        dispatch({type: RESET});
+        getData(SAVED_POST_DATA).then((data) => {
+          if (data) {
+            const savedData = JSON.parse(data);
+            setCategory(savedData.category);
+            setjobTitle(savedData.title);
+            setDescription(savedData.description);
+            setExperience(savedData.experience);
+            setSallery(savedData.salary);
+            setEmployementType(savedData.employment_type);
+            setRole(savedData.employee_role);
+            setSkill(savedData.employee_skills);
+            setQualificaiton(savedData.qualification);
+            setVacancy(savedData.vacancy);
+            setLocation(savedData.location);
+            setSlectedImage(savedData.image);
+          }
+        });
       } else {
         toast.current.show(jobcategoryData.message);
       }
       setLoader(false);
     }
+
     if (jobcategoryError) {
       setLoader(false);
       dispatch({type: RESET});
@@ -139,35 +161,27 @@ export default function JobPost({navigation}) {
   const postJob = () => {
     let errorMsg = '';
 
-    if (selectedCategory.id == 0) {
-      errorMsg = 'Please select category';
-    } else if (jobTitle == '') {
-      errorMsg = 'Please enter job title';
-    } else if (experience == '') {
-      errorMsg = 'Please enter work experience';
-    } else if (sallery == '') {
-      errorMsg = 'Please enter sallery';
-    } else if (description == '') {
-      errorMsg = 'Please enter job description';
-    } else if (selectedEmployemnetType.id == 0) {
+    if (selectedCategory.id == 0) errorMsg = 'Please select category';
+    else if (jobTitle == '') errorMsg = 'Please enter job title';
+    else if (experience == '') errorMsg = 'Please enter work experience';
+    else if (sallery == '') errorMsg = 'Please enter sallery';
+    else if (description == '') errorMsg = 'Please enter job description';
+    else if (selectedEmployemnetType.id == 0)
       errorMsg = 'Please select employment type';
-    } else if (role == '') {
-      errorMsg = 'Please enter employee role';
-    } else if (skill == '') {
-      errorMsg = 'Please enter skills';
-    } else if (vacancy == '') {
-      errorMsg = 'Please enter number of vacancy';
-    } else if (location == '') {
-      errorMsg = 'Please enter job location';
-    }
+    else if (role == '') errorMsg = 'Please enter employee role';
+    else if (skill == '') errorMsg = 'Please enter skills';
+    else if (vacancy == '') errorMsg = 'Please enter number of vacancy';
+    else if (location == '') errorMsg = 'Please enter job location';
+    else if (!selectedImageUri) errorMsg = 'Please choose image';
 
     if (errorMsg == '') {
       setLoader(true);
+
       const params = {
         category_id: selectedCategory.id,
         title: jobTitle,
         description: description,
-        experience: `${experience} Year`,
+        experience: `${experience} Yr`,
         salary: sallery,
         employment_type: selectedEmployemnetType.id,
         employee_role: role,
@@ -178,29 +192,45 @@ export default function JobPost({navigation}) {
         location: location,
         image: 'test',
       };
-      // const params = {
-      //   category_id: 1,
-      //   title: 'test',
-      //   description: 'test',
-      //   experience: '3 yr',
-      //   salary: '20,0000',
-      //   employment_type: 'FT',
-      //   employee_role: 'manager',
-      //   employee_skills: 'skill',
-      //   qualification: 'B.E',
-      //   vacancy: 5,
-      //   location: 'test',
-      //   image: 'test',
-      // };
+
+      if (saveForlater) {
+        const data = {
+          category: selectedCategory,
+          title: jobTitle,
+          description: description,
+          experience: experience,
+          salary: sallery,
+          employment_type: selectedEmployemnetType,
+          employee_role: role,
+          employee_skills: skill,
+          qualification:
+            qualificaiton == 'Qualification (Optional)' ? '' : qualificaiton,
+          vacancy: vacancy,
+          location: location,
+          image: selectedImageUri,
+        };
+        storeData(SAVED_POST_DATA, JSON.stringify(data));
+      }
       dispatch(postApi(API_POST_JOB, params, POST_JOB_SUCCESS, POST_JOB_ERROR));
     } else {
       toast.current.show(errorMsg);
     }
   };
 
+  const chooseImage = () => {
+    launchImageLibrary({mediaType: 'photo'}, (data) => {
+      if (data.didCancel) {
+      } else if (data.errorCode) {
+      } else {
+        console.log('=====data======', data);
+        setSlectedImage(data.uri);
+      }
+    });
+  };
   const renderTextInput = (
     title,
     placeholder,
+    value,
     setdata,
     keyboardType = 'default',
   ) => {
@@ -215,6 +245,7 @@ export default function JobPost({navigation}) {
           onChangeText={(text) => setdata(text)}
           returnKeyType={'next'}
           keyboardType={keyboardType}
+          value={value}
         />
       </View>
     );
@@ -252,23 +283,27 @@ export default function JobPost({navigation}) {
           {renderTextInput(
             'Job Title (Designation)',
             'Job Title (Designation)',
+            jobTitle,
             setjobTitle,
           )}
           {renderTextInput(
             'Experience',
             'Work experience you need',
+            experience,
             setExperience,
             'number-pad',
           )}
           {renderTextInput(
             'Sallery',
             '10000 - 100000',
+            sallery,
             setSallery,
             'number-pad',
           )}
           {renderTextInput(
             'Job Description',
             'Describe your job post, What you need',
+            description,
             setDescription,
           )}
           <CommonDropDown
@@ -277,31 +312,47 @@ export default function JobPost({navigation}) {
             buttonIcon={'ic_category'}
             onDropDwonPress={showDropDown}
           />
-          {renderTextInput('Employee Role', 'Employee role', setRole)}
+          {renderTextInput('Employee Role', 'Employee role', role, setRole)}
           {renderTextInput(
             'Employee Skills',
             'Skills you need for work',
+            skill,
             setSkill,
           )}
           {renderTextInput(
             'Qualification',
             'Qualification (Optional)',
+            qualificaiton,
             setQualificaiton,
           )}
           {renderTextInput(
             'Vacancy',
             'How many employees you recruit',
+            vacancy,
             setVacancy,
             'number-pad',
           )}
-          {renderTextInput('Location', 'Job location (City)', setLocation)}
+          {renderTextInput(
+            'Location',
+            'Job location (City)',
+            location,
+            setLocation,
+          )}
 
           <View style={styles.chooseImageContainer}>
             <View style={styles.imageContainer}>
-              {/* <Image style={{}} /> */}
+              <Image
+                style={
+                  selectedImageUri
+                    ? styles.imageContainer
+                    : {height: 25, width: 25}
+                }
+                source={{uri: selectedImageUri ? selectedImageUri : 'ic_user'}}
+              />
             </View>
             <TouchableOpacity
-              style={[styles.chooseImageButton, {width: width - 120}]}>
+              style={[styles.chooseImageButton, {width: width - 120}]}
+              onPress={() => chooseImage()}>
               <Text style={styles.chooseImageText}>Choose Image</Text>
             </TouchableOpacity>
           </View>
@@ -373,7 +424,8 @@ const styles = StyleSheet.create({
     width: 50,
     borderRadius: 10,
     backgroundColor: Theme.colors.whiteText,
-    alignContent: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   chooseImageButton: {
     marginLeft: 10,

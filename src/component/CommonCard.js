@@ -21,6 +21,7 @@ export default function CommonCard({...props}) {
     onDeactivePost,
     OnDeletePost,
     isJobSeeker,
+    isPostedJobs,
   } = props;
   const renderImageAndText = (icon, title) => {
     return (
@@ -61,23 +62,21 @@ export default function CommonCard({...props}) {
               style={[
                 styles.statusBackground,
                 {
-                  backgroundColor:
-                    data.status == 'OPEN'
-                      ? Theme.colors.greenBg
-                      : Theme.colors.redBg,
+                  backgroundColor: data.is_active
+                    ? Theme.colors.greenBg
+                    : Theme.colors.redBg,
                 },
               ]}>
               <Text
                 style={[
                   styles.status,
                   {
-                    color:
-                      data.status == 'OPEN'
-                        ? Theme.colors.greenText
-                        : Theme.colors.redText,
+                    color: data.is_active
+                      ? Theme.colors.greenText
+                      : Theme.colors.redText,
                   },
                 ]}>
-                {data.status}
+                {data.is_active ? 'OPEN' : 'CLOSE'}
               </Text>
             </View>
             {data.isUrgent ? (
@@ -134,23 +133,21 @@ export default function CommonCard({...props}) {
             style={[
               styles.statusBackground,
               {
-                backgroundColor:
-                  data.status == 'OPEN'
-                    ? Theme.colors.greenBg
-                    : Theme.colors.blackBg,
+                backgroundColor: data.is_active
+                  ? Theme.colors.greenBg
+                  : Theme.colors.blackBg,
               },
             ]}>
             <Text
               style={[
                 styles.status,
                 {
-                  color:
-                    data.status == 'OPEN'
-                      ? Theme.colors.greenText
-                      : Theme.colors.blackText,
+                  color: data.is_active
+                    ? Theme.colors.greenText
+                    : Theme.colors.blackText,
                 },
               ]}>
-              {data.status}
+              {data.is_active ? 'OPEN' : 'CLOSE'}
             </Text>
           </View>
         </View>
@@ -213,11 +210,11 @@ export default function CommonCard({...props}) {
               `Experiance ${data.experience}`,
             )}
             {isJobSeeker
-              ? renderImageAndText('ic_sm_experiance', data.note)
+              ? renderImageAndText('ic_sm_experiance', data.description)
               : null}
             {renderImageAndText('ic_sm_calendar', `Posted ${data.created_at}`)}
           </View>
-          {data.status ? renderStatusView() : null}
+          {!isPostedJobs ? renderStatusView() : null}
         </View>
         {onEmployeeApplied && onClosedRecruitment ? (
           <View style={styles.bottomContainer}>

@@ -1,6 +1,7 @@
 import {createStore, applyMiddleware, combineReducers} from 'redux';
 import AuthReducer from './AuthReducer';
 import JobProviderReducer from './JobProviderReducer';
+import JobSeekerReducer from './JobSeekerReducer';
 import thunk from 'redux-thunk';
 
 export const RESET_REDUCER = 'reset_reducer';
@@ -8,6 +9,7 @@ export const RESET_REDUCER = 'reset_reducer';
 const appReducer = combineReducers({
   auth: AuthReducer,
   jobProvider: JobProviderReducer,
+  jobSeeker: JobSeekerReducer,
 });
 
 const rootReducer = (state, action) => {

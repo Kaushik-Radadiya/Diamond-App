@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -12,6 +12,15 @@ import {
 import Theme from '../../utils/Theme';
 import CommonHeader from '../../component/CommonHeader';
 import CommonCard from '../../component/CommonCard';
+import {API_GET_SEEKER_JOB} from '../../utils/Url';
+import {
+  GET_SEEKER_JOB_ERROR,
+  GET_SEEKER_JOB_SUCCESS,
+} from '../../redux/JobSeekerReducer';
+import {postApi} from '../../utils/APIKit';
+import {useDispatch, useSelector} from 'react-redux';
+import {API_RESPONSE_STATUS} from '../../utils/Constant';
+import Loader from '../../component/Loader';
 
 export default function Home({navigation}) {
   const searchCategory = ['Round-cut', 'Fency', 'Greder', 'Syner'];
@@ -41,6 +50,51 @@ export default function Home({navigation}) {
       status: 'CLOSED',
     },
   ]);
+
+  const [allJobs, setAllJObsData] = useState([]);
+  const dispatch = useDispatch();
+  const [loading, setLoader] = useState(false);
+  const {seekerJobsData, seekerJobError} = useSelector(
+    (state) => state.jobSeeker,
+  );
+
+  const getAllJobs = () => {
+    setLoader(true);
+    const params = {
+      all: 0,
+      page: 1,
+      perPage: 10,
+      search: '',
+    };
+    dispatch(
+      postApi(
+        API_GET_SEEKER_JOB,
+        params,
+        GET_SEEKER_JOB_SUCCESS,
+        GET_SEEKER_JOB_ERROR,
+      ),
+    );
+  };
+  useEffect(() => {
+    getAllJobs();
+  }, []);
+  useEffect(() => {
+    if (seekerJobsData) {
+      console.log('====seekerJobsData====', seekerJobsData);
+      if (seekerJobsData.status == API_RESPONSE_STATUS.STATUS_200) {
+        const data = seekerJobsData.data.jobs;
+        setRecommendedJobData(data);
+      }
+      setLoader(false);
+    }
+
+    if (seekerJobError) {
+      console.log('====seekerJobError====', seekerJobError);
+      setLoader(false);
+      dispatch({type: POSTED_JOB_RESET});
+    }
+  }, [seekerJobsData, seekerJobError]);
+
   const onFilterPress = () => {
     console.log('===onFilterPress==');
   };
@@ -55,7 +109,7 @@ export default function Home({navigation}) {
         isJobAvailable={true}
         navigation={navigation}
       />
-
+      <Loader loading={loading} />
       <View style={[styles.titleContainer]}>
         <Text style={styles.titleText}>Welcome, John</Text>
         <View style={styles.searchContainer}>

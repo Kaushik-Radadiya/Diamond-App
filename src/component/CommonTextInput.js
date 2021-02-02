@@ -19,6 +19,7 @@ export default function CommonTextinput({...props}) {
     onSubmitEditing,
     keyboardType,
     width = '100%',
+    value,
   } = props;
 
   // const [text, setText] = useState('');
@@ -39,6 +40,7 @@ export default function CommonTextinput({...props}) {
         returnKeyType={returnKeyType}
         onSubmitEditing={onSubmitEditing}
         secureTextEntry={placeholder == 'Password' ? true : false}
+        value={value}
       />
     </TouchableOpacity>
   );

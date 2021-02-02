@@ -8,6 +8,9 @@ export const GET_JOB_CATEGORY_ERROR = 'get_job_category_error';
 export const GET_POSTED_JOB_SUCCESS = 'get_posted_job_success';
 export const GET_POSTED_JOB_ERROR = 'get_posted_job_error';
 export const POSTED_JOB_RESET = 'posted_job_reset';
+export const GET_ALL_JOB_SUCCESS = 'get_all_job_success';
+export const GET_ALL_JOB_ERROR = 'get_all_job_error';
+export const ALL_JOB_RESET = 'all_job_reset';
 export const RESET = 'reset';
 const initialState = {
   providerDashbordData: null,
@@ -18,6 +21,8 @@ const initialState = {
   jobcategoryError: null,
   postedJobsData: null,
   postedJobError: null,
+  allJobsData: null,
+  allJobError: null,
 };
 
 const JobProviderReducer = (state = initialState, action) => {
@@ -48,8 +53,19 @@ const JobProviderReducer = (state = initialState, action) => {
       return {...state, postedJobError: action.payload.data};
     case POSTED_JOB_RESET:
       return {...state, postedJobError: null};
+    case GET_ALL_JOB_SUCCESS:
+      return {...state, allJobsData: action.payload.data};
+    case GET_ALL_JOB_ERROR:
+      return {...state, allJobError: action.payload.data};
+    case ALL_JOB_RESET:
+      return {...state, allJobError: null};
     case RESET:
-      return {...state, providerDashbordError: null, jobcategoryError: null};
+      return {
+        ...state,
+        providerDashbordError: null,
+        jobcategoryError: null,
+        jobcategoryData: null,
+      };
   }
   return state;
 };
