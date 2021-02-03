@@ -8,16 +8,24 @@ import {useDispatch, useSelector} from 'react-redux';
 import {
   GET_ALL_JOB_ERROR,
   GET_ALL_JOB_SUCCESS,
+  POSTED_JOB_RESET,
 } from '../../redux/JobProviderReducer';
 import {API_RESPONSE_STATUS} from '../../utils/Constant';
 import Loader from '../../component/Loader';
-import {postApi} from '../../utils/APIKit';
-import {API_GET_POSTED_JOB} from '../../utils/Url';
+import {postApi, postApiWithoutDispatch} from '../../utils/APIKit';
+import {
+  API_GET_POSTED_JOB,
+  API_PROVIDER_CHANGE_JOB_STATUS,
+  API_PROVIDER_DELETE_JOB,
+} from '../../utils/Url';
+import Toast from '../../component/Toast';
+import {showAlert} from '../../utils/Utils';
 
 export default function AllJobs({navigation}) {
   const [allJobs, setAllJObsData] = useState([]);
+  const toast = React.useRef(null);
   const dispatch = useDispatch();
-  const [loading, setLoader] = useState(false);
+  const [loading, setLoader] = useState(true);
   const {allJobsData, allJobError} = useSelector((state) => state.jobProvider);
 
   const getAllJobs = () => {
@@ -25,7 +33,7 @@ export default function AllJobs({navigation}) {
     const params = {
       all: 0,
       page: 1,
-      perPage: 10,
+      perPage: 20,
       search: '',
     };
     dispatch(
@@ -37,10 +45,12 @@ export default function AllJobs({navigation}) {
       ),
     );
   };
+
   useEffect(() => {
-    getAllJobs();
-  }, []);
-  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      getAllJobs();
+    });
+
     if (allJobsData) {
       console.log('====allJobsData====', allJobsData);
       if (allJobsData.status == API_RESPONSE_STATUS.STATUS_200) {
@@ -55,23 +65,75 @@ export default function AllJobs({navigation}) {
       setLoader(false);
       dispatch({type: POSTED_JOB_RESET});
     }
-  }, [allJobsData, allJobError]);
+    return unsubscribe;
+  }, [navigation, allJobsData, allJobError]);
 
   const onFilterPress = () => {
     console.log('===onFilterPress==');
   };
-  const onDeactivePost = (id) => {
+  const onDeactivePost = (id, status) => {
     console.log('====onDeactivePost==', id);
+    const jobStatus = status == 0 || status == 2;
+    showConfirmationAlert(
+      jobStatus ? 'Job Active' : 'Job Deactive',
+      `Are you sure, Want to ${jobStatus ? 'active' : 'deactive'} this job`,
+      () => changeStatus(id, jobStatus ? 1 : 0),
+    );
   };
   const OnDeletePost = (id) => {
     console.log('====OnDeletePost==', id);
+    showConfirmationAlert(
+      'Job Delete',
+      'Are you sure, Want to delete this job',
+      () => deleteJob(id),
+    );
   };
+
+  const showConfirmationAlert = (title, message, callAction) => {
+    showAlert(title, message, 'Yes', 'No', callAction, () => {});
+  };
+
+  const changeStatus = (id, status) => {
+    let params = {
+      status: status,
+    };
+    setLoader(true);
+    postApiWithoutDispatch(
+      API_PROVIDER_CHANGE_JOB_STATUS.replace('{ID}', id),
+      params,
+    )
+      .then((data) => {
+        console.log('changeStatusdata======', data);
+        toast.current.show(data.message, 'SUCCESS');
+        getAllJobs();
+      })
+      .catch((error) => {
+        console.log('changeStatuserror======', error);
+        setLoader(false);
+      });
+  };
+
+  const deleteJob = (id) => {
+    setLoader(true);
+    postApiWithoutDispatch(API_PROVIDER_DELETE_JOB.replace('{ID}', id), {})
+      .then((data) => {
+        console.log('deleteJobdata======', data);
+        toast.current.show(data.message, 'SUCCESS');
+        getAllJobs();
+      })
+      .catch((error) => {
+        console.log('deleteJoberror======', error);
+        setLoader(false);
+      });
+  };
+
   return (
     <ImageBackground
       resizeMode={'stretch'}
       source={{uri: 'bg'}}
       style={{flex: 1}}>
       <Loader loading={loading} />
+      <Toast ref={toast} duration={5000} />
       <CommonHeader
         title={'All Jobs'}
         isJobProvider

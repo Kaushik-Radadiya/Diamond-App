@@ -68,19 +68,6 @@ export default function Dashboard({navigation}) {
         PROVIDER_DASHBORD_ERROR,
       ),
     );
-    // APIKit.post(API_GET_JOB_PROVIDER_DATA)
-    //   .then(function (response) {
-    //     console.log('===JobProviderData===', response.data);
-    //     if (response.status == API_RESPONSE_STATUS.STATUS_200) {
-    //       const data = response.data.DATA.data;
-    //       setProviderData(data);
-    //     }
-    //     setLoader(false);
-    //   })
-    //   .catch(function (error) {
-    //     setLoader(false);
-    //     console.log(error);
-    //   });
   };
 
   const renderCard = (width, iconName, title, count, onButtonPress) => {

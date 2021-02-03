@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {View, Text, ImageBackground, StyleSheet, FlatList} from 'react-native';
 import CommonButton from '../../component/CommonButton';
 import CommonHeader from '../../component/CommonHeader';
@@ -6,18 +6,25 @@ import Theme from '../../utils/Theme';
 import CommonCard from '../../component/CommonCard';
 import {useDispatch, useSelector} from 'react-redux';
 import Loader from '../../component/Loader';
-import {postApi} from '../../utils/APIKit';
-import {API_GET_POSTED_JOB} from '../../utils/Url';
+import {postApi, postApiWithoutDispatch} from '../../utils/APIKit';
+import {
+  API_GET_POSTED_JOB,
+  API_PROVIDER_CHANGE_JOB_STATUS,
+  API_PROVIDER_DELETE_JOB,
+} from '../../utils/Url';
 import {
   GET_POSTED_JOB_ERROR,
   GET_POSTED_JOB_SUCCESS,
   POSTED_JOB_RESET,
 } from '../../redux/JobProviderReducer';
 import {API_RESPONSE_STATUS} from '../../utils/Constant';
+import Toast from '../../component/Toast';
+import {showAlert} from '../../utils/Utils';
 
 export default function PostedJobs({navigation}) {
   const dispatch = useDispatch();
-  const [loading, setLoader] = useState(false);
+  const toast = React.useRef(null);
+  const [loading, setLoader] = useState(true);
   const {postedJobsData, postedJobError} = useSelector(
     (state) => state.jobProvider,
   );
@@ -27,7 +34,7 @@ export default function PostedJobs({navigation}) {
     const params = {
       all: 1,
       page: 1,
-      perPage: 10,
+      perPage: 20,
       search: '',
     };
     dispatch(
@@ -39,10 +46,12 @@ export default function PostedJobs({navigation}) {
       ),
     );
   };
+  useEffect(() => {}, []);
   useEffect(() => {
-    getPostedJobs();
-  }, []);
-  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      getPostedJobs();
+    });
+
     if (postedJobsData) {
       console.log('====postedJobsData====', postedJobsData);
       if (postedJobsData.status == API_RESPONSE_STATUS.STATUS_200) {
@@ -57,7 +66,9 @@ export default function PostedJobs({navigation}) {
       setLoader(false);
       dispatch({type: POSTED_JOB_RESET});
     }
-  }, [postedJobsData, postedJobError]);
+
+    return unsubscribe;
+  }, [navigation, postedJobsData, postedJobError]);
 
   const onFilterPress = () => {
     console.log('===onFilterPress==');
@@ -69,12 +80,65 @@ export default function PostedJobs({navigation}) {
   };
   const onClosedRecruitment = (id) => {
     console.log('====onClosedRecruitment==', id);
+    showConfirmationAlert(
+      'Job Close',
+      'Are you sure, Want to close this job',
+      () => changeStatus(id, 2),
+    );
   };
   const onDeactivePost = (id) => {
     console.log('====onDeactivePost==', id);
+    showConfirmationAlert(
+      'Job Deactive',
+      'Are you sure, Want to deactive this job',
+      () => changeStatus(id, 0),
+    );
   };
   const OnDeletePost = (id) => {
     console.log('====OnDeletePost==', id);
+    showConfirmationAlert(
+      'Job Delete',
+      'Are you sure, Want to delete this job',
+      () => deleteJob(id),
+    );
+  };
+
+  const showConfirmationAlert = (title, message, callAction) => {
+    showAlert(title, message, 'Yes', 'No', callAction, () => {});
+  };
+
+  const changeStatus = (id, status) => {
+    let params = {
+      status: status,
+    };
+    setLoader(true);
+    postApiWithoutDispatch(
+      API_PROVIDER_CHANGE_JOB_STATUS.replace('{ID}', id),
+      params,
+    )
+      .then((data) => {
+        console.log('data======', data);
+        toast.current.show(data.message, 'SUCCESS');
+        getPostedJobs();
+      })
+      .catch((error) => {
+        console.log('error======', error);
+        setLoader(false);
+      });
+  };
+
+  const deleteJob = (id) => {
+    setLoader(true);
+    postApiWithoutDispatch(API_PROVIDER_DELETE_JOB.replace('{ID}', id), {})
+      .then((data) => {
+        console.log('data======', data);
+        toast.current.show(data.message, 'SUCCESS');
+        getPostedJobs();
+      })
+      .catch((error) => {
+        console.log('error======', error);
+        setLoader(false);
+      });
   };
 
   const [postedJobs, setpostedJobsData] = useState([]);
@@ -84,6 +148,7 @@ export default function PostedJobs({navigation}) {
       resizeMode={'stretch'}
       source={{uri: 'bg'}}
       style={{flex: 1}}>
+      <Toast ref={toast} duration={5000} />
       <Loader loading={loading} />
       <CommonHeader
         title={'Posted Jobs'}

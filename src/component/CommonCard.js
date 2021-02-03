@@ -133,21 +133,27 @@ export default function CommonCard({...props}) {
             style={[
               styles.statusBackground,
               {
-                backgroundColor: data.is_active
-                  ? Theme.colors.greenBg
-                  : Theme.colors.blackBg,
+                backgroundColor:
+                  data.is_active == 1
+                    ? Theme.colors.greenBg
+                    : Theme.colors.blackBg,
               },
             ]}>
             <Text
               style={[
                 styles.status,
                 {
-                  color: data.is_active
-                    ? Theme.colors.greenText
-                    : Theme.colors.blackText,
+                  color:
+                    data.is_active == 1
+                      ? Theme.colors.greenText
+                      : Theme.colors.blackText,
                 },
               ]}>
-              {data.is_active ? 'OPEN' : 'CLOSE'}
+              {data.is_active == 1
+                ? 'OPEN'
+                : data.is_active == 2
+                ? 'CLOSE'
+                : 'DEACTIVE'}
             </Text>
           </View>
         </View>
@@ -171,11 +177,15 @@ export default function CommonCard({...props}) {
                 ]}>
                 <Image
                   style={{height: width * 0.11, width: width * 0.11}}
-                  source={{uri: 'ic_user'}}></Image>
+                  source={{uri: data.image}}></Image>
               </View>
               <View style={{paddingHorizontal: 10}}>
                 <Text style={styles.title}>{data.title}</Text>
-                <Text style={styles.subTitle}>{data.description}</Text>
+                <Text style={styles.subTitle}>
+                  {data.user && data.users.company_name
+                    ? data.users.company_name
+                    : '-'}
+                </Text>
               </View>
             </View>
             <TouchableOpacity
@@ -239,9 +249,13 @@ export default function CommonCard({...props}) {
               style={{padding: 10}}
               onPress={() => {
                 setisMorePopupVisible(false);
-                onDeactivePost(data.id);
+                onDeactivePost(data.id, data.is_active);
               }}>
-              <Text style={styles.popupButtonText}>Deactive Post</Text>
+              <Text style={styles.popupButtonText}>
+                {data.is_active == 0 || data.is_active == 2
+                  ? 'Active Post'
+                  : 'Deactive Post'}
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.popupButtonContainer}

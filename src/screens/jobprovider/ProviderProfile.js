@@ -29,7 +29,12 @@ export default function ProviderProfile({navigation}) {
   const dispatch = useDispatch();
   const [loading, setLoader] = useState(false);
   const toast = useRef(null);
-  const {logoutResponse, logoutError} = useSelector((state) => state.auth);
+  const {
+    logoutResponse,
+    logoutError,
+    providerProfileData,
+    providerProfileError,
+  } = useSelector((state) => state.auth);
 
   const googleSignOut = async () => {
     try {

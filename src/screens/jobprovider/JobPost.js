@@ -16,13 +16,20 @@ import CommonTextinput from '../../component/CommonTextInput';
 import DropDownModal from '../../component/DropDownModal';
 import {useDispatch, useSelector} from 'react-redux';
 import {postApi} from '../../utils/APIKit';
-import {API_GET_JOB_CATEGORY, API_POST_JOB} from '../../utils/Url';
+import {
+  API_GET_JOB_CATEGORY,
+  API_IMAGE_UPLOAD,
+  API_POST_JOB,
+} from '../../utils/Url';
 import {
   GET_JOB_CATEGORY_ERROR,
   GET_JOB_CATEGORY_SUCCESS,
+  IMAGE_UPLOAD_ERROR,
+  IMAGE_UPLOAD_SUCCESS,
   POST_JOB_ERROR,
   POST_JOB_RESET,
   POST_JOB_SUCCESS,
+  RESET_IMAGE_UPLOAD,
 } from '../../redux/JobProviderReducer';
 import {RESET} from '../../redux/AuthReducer';
 import Loader from '../../component/Loader';
@@ -41,6 +48,8 @@ export default function JobPost({navigation}) {
     postJobError,
     jobcategoryData,
     jobcategoryError,
+    imageUploadData,
+    imageUploadError,
   } = useSelector((state) => state.jobProvider);
   const [type, setType] = useState('');
   const [dropDownVisible, showHideDropDown] = useState(false);
@@ -65,6 +74,7 @@ export default function JobPost({navigation}) {
   const [categoryData, setCategoryData] = useState([]);
   const [saveForlater, setSaveForlater] = useState(false);
   const [selectedImageUri, setSlectedImage] = useState(null);
+  const [selectedImageName, setSlectedImageName] = useState(null);
   const toast = React.useRef(null);
 
   const employmentData = [
@@ -79,24 +89,29 @@ export default function JobPost({navigation}) {
   ];
 
   React.useEffect(() => {
-    setLoader(true);
-    dispatch(
-      postApi(
-        API_GET_JOB_CATEGORY,
-        {},
-        GET_JOB_CATEGORY_SUCCESS,
-        GET_JOB_CATEGORY_ERROR,
-      ),
-    );
+    if (!jobcategoryData) {
+      setLoader(true);
+      dispatch(
+        postApi(
+          API_GET_JOB_CATEGORY,
+          {},
+          GET_JOB_CATEGORY_SUCCESS,
+          GET_JOB_CATEGORY_ERROR,
+        ),
+      );
+    }
+
+    setSavedData();
   }, []);
+
   React.useEffect(() => {
     if (postJobData) {
       console.log('====postJobData====', postJobData);
       if (postJobData.status == API_RESPONSE_STATUS.STATUS_200) {
         toast.current.show(postJobData.message, 'SUCCESS');
         dispatch({type: POST_JOB_RESET});
+        setLoader(false);
       }
-      setLoader(false);
     }
 
     if (postJobError) {
@@ -112,24 +127,6 @@ export default function JobPost({navigation}) {
         jobcategoryData.data.category.length
       ) {
         setCategoryData(jobcategoryData.data.category);
-        dispatch({type: RESET});
-        getData(SAVED_POST_DATA).then((data) => {
-          if (data) {
-            const savedData = JSON.parse(data);
-            setCategory(savedData.category);
-            setjobTitle(savedData.title);
-            setDescription(savedData.description);
-            setExperience(savedData.experience);
-            setSallery(savedData.salary);
-            setEmployementType(savedData.employment_type);
-            setRole(savedData.employee_role);
-            setSkill(savedData.employee_skills);
-            setQualificaiton(savedData.qualification);
-            setVacancy(savedData.vacancy);
-            setLocation(savedData.location);
-            setSlectedImage(savedData.image);
-          }
-        });
       } else {
         toast.current.show(jobcategoryData.message);
       }
@@ -140,8 +137,49 @@ export default function JobPost({navigation}) {
       setLoader(false);
       dispatch({type: RESET});
     }
-  }, [postJobData, postJobError, jobcategoryData, jobcategoryError]);
 
+    if (imageUploadData && imageUploadData.data) {
+      console.log('============imageUpload======', imageUploadData);
+      setSlectedImageName(
+        imageUploadData.data.url ? imageUploadData.data.url : '',
+      );
+      setLoader(false);
+      dispatch({type: RESET_IMAGE_UPLOAD});
+    }
+
+    if (imageUploadError) {
+      setLoader(false);
+      dispatch({type: RESET_IMAGE_UPLOAD});
+    }
+  }, [
+    postJobData,
+    postJobError,
+    jobcategoryData,
+    jobcategoryError,
+    imageUploadData,
+    imageUploadError,
+  ]);
+
+  const setSavedData = () => {
+    getData(SAVED_POST_DATA).then((data) => {
+      if (data) {
+        const savedData = JSON.parse(data);
+        setCategory(savedData.category);
+        setjobTitle(savedData.title);
+        setDescription(savedData.description);
+        setExperience(savedData.experience);
+        setSallery(savedData.salary);
+        setEmployementType(savedData.employment_type);
+        setRole(savedData.employee_role);
+        setSkill(savedData.employee_skills);
+        setQualificaiton(savedData.qualification);
+        setVacancy(savedData.vacancy);
+        setLocation(savedData.location);
+        setSlectedImage(savedData.image);
+        setSlectedImageName(savedData.imageName);
+      }
+    });
+  };
   const onSave = (item) => {
     if (type == 'Category') {
       setCategory(item);
@@ -181,7 +219,7 @@ export default function JobPost({navigation}) {
         category_id: selectedCategory.id,
         title: jobTitle,
         description: description,
-        experience: `${experience} Yr`,
+        experience: experience,
         salary: sallery,
         employment_type: selectedEmployemnetType.id,
         employee_role: role,
@@ -190,7 +228,7 @@ export default function JobPost({navigation}) {
           qualificaiton == 'Qualification (Optional)' ? '' : qualificaiton,
         vacancy: vacancy,
         location: location,
-        image: 'test',
+        image: selectedImageName,
       };
 
       if (saveForlater) {
@@ -208,6 +246,7 @@ export default function JobPost({navigation}) {
           vacancy: vacancy,
           location: location,
           image: selectedImageUri,
+          imageName: selectedImageName,
         };
         storeData(SAVED_POST_DATA, JSON.stringify(data));
       }
@@ -224,6 +263,25 @@ export default function JobPost({navigation}) {
       } else {
         console.log('=====data======', data);
         setSlectedImage(data.uri);
+
+        setLoader(true);
+        let imageFormData = new FormData();
+
+        const imageData = {
+          uri: data.uri,
+          type: 'multipart/form-data',
+          name: `image.jpg`,
+        };
+        imageFormData.append('image', imageData);
+
+        dispatch(
+          postApi(
+            API_IMAGE_UPLOAD,
+            imageFormData,
+            IMAGE_UPLOAD_SUCCESS,
+            IMAGE_UPLOAD_ERROR,
+          ),
+        );
       }
     });
   };

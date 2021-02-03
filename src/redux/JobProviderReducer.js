@@ -12,6 +12,13 @@ export const GET_ALL_JOB_SUCCESS = 'get_all_job_success';
 export const GET_ALL_JOB_ERROR = 'get_all_job_error';
 export const ALL_JOB_RESET = 'all_job_reset';
 export const RESET = 'reset';
+export const IMAGE_UPLOAD_SUCCESS = 'image_upload_success';
+export const IMAGE_UPLOAD_ERROR = 'image_upload_error';
+export const RESET_IMAGE_UPLOAD = 'reset_image_upload';
+export const GET_PROVIDER_PROFILE_SUCCESS = 'image_provider_profile_success';
+export const GET_PROVIDER_PROFILE_ERROR = 'image_provider_profile_error';
+export const RESET_PROVIDER_PROFILE = 'reset_provider_profile';
+
 const initialState = {
   providerDashbordData: null,
   providerDashbordError: null,
@@ -23,6 +30,10 @@ const initialState = {
   postedJobError: null,
   allJobsData: null,
   allJobError: null,
+  imageUploadData: null,
+  imageUploadError: null,
+  providerProfileData: null,
+  providerProfileError: null,
 };
 
 const JobProviderReducer = (state = initialState, action) => {
@@ -59,12 +70,23 @@ const JobProviderReducer = (state = initialState, action) => {
       return {...state, allJobError: action.payload.data};
     case ALL_JOB_RESET:
       return {...state, allJobError: null};
+    case IMAGE_UPLOAD_SUCCESS:
+      return {...state, imageUploadData: action.payload.data};
+    case IMAGE_UPLOAD_ERROR:
+      return {...state, imageUploadError: action.payload.data};
+    case RESET_IMAGE_UPLOAD:
+      return {...state, imageUploadData: null, imageUploadError: null};
+    case GET_PROVIDER_PROFILE_SUCCESS:
+      return {...state, providerProfileData: action.payload.data};
+    case GET_PROVIDER_PROFILE_ERROR:
+      return {...state, providerProfileError: action.payload.data};
+    case RESET_PROVIDER_PROFILE:
+      return {...state, providerProfileError: null};
     case RESET:
       return {
         ...state,
         providerDashbordError: null,
         jobcategoryError: null,
-        jobcategoryData: null,
       };
   }
   return state;

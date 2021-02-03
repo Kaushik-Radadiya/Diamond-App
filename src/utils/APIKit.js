@@ -35,6 +35,23 @@ export const postApi = (url, params, successtype, failType = 'default') => (
     });
 };
 
+export const postApiWithoutDispatch = (url, params) => {
+  console.log('=====POST=====', params, url);
+
+  return new Promise((resolve, reject) => {
+    APIKit.post(url, params)
+      .then(function (response) {
+        console.log('=====response====', response.data);
+        resolve(response.data);
+      })
+      .catch(function (error) {
+        console.log('=====POST--ERROR=====', error.response.data);
+        reject(error.response.data);
+        errorAlert(error.response.data, true);
+      });
+  });
+};
+
 export const getApi = (dispatch = (
   url,
   params = {},

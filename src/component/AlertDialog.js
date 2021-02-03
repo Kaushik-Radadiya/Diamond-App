@@ -60,8 +60,10 @@ export class AlertDialog extends Component {
             backgroundColor: '#00000099',
           }}>
           <View style={styles.Alert_Main_View}>
-            {/* <Text style={styles.Alert_Title}>{alertData.title}</Text>
-            <View style={styles.dividerLine} /> */}
+            {alertData.title ? (
+              <Text style={styles.Alert_Title}>{alertData.title}</Text>
+            ) : null}
+            <View style={styles.dividerLine} />
             <View
               style={{
                 minHeight: 80,
@@ -94,7 +96,7 @@ export class AlertDialog extends Component {
                 </Text>
               </TouchableOpacity>
 
-              <View style={{width: 1}} />
+              <View style={{width: 1, backgroundColor: 'black'}} />
 
               {alertData.negativeButtonText != '' ? (
                 <TouchableOpacity
