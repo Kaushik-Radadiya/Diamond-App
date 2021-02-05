@@ -15,6 +15,7 @@ import JobApplied from './src/screens/jobseeker/JobApplied';
 import JobSaved from './src/screens/jobseeker/JobSaved';
 import Profile from './src/screens/jobseeker/Profile';
 import Setting from './src/screens/jobseeker/Setting';
+import JobDetail from './src/screens/jobseeker/JobDetail';
 import FreelanceJobs from './src/screens/jobseeker/FreelanceJobs';
 import Dashbord from './src/screens/jobprovider/Dashbord';
 import AllJobs from './src/screens/jobprovider/AllJobs';
@@ -214,6 +215,7 @@ const Route = () => {
         <Stack.Screen name="LookingFor" component={LookingFor} />
         <Stack.Screen name="Home" component={JobSeekerDashbord} />
         <Stack.Screen name="Dashbord" component={JobProviderDashbord} />
+        <Stack.Screen name="JobDetail" component={JobDetail} />
         <Stack.Screen name="Setting" component={Setting} />
         <Stack.Screen name="FreelanceJobs" component={FreelanceJobs} />
         <Stack.Screen name="JobPost" component={JobPost} />

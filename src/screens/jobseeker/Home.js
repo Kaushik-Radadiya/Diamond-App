@@ -24,42 +24,14 @@ import Loader from '../../component/Loader';
 
 export default function Home({navigation}) {
   const searchCategory = ['Round-cut', 'Fency', 'Greder', 'Syner'];
-  const [recommendedJobData, setRecommendedJobData] = useState([
-    {
-      id: 1,
-      image: 'ic_user',
-      title: 'Syner (Planer)',
-      description: 'Hari Krishna Diamond PVT. LTD.',
-      location: 'Surat, Gujarat',
-      experience: 'Experiance 1 to 5 years',
-      created_at: 'Posted 02-10-2020',
-      employApplied: 2,
-      note: 'We have given opertunity in siner(Planer).',
-      status: 'OPEN',
-    },
-    {
-      id: 2,
-      image: 'ic_user',
-      title: 'Syner (Planer)',
-      description: 'Hari Krishna Diamond PVT. LTD.',
-      location: 'Surat, Gujarat',
-      experience: 'Experiance 1 to 5 years',
-      created_at: 'Posted 02-10-2020',
-      employApplied: 2,
-      note: 'We have given opertunity in siner(Planer).',
-      status: 'CLOSED',
-    },
-  ]);
-
-  const [allJobs, setAllJObsData] = useState([]);
+  const [recommendedJobData, setRecommendedJobData] = useState([]);
   const dispatch = useDispatch();
-  const [loading, setLoader] = useState(false);
+  const [loading, setLoader] = useState(true);
   const {seekerJobsData, seekerJobError} = useSelector(
     (state) => state.jobSeeker,
   );
 
-  const getAllJobs = () => {
-    setLoader(true);
+  const getRecommendedJobs = () => {
     const params = {
       all: 0,
       page: 1,
@@ -76,7 +48,7 @@ export default function Home({navigation}) {
     );
   };
   useEffect(() => {
-    getAllJobs();
+    getRecommendedJobs();
   }, []);
   useEffect(() => {
     if (seekerJobsData) {
@@ -99,6 +71,12 @@ export default function Home({navigation}) {
     console.log('===onFilterPress==');
   };
 
+  const saveJob = (id) => {
+    console.log('===saveJob==', id);
+  };
+  const applyJob = (id) => {
+    console.log('===applyJob==', id);
+  };
   return (
     <ImageBackground
       resizeMode={'stretch'}
@@ -120,32 +98,53 @@ export default function Home({navigation}) {
           <Image style={{height: 25, width: 25}} source={{uri: 'ic_search'}} />
         </View>
       </View>
-      <View style={{paddingHorizontal: 15, paddingTop: 15, flex: 1}}>
-        <Text style={styles.bodyTitle}>Search by Category</Text>
-        <FlatList
-          contentContainerStyle={{paddingVertical: 10}}
-          data={searchCategory}
-          extraData={searchCategory}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({item, index}) => (
-            <TouchableOpacity style={styles.categoryConatiner}>
-              <Text style={styles.categoryText}>{item}</Text>
-            </TouchableOpacity>
-          )}
-        />
-        <Text style={styles.bodyTitle}>Recommended Job</Text>
+      {recommendedJobData.length ? (
+        <View style={{paddingHorizontal: 15, paddingTop: 15, flex: 1}}>
+          <Text style={styles.bodyTitle}>Search by Category</Text>
+          <FlatList
+            contentContainerStyle={{paddingVertical: 10}}
+            data={searchCategory}
+            extraData={searchCategory}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({item, index}) => (
+              <TouchableOpacity style={styles.categoryConatiner}>
+                <Text style={styles.categoryText}>{item}</Text>
+              </TouchableOpacity>
+            )}
+          />
+          <Text style={styles.bodyTitle}>Recommended Job</Text>
 
-        <FlatList
-          contentContainerStyle={{paddingBottom: 10}}
-          data={recommendedJobData}
-          extraData={recommendedJobData}
-          showsVerticalScrollIndicator={false}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({item}) => <CommonCard data={item} isJobSeeker />}
-        />
-      </View>
+          <FlatList
+            contentContainerStyle={{paddingBottom: 10}}
+            data={recommendedJobData}
+            extraData={recommendedJobData}
+            showsVerticalScrollIndicator={false}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({item}) => (
+              <CommonCard
+                data={item}
+                isJobSeeker
+                onSave={saveJob}
+                onApply={applyJob}
+                navigation={navigation}
+              />
+            )}
+          />
+        </View>
+      ) : !loading ? (
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <Text
+            style={{
+              fontFamily: Theme.fontFamily.PoppinsMedium,
+              fontSize: Theme.fontSizes.medium,
+              color: Theme.colors.theme,
+            }}>
+            No jobs available
+          </Text>
+        </View>
+      ) : null}
     </ImageBackground>
   );
 }
@@ -184,6 +183,7 @@ const styles = StyleSheet.create({
   bodyTitle: {
     fontFamily: Theme.fontFamily.PoppinsRegular,
     fontSize: Theme.fontSizes.small,
+    color: Theme.colors.blackText,
   },
   categoryConatiner: {
     backgroundColor: Theme.colors.categoryBg,

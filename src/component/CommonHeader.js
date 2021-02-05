@@ -11,6 +11,7 @@ export default function CommonHeader({...props}) {
     isBack,
     headerRightButtonPress,
     headerRightIcon,
+    sharePress,
   } = props;
 
   if (isBack) {
@@ -60,6 +61,7 @@ export default function CommonHeader({...props}) {
               />
             </TouchableOpacity>
           ) : null}
+
           <TouchableOpacity
             style={styles.headerButtonContainer}
             onPress={() => navigation.navigate('Setting')}>

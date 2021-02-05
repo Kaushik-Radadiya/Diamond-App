@@ -22,6 +22,9 @@ export default function CommonCard({...props}) {
     OnDeletePost,
     isJobSeeker,
     isPostedJobs,
+    onApply,
+    onSave,
+    navigation,
   } = props;
   const renderImageAndText = (icon, title) => {
     return (
@@ -101,6 +104,7 @@ export default function CommonCard({...props}) {
             ) : null}
           </View>
           <TouchableOpacity
+            onPress={() => onApply(data.id)}
             style={{
               // paddingVertical: 5,
               flexDirection: 'row',
@@ -162,7 +166,11 @@ export default function CommonCard({...props}) {
   };
 
   return (
-    <View
+    <TouchableOpacity
+      onPress={() => {
+        isJobSeeker ? navigation.navigate('JobDetail', {jobData: data}) : {};
+      }}
+      activeOpacity={1}
       style={{
         paddingTop: 15,
       }}>
@@ -198,7 +206,9 @@ export default function CommonCard({...props}) {
               }}
               activeOpacity={1}
               onPress={() =>
-                isJobSeeker ? {} : setisMorePopupVisible(!isMorePopupVisible)
+                isJobSeeker
+                  ? onSave(data.id)
+                  : setisMorePopupVisible(!isMorePopupVisible)
               }>
               <Image
                 style={{height: 20, width: 20}}
@@ -268,7 +278,7 @@ export default function CommonCard({...props}) {
           </View>
         ) : null}
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 

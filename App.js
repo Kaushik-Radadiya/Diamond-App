@@ -5,6 +5,7 @@ import {Provider as StoreProvider} from 'react-redux';
 import store from './src/redux/Store';
 import {SafeAreaView} from 'react-native';
 import AlertDialog from './src/component/AlertDialog';
+import OfflineNotice from './src/component/OfflineNotice';
 
 export default function App() {
   return (
@@ -12,6 +13,7 @@ export default function App() {
       <SafeAreaView style={{flex: 1}}>
         <Route />
         <AlertDialog />
+        <OfflineNotice />
       </SafeAreaView>
     </StoreProvider>
   );

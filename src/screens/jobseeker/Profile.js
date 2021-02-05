@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   FlatList,
+  TextInput,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 
@@ -18,19 +19,34 @@ import {LOGOUT_ERROR, LOGOUT_SUCCESS, RESET} from '../../redux/AuthReducer';
 import {clearToken, postApi} from '../../utils/APIKit';
 import {API_RESPONSE_STATUS, LOGINTYPE, TOKEN} from '../../utils/Constant';
 import Theme from '../../utils/Theme';
-import {API_LOGOUT} from '../../utils/Url';
+import {API_GET_PROFILE_DETAIL, API_LOGOUT} from '../../utils/Url';
 import {getData, storeData} from '../../utils/Utils';
 import {LoginManager} from 'react-native-fbsdk';
 import {GoogleSignin} from '@react-native-community/google-signin';
 import {RESET_REDUCER} from '../../redux/Store';
+import {
+  GET_SEEKER_PROFILE_ERROR,
+  GET_SEEKER_PROFILE_SUCCESS,
+} from '../../redux/JobSeekerReducer';
 
 export default function Profile({navigation}) {
   const dispatch = useDispatch();
   const [skills, setskills] = useState(['Syner', 'Colur Paurity', 'Fency']);
   const [loading, setLoader] = useState(false);
+  const [name, setName] = useState('');
+  const [mobileNo, setMobileNo] = useState('');
+  const [password, setPassword] = useState('');
+  const [city, setCity] = useState('');
+  const [state, setState] = useState('');
+  const [companyName, setCompanyName] = useState('');
+  const [email, setEmail] = useState('');
+  const [experience, setExperiance] = useState('');
+
   const toast = useRef(null);
   const {logoutResponse, logoutError} = useSelector((state) => state.auth);
-
+  const {seekerProfileData, seekerProfileError} = useSelector(
+    (state) => state.jobSeeker,
+  );
   const googleSignOut = async () => {
     try {
       await GoogleSignin.revokeAccess();
@@ -39,6 +55,18 @@ export default function Profile({navigation}) {
       console.error(error);
     }
   };
+
+  React.useEffect(() => {
+    setLoader(true);
+    dispatch(
+      postApi(
+        API_GET_PROFILE_DETAIL,
+        {},
+        GET_SEEKER_PROFILE_SUCCESS,
+        GET_SEEKER_PROFILE_ERROR,
+      ),
+    );
+  }, []);
 
   React.useEffect(() => {
     if (logoutResponse) {
@@ -67,19 +95,43 @@ export default function Profile({navigation}) {
       setLoader(false);
       dispatch({type: RESET});
     }
-  }, [logoutResponse, logoutError]);
 
-  const renderBodyText = (title, value) => {
+    if (seekerProfileData) {
+      setLoader(false);
+      if (seekerProfileData.status == API_RESPONSE_STATUS.STATUS_200) {
+        console.log('======seekerProfileData===', seekerProfileData);
+        const data = seekerProfileData.data.user;
+        setName(data.name || 'Add Name');
+        setMobileNo(data.mobile || 'Add Mobile Number');
+        setPassword('password');
+        setCity(data.city || 'Add City');
+        setState(data.state || 'Add State');
+        setCompanyName(data.company_name || 'Add Company Name');
+        setEmail(data.company_email || 'Add Company Email');
+        setExperiance(data.experience || 'Add Experience');
+      } else {
+        toast.current.show(logoutResponse.message);
+      }
+    }
+    if (seekerProfileError) {
+      setLoader(false);
+      dispatch({type: RESET});
+    }
+  }, [logoutResponse, logoutError, seekerProfileData, seekerProfileError]);
+
+  const renderBodyText = (title, value, setData, keyboardType = 'default') => {
     return (
       <View style={{paddingBottom: 5, flex: 1}}>
         {title != '' ? <Text style={styles.subTitle}>{title}</Text> : null}
-        <Text
-          style={{
-            fontFamily: Theme.fontFamily.PoppinsRegular,
-            fontSize: Theme.fontSizes.mini - 1,
-          }}>
-          {value}
-        </Text>
+        <TextInput
+          keyboardType={keyboardType}
+          style={styles.textInputStyle}
+          onChangeText={(text) => {
+            setData(text);
+          }}
+          secureTextEntry={title == 'Password' ? true : false}
+          value={value.toString()}
+        />
       </View>
     );
   };
@@ -134,19 +186,19 @@ export default function Profile({navigation}) {
         <ScrollView showsVerticalScrollIndicator={false}>
           <Text style={styles.bodyTitle}>Personal Details</Text>
           <View style={styles.bodyCardContainer}>
-            {renderBodyText('Name', 'John Doe')}
-            {renderBodyText('Email', 'JohnDoe@gmail.com')}
-            {renderBodyText('Mobile No', '0123456789')}
-            {renderBodyText('Password', '* * * * * * *')}
+            {renderBodyText('Name', name, setName)}
+            {renderBodyText('Email', email, setEmail)}
+            {renderBodyText('Mobile No', mobileNo, setMobileNo, 'phone-pad')}
+            {renderBodyText('Password', password, setPassword)}
             <View style={{flexDirection: 'row'}}>
-              {renderBodyText('Current City', 'Surat')}
-              {renderBodyText('State', 'Gujrat')}
+              {renderBodyText('Current City', city, setCity)}
+              {renderBodyText('State', state, setState)}
             </View>
           </View>
           <Text style={styles.bodyTitle}>Company Details</Text>
           <View style={[styles.bodyCardContainer, {paddingBottom: 10}]}>
-            {renderBodyText('Company Name', 'Krishna Diamond PVT. LTD')}
-            {renderBodyText('Experience', '5 Years')}
+            {renderBodyText('Company Name', companyName, setCompanyName)}
+            {renderBodyText('Experience', experience, setExperiance)}
             <View>
               <Text
                 style={[
@@ -299,5 +351,13 @@ const styles = StyleSheet.create({
     width: 2,
     backgroundColor: Theme.colors.border,
     marginVertical: 10,
+  },
+  textInputStyle: {
+    height: 20,
+    flex: 1,
+    fontFamily: Theme.fontFamily.PoppinsRegular,
+    fontSize: Theme.fontSizes.mini - 1,
+    includeFontPadding: false,
+    padding: 0,
   },
 });

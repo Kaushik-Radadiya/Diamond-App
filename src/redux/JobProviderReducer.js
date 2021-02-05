@@ -15,9 +15,8 @@ export const RESET = 'reset';
 export const IMAGE_UPLOAD_SUCCESS = 'image_upload_success';
 export const IMAGE_UPLOAD_ERROR = 'image_upload_error';
 export const RESET_IMAGE_UPLOAD = 'reset_image_upload';
-export const GET_PROVIDER_PROFILE_SUCCESS = 'image_provider_profile_success';
-export const GET_PROVIDER_PROFILE_ERROR = 'image_provider_profile_error';
-export const RESET_PROVIDER_PROFILE = 'reset_provider_profile';
+export const GET_PROVIDER_PROFILE_SUCCESS = 'get_provider_profile_success';
+export const GET_PROVIDER_PROFILE_ERROR = 'get_provider_profile_error';
 
 const initialState = {
   providerDashbordData: null,
@@ -80,13 +79,12 @@ const JobProviderReducer = (state = initialState, action) => {
       return {...state, providerProfileData: action.payload.data};
     case GET_PROVIDER_PROFILE_ERROR:
       return {...state, providerProfileError: action.payload.data};
-    case RESET_PROVIDER_PROFILE:
-      return {...state, providerProfileError: null};
     case RESET:
       return {
         ...state,
         providerDashbordError: null,
         jobcategoryError: null,
+        providerProfileError: null,
       };
   }
   return state;

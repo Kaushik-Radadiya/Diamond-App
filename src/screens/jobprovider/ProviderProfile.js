@@ -8,6 +8,7 @@ import {
   ScrollView,
   TouchableOpacity,
   StyleSheet,
+  TextInput,
 } from 'react-native';
 
 import CommonHeader from '../../component/CommonHeader';
@@ -15,7 +16,7 @@ import Theme from '../../utils/Theme';
 
 import {useDispatch, useSelector} from 'react-redux';
 import {clearToken, postApi} from '../../utils/APIKit';
-import {API_LOGOUT} from '../../utils/Url';
+import {API_GET_PROFILE_DETAIL, API_LOGOUT} from '../../utils/Url';
 import {LOGOUT_ERROR, LOGOUT_SUCCESS, RESET} from '../../redux/AuthReducer';
 import {getData, storeData} from '../../utils/Utils';
 import {API_RESPONSE_STATUS, LOGINTYPE, TOKEN} from '../../utils/Constant';
@@ -24,17 +25,31 @@ import {GoogleSignin} from '@react-native-community/google-signin';
 import Toast from '../../component/Toast';
 import Loader from '../../component/Loader';
 import {RESET_REDUCER} from '../../redux/Store';
+import {
+  GET_PROVIDER_PROFILE_ERROR,
+  GET_PROVIDER_PROFILE_SUCCESS,
+} from '../../redux/JobProviderReducer';
 
 export default function ProviderProfile({navigation}) {
   const dispatch = useDispatch();
   const [loading, setLoader] = useState(false);
+  const [name, setName] = useState('');
+  const [mobileNo, setMobileNo] = useState('');
+  const [password, setPassword] = useState('');
+  const [city, setCity] = useState('');
+  const [state, setState] = useState('');
+  const [companyName, setCompanyName] = useState('');
+  const [description, setDescription] = useState('');
+  const [website, setWebsite] = useState('');
+  const [email, setEmail] = useState('');
+  const [companyPhone, setCompanyPhone] = useState('');
+
   const toast = useRef(null);
-  const {
-    logoutResponse,
-    logoutError,
-    providerProfileData,
-    providerProfileError,
-  } = useSelector((state) => state.auth);
+  const {logoutResponse, logoutError} = useSelector((state) => state.auth);
+
+  const {providerProfileData, providerProfileError} = useSelector(
+    (state) => state.jobProvider,
+  );
 
   const googleSignOut = async () => {
     try {
@@ -45,6 +60,17 @@ export default function ProviderProfile({navigation}) {
     }
   };
 
+  React.useEffect(() => {
+    setLoader(true);
+    dispatch(
+      postApi(
+        API_GET_PROFILE_DETAIL,
+        {},
+        GET_PROVIDER_PROFILE_SUCCESS,
+        GET_PROVIDER_PROFILE_ERROR,
+      ),
+    );
+  }, []);
   React.useEffect(() => {
     if (logoutResponse) {
       setLoader(false);
@@ -72,9 +98,34 @@ export default function ProviderProfile({navigation}) {
       setLoader(false);
       dispatch({type: RESET});
     }
-  }, [logoutResponse, logoutError]);
 
-  const renderBodyText = (title, value) => {
+    if (providerProfileData) {
+      setLoader(false);
+      if (providerProfileData.status == API_RESPONSE_STATUS.STATUS_200) {
+        console.log('======providerProfileData===', providerProfileData);
+        const data = providerProfileData.data.user;
+        setName(data.name || 'Add Name');
+        setMobileNo(data.mobile || 'Add Mobile Number');
+        setPassword('password');
+        setCity(data.city || 'Add City');
+        setState(data.state || 'Add State');
+        setCompanyName(data.company_name || 'Add Company Name');
+        setDescription(data.company_description || 'Add Company Description');
+        setWebsite(data.company_website || 'Add Company WebSite');
+        setEmail(data.company_email || 'Add Company Email');
+        setCompanyPhone(data.company_phone || 'Add Company Number');
+      } else {
+        toast.current.show(logoutResponse.message);
+      }
+    }
+    if (providerProfileError) {
+      setLoader(false);
+      dispatch({type: RESET});
+    }
+  }, [logoutResponse, logoutError, providerProfileData, providerProfileError]);
+
+  const renderBodyText = (title, value, setData, keyboardType = 'default') => {
+    console.log('=value===', title, value);
     return (
       <View style={{paddingBottom: 5, flex: 1}}>
         {title != '' ? (
@@ -86,33 +137,41 @@ export default function ProviderProfile({navigation}) {
             {title}
           </Text>
         ) : null}
-        <Text
-          style={{
-            fontFamily: Theme.fontFamily.PoppinsRegular,
-            fontSize: Theme.fontSizes.mini - 1,
-          }}>
-          {value}
-        </Text>
+        <TextInput
+          keyboardType={keyboardType}
+          style={styles.textInputStyle}
+          onChangeText={(text) => {
+            setData(text);
+          }}
+          secureTextEntry={title == 'Password' ? true : false}
+          value={value.toString()}
+        />
       </View>
     );
   };
 
-  const renderImageAndText = (icon, title) => {
+  const renderImageAndText = (
+    icon,
+    value,
+    setData,
+    keyboardType = 'default',
+  ) => {
     return (
       <View
         style={{
           flexDirection: 'row',
           paddingVertical: 5,
+          alignItems: 'center',
         }}>
         <Image style={{height: 18, width: 18}} source={{uri: icon}} />
-        <Text
-          style={{
-            fontFamily: Theme.fontFamily.PoppinsRegular,
-            fontSize: Theme.fontSizes.mini,
-            marginLeft: 10,
-          }}>
-          {title}
-        </Text>
+        <TextInput
+          keyboardType={keyboardType}
+          style={[styles.textInputStyle, {marginLeft: 10}]}
+          onChangeText={(text) => {
+            setData(text);
+          }}
+          value={value.toString()}
+        />
       </View>
     );
   };
@@ -137,7 +196,9 @@ export default function ProviderProfile({navigation}) {
         <View style={styles.profileBgContainer}>
           <Image style={{height: 35, width: 35}} source={{uri: 'ic_avatar'}} />
         </View>
-        <Text style={styles.headerTitle}>Hari Krishna Diamond PVT. LTD.</Text>
+        <TextInput style={styles.headerTitle}>
+          Hari Krishna Diamond PVT. LTD.
+        </TextInput>
         <View style={styles.editProfileContiner}>
           <TouchableOpacity
             style={{flex: 1}}
@@ -151,24 +212,26 @@ export default function ProviderProfile({navigation}) {
         <ScrollView showsVerticalScrollIndicator={false}>
           <Text style={styles.bodyTitle}>Personal Details</Text>
           <View style={styles.bodyCardContainer}>
-            {renderBodyText('Name', 'Savji Dholakia')}
-            {renderBodyText('Mobile No', '0123456789')}
-            {renderBodyText('Password', '* * * * * * *')}
+            {renderBodyText('Name', name, setName)}
+            {renderBodyText('Mobile No', mobileNo, setMobileNo, 'phone-pad')}
+            {renderBodyText('Password', password, setPassword)}
             <View style={{flexDirection: 'row'}}>
-              {renderBodyText('Current City', 'Surat')}
-              {renderBodyText('State', 'Gujrat')}
+              {renderBodyText('Current City', city, setCity)}
+              {renderBodyText('State', state, setState)}
             </View>
           </View>
           <Text style={styles.bodyTitle}>Company Details</Text>
           <View style={[styles.bodyCardContainer, {paddingBottom: 10}]}>
-            {renderBodyText('Company Name', 'Hari Krishna Diamond PVT. LTD')}
-            {renderBodyText(
-              '',
-              'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
+            {renderBodyText('Company Name', companyName, setCompanyName)}
+            {renderBodyText('', description, setDescription)}
+            {renderImageAndText('ic_sm_web', website, setWebsite)}
+            {renderImageAndText('ic_sm_mail', email, setEmail)}
+            {renderImageAndText(
+              'ic_sm_call',
+              companyPhone,
+              setCompanyPhone,
+              'phone-pad',
             )}
-            {renderImageAndText('ic_sm_web', 'www.harikrishnadiamond.com')}
-            {renderImageAndText('ic_sm_mail', 'harikrishnadiamond@gmail.com')}
-            {renderImageAndText('ic_sm_call', '0123456789')}
           </View>
           <TouchableOpacity
             style={styles.logoutContainer}
@@ -256,5 +319,13 @@ const styles = StyleSheet.create({
     fontSize: Theme.fontSizes.small - 1,
     color: Theme.colors.theme,
     textAlign: 'center',
+  },
+  textInputStyle: {
+    height: 20,
+    flex: 1,
+    fontFamily: Theme.fontFamily.PoppinsRegular,
+    fontSize: Theme.fontSizes.mini - 1,
+    includeFontPadding: false,
+    padding: 0,
   },
 });

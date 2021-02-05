@@ -10,5 +10,6 @@ export const API_GET_POSTED_JOB = 'job/provider/list';
 export const API_GET_SEEKER_JOB = 'job/seeker/list';
 export const API_IMAGE_UPLOAD = 'upload';
 export const API_GET_PROFILE_DETAIL = 'user/profile';
+export const API_EDIT_PROFILE_DETAIL = 'user/edit-profile';
 export const API_PROVIDER_CHANGE_JOB_STATUS = 'job/provider/change-status/{ID}';
 export const API_PROVIDER_DELETE_JOB = 'job/delete/{ID}';
