@@ -41,12 +41,15 @@ export default function Profile({navigation}) {
   const [companyName, setCompanyName] = useState('');
   const [email, setEmail] = useState('');
   const [experience, setExperiance] = useState('');
+  const [totalSavedJob, settotalSavedJob] = useState(0);
+  const [totalAppliedJob, settotalAppliedJob] = useState(0);
 
   const toast = useRef(null);
   const {logoutResponse, logoutError} = useSelector((state) => state.auth);
-  const {seekerProfileData, seekerProfileError} = useSelector(
+  const {seekerJobsData, seekerProfileData, seekerProfileError} = useSelector(
     (state) => state.jobSeeker,
   );
+
   const googleSignOut = async () => {
     try {
       await GoogleSignin.revokeAccess();
@@ -117,7 +120,33 @@ export default function Profile({navigation}) {
       setLoader(false);
       dispatch({type: RESET});
     }
-  }, [logoutResponse, logoutError, seekerProfileData, seekerProfileError]);
+
+    if (seekerJobsData) {
+      console.log('====seekerJobsData====', seekerJobsData);
+      if (
+        seekerJobsData.status == API_RESPONSE_STATUS.STATUS_200 &&
+        seekerJobsData.data &&
+        seekerJobsData.data.jobs &&
+        seekerJobsData.data.jobs.length
+      ) {
+        const appliedJobcount = seekerJobsData.data.jobs.filter(
+          (item) => item.apply_user,
+        ).length;
+        const savedJobcount = seekerJobsData.data.jobs.filter(
+          (item) => item.save_user,
+        ).length;
+        settotalAppliedJob(appliedJobcount);
+        settotalSavedJob(savedJobcount);
+      }
+      setLoader(false);
+    }
+  }, [
+    logoutResponse,
+    logoutError,
+    seekerProfileData,
+    seekerProfileError,
+    seekerJobsData,
+  ]);
 
   const renderBodyText = (title, value, setData, keyboardType = 'default') => {
     return (
@@ -172,12 +201,12 @@ export default function Profile({navigation}) {
         </View>
         <View style={styles.saveAppliedContiner}>
           <TouchableOpacity style={styles.appliedButtonContainer}>
-            <Text style={styles.appliedText}>{'(0)'}</Text>
+            <Text style={styles.appliedText}>{`(${totalSavedJob})`}</Text>
             <Text style={styles.appliedText}>Applied Job</Text>
           </TouchableOpacity>
           <View style={styles.sepratorLine} />
           <TouchableOpacity style={styles.appliedButtonContainer}>
-            <Text style={styles.appliedText}>{'(0)'}</Text>
+            <Text style={styles.appliedText}>{`(${totalSavedJob})`}</Text>
             <Text style={styles.appliedText}>Saved Job</Text>
           </TouchableOpacity>
         </View>

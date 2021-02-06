@@ -26,6 +26,7 @@ export default function CommonCard({...props}) {
     onSave,
     navigation,
   } = props;
+
   const renderImageAndText = (icon, title) => {
     return (
       <View
@@ -103,29 +104,31 @@ export default function CommonCard({...props}) {
               </View>
             ) : null}
           </View>
-          <TouchableOpacity
-            onPress={() => onApply(data.id)}
-            style={{
-              // paddingVertical: 5,
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}>
-            <Text
-              numberOfLines={2}
+          {!data.apply_user ? (
+            <TouchableOpacity
+              onPress={() => onApply(data.id)}
               style={{
-                fontFamily: Theme.fontFamily.PoppinsMedium,
-                fontSize: Theme.fontSizes.mini - 1,
-                color: Theme.colors.theme,
-                marginRight: 2,
-                includeFontPadding: false,
+                // paddingVertical: 5,
+                flexDirection: 'row',
+                alignItems: 'center',
               }}>
-              Apply Now
-            </Text>
-            <Image
-              style={{height: 15, width: 16}}
-              source={{uri: 'ic_apply_arow'}}
-            />
-          </TouchableOpacity>
+              <Text
+                numberOfLines={2}
+                style={{
+                  fontFamily: Theme.fontFamily.PoppinsMedium,
+                  fontSize: Theme.fontSizes.mini - 1,
+                  color: Theme.colors.theme,
+                  marginRight: 2,
+                  includeFontPadding: false,
+                }}>
+                Apply Now
+              </Text>
+              <Image
+                style={{height: 15, width: 16}}
+                source={{uri: 'ic_apply_arow'}}
+              />
+            </TouchableOpacity>
+          ) : null}
         </View>
       );
     } else {
@@ -214,7 +217,7 @@ export default function CommonCard({...props}) {
                 style={{height: 20, width: 20}}
                 source={{
                   uri: isJobSeeker
-                    ? data.isSaved
+                    ? data.save_user
                       ? 'ic_bookmarkfill'
                       : 'ic_bookmark'
                     : 'ic_more',

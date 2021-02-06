@@ -12,11 +12,31 @@ import {
 import CommonButton from '../../component/CommonButton';
 
 import CommonHeader from '../../component/CommonHeader';
+import Loader from '../../component/Loader';
+import Toast from '../../component/Toast';
+import {
+  GET_SEEKER_JOB_ERROR,
+  GET_SEEKER_JOB_SUCCESS,
+} from '../../redux/JobSeekerReducer';
+import {postApi, postApiWithoutDispatch} from '../../utils/APIKit';
 import Theme from '../../utils/Theme';
+import {
+  API_GET_SEEKER_JOB,
+  API_SEEKER_CHANGE_JOB_STATUS,
+} from '../../utils/Url';
+import {useDispatch, useSelector} from 'react-redux';
 
 export default function JobDetail({navigation, route}) {
+  const dispatch = useDispatch();
   const width = useWindowDimensions().width;
+  const toast = React.useRef(null);
+  const [loading, setLoader] = useState(false);
   const {jobData} = route.params;
+  const [isSaved, setSavedJob] = useState(jobData.save_user ? true : false);
+  const [isApplied, setJobApplied] = useState(
+    jobData.apply_user ? true : false,
+  );
+
   const scrollRef = React.useRef();
   const [jobDetailSelected, setJobDetailSelected] = React.useState(true);
 
@@ -25,7 +45,68 @@ export default function JobDetail({navigation, route}) {
     console.log('=====share=====');
   };
 
-  const applyNow = () => {};
+  const saveJob = () => {
+    console.log('===saveJob==', jobData.id);
+    if (isSaved) {
+      toast.current.show('Job Already Saved');
+    } else {
+      changeStatus(jobData.id, 'S');
+    }
+  };
+  const applyJob = (id) => {
+    console.log('===applyJob==', jobData.id);
+    if (isApplied) {
+      toast.current.show('Job Already Applied');
+    } else {
+      changeStatus(jobData.id, 'A');
+    }
+  };
+
+  const getRecommendedJobs = () => {
+    const params = {
+      all: 0,
+      page: 1,
+      perPage: 20,
+      search: '',
+      category_id: '',
+      employment_type: '',
+    };
+    dispatch(
+      postApi(
+        API_GET_SEEKER_JOB,
+        params,
+        GET_SEEKER_JOB_SUCCESS,
+        GET_SEEKER_JOB_ERROR,
+      ),
+    );
+  };
+
+  const changeStatus = (id, status) => {
+    let params = {
+      status: status,
+    };
+    setLoader(true);
+    postApiWithoutDispatch(
+      API_SEEKER_CHANGE_JOB_STATUS.replace('{ID}', id),
+      params,
+    )
+      .then((data) => {
+        console.log('changeStatusdata======', data);
+        setLoader(false);
+        getRecommendedJobs();
+        if (status == 'A') {
+          toast.current.show('Job Applied Successfully', 'SUCCESS');
+          setJobApplied(true);
+        } else {
+          toast.current.show('Job Saved Successfully', 'SUCCESS');
+          setSavedJob(true);
+        }
+      })
+      .catch((error) => {
+        console.log('changeStatuserror======', error);
+        setLoader(false);
+      });
+  };
 
   const renderBodyText = (title, value) => {
     return (
@@ -81,6 +162,8 @@ export default function JobDetail({navigation, route}) {
         headerRightButtonPress={share}
         headerRightIcon={'ic_share'}
       />
+      <Toast ref={toast} duration={5000} />
+      <Loader loading={loading} />
       <View style={{flex: 1}}>
         <View
           style={{
@@ -98,7 +181,7 @@ export default function JobDetail({navigation, route}) {
                   {height: width * 0.12, width: width * 0.12},
                 ]}>
                 <Image
-                  style={{height: width * 0.11, width: width * 0.11}}
+                  style={{height: width * 0.1, width: width * 0.1}}
                   source={{uri: jobData.image}}></Image>
               </View>
               <View style={{paddingHorizontal: 10}}>
@@ -205,18 +288,25 @@ export default function JobDetail({navigation, route}) {
               {renderImageAndText('ic_sm_call', jobData.users.company_phone)}
             </View>
             <View
-              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
               <CommonButton
                 buttonStyle={[styles.buttonStyle, {width: width - 100}]}
-                text={'APPLY NOW'}
+                text={isApplied ? 'JOB APPLIED' : 'APPLY NOW'}
                 textStyle={[styles.buttonTextStyle]}
-                buttonPress={applyNow}
+                buttonPress={applyJob}
               />
               <TouchableOpacity
+                onPress={() => saveJob()}
                 style={[styles.buttonStyle, {height: 55, width: 60}]}>
                 <Image
                   style={{height: 30, width: 30}}
-                  source={{uri: 'ic_saved_job'}}
+                  source={{
+                    uri: isSaved ? 'ic_saved_jobfill' : 'ic_saved_job',
+                  }}
                 />
               </TouchableOpacity>
             </View>

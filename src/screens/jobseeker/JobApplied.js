@@ -7,31 +7,79 @@ import {
   StyleSheet,
   FlatList,
   useWindowDimensions,
+  TouchableOpacity,
 } from 'react-native';
 import CommonHeader from '../../component/CommonHeader';
+import {
+  GET_SEEKER_JOB_ERROR,
+  GET_SEEKER_JOB_SUCCESS,
+} from '../../redux/JobSeekerReducer';
+import {postApi} from '../../utils/APIKit';
+import {useDispatch, useSelector} from 'react-redux';
+import {API_RESPONSE_STATUS} from '../../utils/Constant';
+import Loader from '../../component/Loader';
+import Toast from '../../component/Toast';
+import {API_GET_SEEKER_JOB} from '../../utils/Url';
 
 export default function JobApplied({navigation}) {
   const width = useWindowDimensions().width;
-  const [appliedJobData, setAppliedobData] = useState([
-    {
-      id: 1,
-      image: 'ic_user',
-      title: 'Syner (Planer)',
-      subTitle: 'Hari Krishna Diamond PVT. LTD.',
-      postedDate: 'Applied on 02-10-2020',
-    },
-    {
-      id: 2,
-      image: 'ic_user',
-      title: 'Syner (Planer)',
-      subTitle: 'Hari Krishna Diamond PVT. LTD.',
-      postedDate: 'Applied on 02-10-2020',
-    },
-  ]);
+  const [appliedJobData, setAppliedobData] = useState([]);
+
+  const dispatch = useDispatch();
+  const toast = React.useRef(null);
+  const [loading, setLoader] = useState(true);
+  const {seekerJobsData, seekerJobError} = useSelector(
+    (state) => state.jobSeeker,
+  );
+
+  const getRecommendedJobs = () => {
+    const params = {
+      all: 0,
+      page: 1,
+      perPage: 20,
+      search: '',
+      category_id: '',
+      employment_type: '',
+    };
+    dispatch(
+      postApi(
+        API_GET_SEEKER_JOB,
+        params,
+        GET_SEEKER_JOB_SUCCESS,
+        GET_SEEKER_JOB_ERROR,
+      ),
+    );
+  };
+
+  React.useEffect(() => {
+    if (seekerJobsData) {
+      console.log('====seekerJobsData====', seekerJobsData);
+      if (
+        seekerJobsData.status == API_RESPONSE_STATUS.STATUS_200 &&
+        seekerJobsData.data &&
+        seekerJobsData.data.jobs &&
+        seekerJobsData.data.jobs.length
+      ) {
+        const data = seekerJobsData.data.jobs.filter((item) => item.apply_user);
+        setAppliedobData(data);
+      }
+      setLoader(false);
+    }
+
+    if (seekerJobError) {
+      console.log('====seekerJobError====', seekerJobError);
+      setLoader(false);
+      dispatch({type: POSTED_JOB_RESET});
+    }
+  }, [seekerJobsData, seekerJobError]);
 
   const renderCard = (data) => {
     return (
-      <View
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate('JobDetail', {jobData: data});
+        }}
+        activeOpacity={1}
         style={{
           paddingTop: 15,
         }}>
@@ -49,7 +97,9 @@ export default function JobApplied({navigation}) {
               </View>
               <View style={{paddingHorizontal: 10}}>
                 <Text style={styles.title}>{data.title}</Text>
-                <Text style={styles.subTitle}>{data.subTitle}</Text>
+                <Text style={styles.subTitle}>
+                  {data.users.company_name || '--'}
+                </Text>
               </View>
             </View>
 
@@ -76,7 +126,7 @@ export default function JobApplied({navigation}) {
                     marginLeft: 10,
                     includeFontPadding: false,
                   }}>
-                  {data.postedDate}
+                  {`Applied on ${data.updated_at}`}
                 </Text>
               </View>
               <View
@@ -99,7 +149,7 @@ export default function JobApplied({navigation}) {
             </View>
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   };
   return (
@@ -112,16 +162,31 @@ export default function JobApplied({navigation}) {
         isJobAvailable={true}
         navigation={navigation}
       />
-      <View style={{paddingHorizontal: 15, flex: 1}}>
-        <FlatList
-          contentContainerStyle={{paddingBottom: 10}}
-          data={appliedJobData}
-          extraData={appliedJobData}
-          showsVerticalScrollIndicator={false}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({item}) => renderCard(item)}
-        />
-      </View>
+      <Toast ref={toast} duration={5000} />
+      <Loader loading={loading} />
+      {appliedJobData.length ? (
+        <View style={{paddingHorizontal: 15, flex: 1}}>
+          <FlatList
+            contentContainerStyle={{paddingBottom: 10}}
+            data={appliedJobData}
+            extraData={appliedJobData}
+            showsVerticalScrollIndicator={false}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({item}) => renderCard(item)}
+          />
+        </View>
+      ) : !loading ? (
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <Text
+            style={{
+              fontFamily: Theme.fontFamily.PoppinsMedium,
+              fontSize: Theme.fontSizes.medium,
+              color: Theme.colors.theme,
+            }}>
+            No applied jobs available
+          </Text>
+        </View>
+      ) : null}
     </ImageBackground>
   );
 }

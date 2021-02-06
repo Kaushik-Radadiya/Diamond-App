@@ -12,20 +12,25 @@ import {
 import Theme from '../../utils/Theme';
 import CommonHeader from '../../component/CommonHeader';
 import CommonCard from '../../component/CommonCard';
-import {API_GET_SEEKER_JOB} from '../../utils/Url';
+import {
+  API_GET_SEEKER_JOB,
+  API_SEEKER_CHANGE_JOB_STATUS,
+} from '../../utils/Url';
 import {
   GET_SEEKER_JOB_ERROR,
   GET_SEEKER_JOB_SUCCESS,
 } from '../../redux/JobSeekerReducer';
-import {postApi} from '../../utils/APIKit';
+import {postApi, postApiWithoutDispatch} from '../../utils/APIKit';
 import {useDispatch, useSelector} from 'react-redux';
 import {API_RESPONSE_STATUS} from '../../utils/Constant';
 import Loader from '../../component/Loader';
+import Toast from '../../component/Toast';
 
 export default function Home({navigation}) {
   const searchCategory = ['Round-cut', 'Fency', 'Greder', 'Syner'];
   const [recommendedJobData, setRecommendedJobData] = useState([]);
   const dispatch = useDispatch();
+  const toast = React.useRef(null);
   const [loading, setLoader] = useState(true);
   const {seekerJobsData, seekerJobError} = useSelector(
     (state) => state.jobSeeker,
@@ -35,8 +40,10 @@ export default function Home({navigation}) {
     const params = {
       all: 0,
       page: 1,
-      perPage: 10,
+      perPage: 25,
       search: '',
+      category_id: '',
+      employment_type: '',
     };
     dispatch(
       postApi(
@@ -53,8 +60,15 @@ export default function Home({navigation}) {
   useEffect(() => {
     if (seekerJobsData) {
       console.log('====seekerJobsData====', seekerJobsData);
-      if (seekerJobsData.status == API_RESPONSE_STATUS.STATUS_200) {
-        const data = seekerJobsData.data.jobs;
+      if (
+        seekerJobsData.status == API_RESPONSE_STATUS.STATUS_200 &&
+        seekerJobsData.data &&
+        seekerJobsData.data.jobs &&
+        seekerJobsData.data.jobs.length
+      ) {
+        const data = seekerJobsData.data.jobs.filter(
+          (item) => !item.apply_user && item.is_active,
+        );
         setRecommendedJobData(data);
       }
       setLoader(false);
@@ -73,10 +87,33 @@ export default function Home({navigation}) {
 
   const saveJob = (id) => {
     console.log('===saveJob==', id);
+    changeStatus(id, 'S');
   };
   const applyJob = (id) => {
     console.log('===applyJob==', id);
+    changeStatus(id, 'A');
   };
+
+  const changeStatus = (id, status) => {
+    let params = {
+      status: status,
+    };
+    setLoader(true);
+    postApiWithoutDispatch(
+      API_SEEKER_CHANGE_JOB_STATUS.replace('{ID}', id),
+      params,
+    )
+      .then((data) => {
+        console.log('changeStatusdata======', data);
+        toast.current.show(data.message, 'SUCCESS');
+        getRecommendedJobs();
+      })
+      .catch((error) => {
+        console.log('changeStatuserror======', error);
+        setLoader(false);
+      });
+  };
+
   return (
     <ImageBackground
       resizeMode={'stretch'}
@@ -87,6 +124,7 @@ export default function Home({navigation}) {
         isJobAvailable={true}
         navigation={navigation}
       />
+      <Toast ref={toast} duration={5000} />
       <Loader loading={loading} />
       <View style={[styles.titleContainer]}>
         <Text style={styles.titleText}>Welcome, John</Text>
