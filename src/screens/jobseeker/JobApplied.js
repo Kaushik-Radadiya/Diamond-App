@@ -11,69 +11,103 @@ import {
 } from 'react-native';
 import CommonHeader from '../../component/CommonHeader';
 import {
+  GET_SEEKER_APPLIED_JOB_ERROR,
+  GET_SEEKER_APPLIED_JOB_SUCCESS,
   GET_SEEKER_JOB_ERROR,
   GET_SEEKER_JOB_SUCCESS,
+  SEEKER_RESET,
 } from '../../redux/JobSeekerReducer';
 import {postApi} from '../../utils/APIKit';
 import {useDispatch, useSelector} from 'react-redux';
 import {API_RESPONSE_STATUS} from '../../utils/Constant';
 import Loader from '../../component/Loader';
 import Toast from '../../component/Toast';
-import {API_GET_SEEKER_JOB} from '../../utils/Url';
+import {
+  API_GET_SEEKER_JOB,
+  
+} from '../../utils/Url';
+import ListFooterLoader from '../../component/ListFooterLoader';
 
+let pageNumber = 0;
+let isLoadMore = true;
 export default function JobApplied({navigation}) {
   const width = useWindowDimensions().width;
   const [appliedJobData, setAppliedobData] = useState([]);
-
+  const [isLoadingMore, setLoadingMore] = useState(false);
   const dispatch = useDispatch();
   const toast = React.useRef(null);
-  const [loading, setLoader] = useState(true);
-  const {seekerJobsData, seekerJobError} = useSelector(
+  const [loading, setLoader] = useState(false);
+  const {appliedJobsData, appliedJobsError} = useSelector(
     (state) => state.jobSeeker,
   );
 
-  const getRecommendedJobs = () => {
+  const getAppliedJobsData = () => {
+    pageNumber++;
     const params = {
       all: 0,
-      page: 1,
-      perPage: 20,
+      page: pageNumber,
+      perPage: 10,
       search: '',
       category_id: '',
       employment_type: '',
+      type: 'A',
     };
     dispatch(
       postApi(
         API_GET_SEEKER_JOB,
         params,
-        GET_SEEKER_JOB_SUCCESS,
-        GET_SEEKER_JOB_ERROR,
+        GET_SEEKER_APPLIED_JOB_SUCCESS,
+        GET_SEEKER_APPLIED_JOB_ERROR,
       ),
     );
   };
 
+  // React.useEffect(() => {
+  //   getAppliedJobsData();
+  // }, []);
   React.useEffect(() => {
-    if (seekerJobsData) {
-      console.log('====seekerJobsData====', seekerJobsData);
-      if (
-        seekerJobsData.status == API_RESPONSE_STATUS.STATUS_200 &&
-        seekerJobsData.data &&
-        seekerJobsData.data.jobs &&
-        seekerJobsData.data.jobs.length
-      ) {
-        const data = seekerJobsData.data.jobs.filter((item) => item.apply_user);
-        setAppliedobData(data);
+    const unsubscribe = navigation.addListener('focus', () => {
+      pageNumber = 0;
+      isLoadMore = true;
+      setAppliedobData([]);
+      setLoader(true);
+      getAppliedJobsData();
+    });
+    if (appliedJobsData) {
+      console.log('====appliedJobsData====', appliedJobsData);
+      if (appliedJobsData.status == API_RESPONSE_STATUS.STATUS_200) {
+        if (
+          appliedJobsData.data &&
+          appliedJobsData.data.jobs &&
+          appliedJobsData.data.jobs.length
+        ) {
+          const data = appliedJobData.concat(appliedJobsData.data.jobs);
+          setAppliedobData(data);
+        } else {
+          isLoadMore = false;
+        }
       }
+      setLoadingMore(false);
       setLoader(false);
     }
 
-    if (seekerJobError) {
-      console.log('====seekerJobError====', seekerJobError);
+    if (appliedJobsError) {
+      console.log('====appliedJobsError====', appliedJobsError);
       setLoader(false);
-      dispatch({type: POSTED_JOB_RESET});
+      dispatch({type: SEEKER_RESET});
     }
-  }, [seekerJobsData, seekerJobError]);
+    return unsubscribe;
+  }, [appliedJobsData, appliedJobsError]);
+
+  const loadMoreData = () => {
+    if (isLoadMore) {
+      setLoadingMore(true);
+      getAppliedJobsData();
+    }
+  };
 
   const renderCard = (data) => {
+    // const data = item.jobs;
     return (
       <TouchableOpacity
         onPress={() => {
@@ -98,7 +132,7 @@ export default function JobApplied({navigation}) {
               <View style={{paddingHorizontal: 10}}>
                 <Text style={styles.title}>{data.title}</Text>
                 <Text style={styles.subTitle}>
-                  {data.users.company_name || '--'}
+                  {data.users.company_name || '-'}
                 </Text>
               </View>
             </View>
@@ -172,6 +206,10 @@ export default function JobApplied({navigation}) {
             extraData={appliedJobData}
             showsVerticalScrollIndicator={false}
             keyExtractor={(item, index) => index.toString()}
+            onEndReached={loadMoreData}
+            onEndReachedThreshold={0.5}
+            initialNumToRender={10}
+            ListFooterComponent={<ListFooterLoader isLoading={isLoadingMore} />}
             renderItem={({item}) => renderCard(item)}
           />
         </View>

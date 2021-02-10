@@ -20,20 +20,24 @@ import {
 } from '../../utils/Url';
 import Toast from '../../component/Toast';
 import {showAlert} from '../../utils/Utils';
+import ListFooterLoader from '../../component/ListFooterLoader';
 
+let pageNumber = 0;
+let isLoadMore = true;
 export default function AllJobs({navigation}) {
   const [allJobs, setAllJObsData] = useState([]);
   const toast = React.useRef(null);
   const dispatch = useDispatch();
   const [loading, setLoader] = useState(true);
+  const [isLoadingMore, setLoadingMore] = useState(false);
   const {allJobsData, allJobError} = useSelector((state) => state.jobProvider);
 
   const getAllJobs = () => {
-    setLoader(true);
+    pageNumber++;
     const params = {
       all: 0,
-      page: 1,
-      perPage: 20,
+      page: pageNumber,
+      perPage: 10,
       search: '',
     };
     dispatch(
@@ -48,15 +52,24 @@ export default function AllJobs({navigation}) {
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
+      pageNumber = 0;
+      isLoadMore = true;
+      setAllJObsData([]);
+      setLoader(true);
       getAllJobs();
     });
 
     if (allJobsData) {
       console.log('====allJobsData====', allJobsData);
       if (allJobsData.status == API_RESPONSE_STATUS.STATUS_200) {
-        const data = allJobsData.data.jobs;
-        setAllJObsData(data);
+        if (allJobsData.data && allJobsData.data.jobs && allJobsData.data.jobs.length) {
+          const data = allJobs.concat(allJobsData.data.jobs);
+          setAllJObsData(data);
+        } else {
+          isLoadMore = false;
+        }
       }
+      setLoadingMore(false);
       setLoader(false);
     }
 
@@ -97,7 +110,8 @@ export default function AllJobs({navigation}) {
     let params = {
       status: status,
     };
-    setLoader(true);
+
+    setLoader(true)
     postApiWithoutDispatch(
       API_PROVIDER_CHANGE_JOB_STATUS.replace('{ID}', id),
       params,
@@ -105,7 +119,15 @@ export default function AllJobs({navigation}) {
       .then((data) => {
         console.log('changeStatusdata======', data);
         toast.current.show(data.message, 'SUCCESS');
-        getAllJobs();
+        let newData = [...allJobs];
+        newData.map((item) => {
+          if (item.id == id) {
+            item.is_active = status;
+          }
+        });
+
+        setAllJObsData(newData);
+        setLoader(false);
       })
       .catch((error) => {
         console.log('changeStatuserror======', error);
@@ -114,12 +136,20 @@ export default function AllJobs({navigation}) {
   };
 
   const deleteJob = (id) => {
-    setLoader(true);
+    setLoader(true)
     postApiWithoutDispatch(API_PROVIDER_DELETE_JOB.replace('{ID}', id), {})
       .then((data) => {
         console.log('deleteJobdata======', data);
         toast.current.show(data.message, 'SUCCESS');
-        getAllJobs();
+        let newData = [...allJobs];
+        newData.splice(
+          newData.findIndex(function (i) {
+            return i.id === id;
+          }),
+          1,
+        );
+        setAllJObsData(newData);
+        setLoader(false)
       })
       .catch((error) => {
         console.log('deleteJoberror======', error);
@@ -127,6 +157,12 @@ export default function AllJobs({navigation}) {
       });
   };
 
+  const loadMoreData = () => {
+    if (isLoadMore) {
+      setLoadingMore(true);
+      getAllJobs();
+    }
+  };
   return (
     <ImageBackground
       resizeMode={'stretch'}
@@ -148,6 +184,10 @@ export default function AllJobs({navigation}) {
             data={allJobs}
             extraData={allJobs}
             keyExtractor={(item, index) => index.toString()}
+            onEndReached={loadMoreData}
+            onEndReachedThreshold={0.5}
+            initialNumToRender={10}
+            ListFooterComponent={<ListFooterLoader isLoading={isLoadingMore} />}
             renderItem={({item}) => (
               <CommonCard
                 data={item}

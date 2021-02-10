@@ -20,21 +20,26 @@ import {
 import {API_RESPONSE_STATUS} from '../../utils/Constant';
 import Toast from '../../component/Toast';
 import {showAlert} from '../../utils/Utils';
+import ListFooterLoader from '../../component/ListFooterLoader';
 
+let pageNumber = 1;
+let isLoadMore = true;
 export default function PostedJobs({navigation}) {
   const dispatch = useDispatch();
   const toast = React.useRef(null);
   const [loading, setLoader] = useState(true);
+  const [isLoadingMore, setLoadingMore] = useState(false);
   const {postedJobsData, postedJobError} = useSelector(
     (state) => state.jobProvider,
   );
 
   const getPostedJobs = () => {
-    setLoader(true);
+    pageNumber++;
+    console.log('=====pageNumber====', pageNumber);
     const params = {
       all: 1,
-      page: 1,
-      perPage: 20,
+      page: pageNumber,
+      perPage: 10,
       search: '',
     };
     dispatch(
@@ -49,15 +54,25 @@ export default function PostedJobs({navigation}) {
   useEffect(() => {}, []);
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
+      pageNumber = 0;
+      isLoadMore = true;
+      setpostedJobsData([]);
+
+      setLoader(true);
       getPostedJobs();
     });
 
     if (postedJobsData) {
-      console.log('====postedJobsData====', postedJobsData);
       if (postedJobsData.status == API_RESPONSE_STATUS.STATUS_200) {
-        const data = postedJobsData.data.jobs;
-        setpostedJobsData(data);
+        if (postedJobsData.data && postedJobsData.data.jobs && postedJobsData.data.jobs.length) {
+          const data = postedJobs.concat(postedJobsData.data.jobs);
+          setpostedJobsData(data);
+        } else {
+          console.log('=====isloadmore');
+          isLoadMore = false;
+        }
       }
+      setLoadingMore(false);
       setLoader(false);
     }
 
@@ -119,7 +134,8 @@ export default function PostedJobs({navigation}) {
       .then((data) => {
         console.log('data======', data);
         toast.current.show(data.message, 'SUCCESS');
-        getPostedJobs();
+        removeItem(id);
+        setLoader(false);
       })
       .catch((error) => {
         console.log('error======', error);
@@ -133,7 +149,8 @@ export default function PostedJobs({navigation}) {
       .then((data) => {
         console.log('data======', data);
         toast.current.show(data.message, 'SUCCESS');
-        getPostedJobs();
+        removeItem(id);
+        setLoader(false);
       })
       .catch((error) => {
         console.log('error======', error);
@@ -143,6 +160,22 @@ export default function PostedJobs({navigation}) {
 
   const [postedJobs, setpostedJobsData] = useState([]);
 
+  const removeItem = (id) => {
+    let newData = [...postedJobs];
+    newData.splice(
+      newData.findIndex(function (i) {
+        return i.id === id;
+      }),
+      1,
+    );
+    setpostedJobsData(newData);
+  };
+  const loadMoreData = () => {
+    if (isLoadMore) {
+      setLoadingMore(true);
+      getPostedJobs();
+    }
+  };
   return (
     <ImageBackground
       resizeMode={'stretch'}
@@ -164,6 +197,10 @@ export default function PostedJobs({navigation}) {
             data={postedJobs}
             extraData={postedJobs}
             keyExtractor={(item, index) => index.toString()}
+            onEndReached={loadMoreData}
+            onEndReachedThreshold={0.5}
+            initialNumToRender={10}
+            ListFooterComponent={<ListFooterLoader isLoading={isLoadingMore} />}
             renderItem={({item}) => (
               <CommonCard
                 data={item}

@@ -20,7 +20,11 @@ export default function Splash({navigation}) {
       else navigateTo = 'Home';
     }
 
-    navigation.navigate(navigateTo);
+    navigation.reset({
+      index: 0,
+      routes: [{name: navigateTo}],
+    });
+    
   };
   return null;
 }

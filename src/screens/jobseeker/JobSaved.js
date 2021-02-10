@@ -5,6 +5,9 @@ import CommonHeader from '../../component/CommonHeader';
 import {
   GET_SEEKER_JOB_ERROR,
   GET_SEEKER_JOB_SUCCESS,
+  GET_SEEKER_SAVED_JOB_ERROR,
+  GET_SEEKER_SAVED_JOB_SUCCESS,
+  SEEKER_RESET,
 } from '../../redux/JobSeekerReducer';
 import {postApi, postApiWithoutDispatch} from '../../utils/APIKit';
 import {useDispatch, useSelector} from 'react-redux';
@@ -15,59 +18,82 @@ import {
   API_GET_SEEKER_JOB,
   API_SEEKER_CHANGE_JOB_STATUS,
 } from '../../utils/Url';
+import ListFooterLoader from '../../component/ListFooterLoader';
 
+let pageNumber = 0;
+let isLoadMore = true;
 export default function JobSaved({navigation}) {
   const [savedJobData, setSavedJobData] = useState([]);
   const dispatch = useDispatch();
   const toast = React.useRef(null);
-  const [loading, setLoader] = useState(true);
-  const {seekerJobsData, seekerJobError} = useSelector(
+  const [isLoadingMore, setLoadingMore] = useState(false);
+  const [loading, setLoader] = useState(false);
+  const {savedJobsData, savedJobsError} = useSelector(
     (state) => state.jobSeeker,
   );
-  const getRecommendedJobs = () => {
+  const getSavedJobsData = () => {
+    pageNumber++;
     const params = {
       all: 0,
-      page: 1,
-      perPage: 20,
+      page: pageNumber,
+      perPage: 10,
       search: '',
       category_id: '',
       employment_type: '',
+      type: 'S',
     };
     dispatch(
       postApi(
         API_GET_SEEKER_JOB,
         params,
-        GET_SEEKER_JOB_SUCCESS,
-        GET_SEEKER_JOB_ERROR,
+        GET_SEEKER_SAVED_JOB_SUCCESS,
+        GET_SEEKER_SAVED_JOB_ERROR,
       ),
     );
   };
 
+  // React.useEffect(() => {
+  //   getSavedJobsData();
+  // }, []);
+
   React.useEffect(() => {
-    if (seekerJobsData) {
-      console.log('====seekerJobsData====', seekerJobsData);
-      if (
-        seekerJobsData.status == API_RESPONSE_STATUS.STATUS_200 &&
-        seekerJobsData.data &&
-        seekerJobsData.data.jobs &&
-        seekerJobsData.data.jobs.length
-      ) {
-        const data = seekerJobsData.data.jobs.filter((item) => item.save_user);
-        setSavedJobData(data);
+    const unsubscribe = navigation.addListener('focus', () => {
+      pageNumber = 0;
+      isLoadMore = true;
+      setSavedJobData([]);
+      setLoader(true);
+      getSavedJobsData();
+    });
+    if (savedJobsData) {
+      console.log('====savedJobsData====', savedJobsData);
+      if (savedJobsData.status == API_RESPONSE_STATUS.STATUS_200) {
+        if (
+          savedJobsData.data &&
+          savedJobsData.data.jobs &&
+          savedJobsData.data.jobs.length
+        ) {
+          const data = savedJobData.concat(savedJobsData.data.jobs);
+          setSavedJobData(data);
+        } else {
+          isLoadMore = false;
+        }
       }
+      setLoadingMore(false);
       setLoader(false);
     }
 
-    if (seekerJobError) {
-      console.log('====seekerJobError====', seekerJobError);
+    if (savedJobsError) {
+      console.log('====savedJobsError====', savedJobsError);
       setLoader(false);
-      dispatch({type: POSTED_JOB_RESET});
+      dispatch({type: SEEKER_RESET});
     }
-  }, [seekerJobsData, seekerJobError]);
+    return unsubscribe;
+  }, [savedJobsData, savedJobsError]);
 
   const saveJob = (id) => {
     console.log('===saveJob==', id);
-    changeStatus(id, 'S');
+
+    // changeStatus(id, 'S');
   };
   const applyJob = (id) => {
     console.log('===applyJob==', id);
@@ -85,13 +111,24 @@ export default function JobSaved({navigation}) {
     )
       .then((data) => {
         console.log('changeStatusdata======', data);
-        toast.current.show(data.message, 'SUCCESS');
-        getRecommendedJobs();
+        getSavedJobsData();
+        if (status == 'A') {
+          toast.current.show('Job Applied Successfully', 'SUCCESS');
+        } else {
+          toast.current.show('Job Saved Successfully', 'SUCCESS');
+        }
       })
       .catch((error) => {
         console.log('changeStatuserror======', error);
         setLoader(false);
       });
+  };
+
+  const loadMoreData = () => {
+    if (isLoadMore) {
+      setLoadingMore(true);
+      getSavedJobsData();
+    }
   };
 
   return (
@@ -114,6 +151,10 @@ export default function JobSaved({navigation}) {
             extraData={savedJobData}
             showsVerticalScrollIndicator={false}
             keyExtractor={(item, index) => index.toString()}
+            onEndReached={loadMoreData}
+            onEndReachedThreshold={0.5}
+            initialNumToRender={10}
+            ListFooterComponent={<ListFooterLoader isLoading={isLoadingMore} />}
             renderItem={({item}) => (
               <CommonCard
                 data={item}

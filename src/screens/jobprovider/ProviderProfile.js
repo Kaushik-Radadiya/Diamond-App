@@ -16,9 +16,13 @@ import Theme from '../../utils/Theme';
 
 import {useDispatch, useSelector} from 'react-redux';
 import {clearToken, postApi} from '../../utils/APIKit';
-import {API_GET_PROFILE_DETAIL, API_LOGOUT} from '../../utils/Url';
+import {
+  API_EDIT_PROFILE_DETAIL,
+  API_GET_PROFILE_DETAIL,
+  API_LOGOUT,
+} from '../../utils/Url';
 import {LOGOUT_ERROR, LOGOUT_SUCCESS, RESET} from '../../redux/AuthReducer';
-import {getData, storeData} from '../../utils/Utils';
+import {getData, showAlert, storeData} from '../../utils/Utils';
 import {API_RESPONSE_STATUS, LOGINTYPE, TOKEN} from '../../utils/Constant';
 import {LoginManager} from 'react-native-fbsdk';
 import {GoogleSignin} from '@react-native-community/google-signin';
@@ -30,6 +34,7 @@ import {
   GET_PROVIDER_PROFILE_SUCCESS,
 } from '../../redux/JobProviderReducer';
 
+let loginType = 'other';
 export default function ProviderProfile({navigation}) {
   const dispatch = useDispatch();
   const [loading, setLoader] = useState(false);
@@ -61,6 +66,9 @@ export default function ProviderProfile({navigation}) {
   };
 
   React.useEffect(() => {
+    getData(LOGINTYPE.Type).then((value) => {
+      loginType = value;
+    });
     setLoader(true);
     dispatch(
       postApi(
@@ -76,18 +84,17 @@ export default function ProviderProfile({navigation}) {
       setLoader(false);
       if (logoutResponse.status == API_RESPONSE_STATUS.STATUS_200) {
         console.log('======logoutResponse===', logoutResponse);
-        getData(LOGINTYPE.Type).then((value) => {
-          if (value == LOGINTYPE.Facebook) LoginManager.logOut();
-          else if (value == LOGINTYPE.Google) googleSignOut();
 
-          storeData(TOKEN, '');
-          storeData(LOGINTYPE.Type, '');
-          dispatch({type: RESET_REDUCER});
-          clearToken();
-          navigation.reset({
-            index: 0,
-            routes: [{name: 'SelectAppType'}],
-          });
+        if (loginType == LOGINTYPE.Facebook) LoginManager.logOut();
+        else if (loginType == LOGINTYPE.Google) googleSignOut();
+
+        storeData(TOKEN, '');
+        storeData(LOGINTYPE.Type, '');
+        dispatch({type: RESET_REDUCER});
+        clearToken();
+        navigation.reset({
+          index: 0,
+          routes: [{name: 'SelectAppType'}],
         });
       } else {
         toast.current.show(logoutResponse.message);
@@ -125,7 +132,6 @@ export default function ProviderProfile({navigation}) {
   }, [logoutResponse, logoutError, providerProfileData, providerProfileError]);
 
   const renderBodyText = (title, value, setData, keyboardType = 'default') => {
-    console.log('=value===', title, value);
     return (
       <View style={{paddingBottom: 5, flex: 1}}>
         {title != '' ? (
@@ -144,6 +150,7 @@ export default function ProviderProfile({navigation}) {
             setData(text);
           }}
           secureTextEntry={title == 'Password' ? true : false}
+          editable={title == 'Password' ? false : true}
           value={value.toString()}
         />
       </View>
@@ -177,12 +184,79 @@ export default function ProviderProfile({navigation}) {
   };
 
   const onLogout = () => {
-    setLoader(true);
-    dispatch(postApi(API_LOGOUT, {}, LOGOUT_SUCCESS, LOGOUT_ERROR));
+    showAlert(
+      'Logout',
+      'Are you sure, Want to logout',
+      'Yes',
+      'No',
+      () => {
+        setLoader(true);
+        dispatch(postApi(API_LOGOUT, {}, LOGOUT_SUCCESS, LOGOUT_ERROR));
+      },
+      () => {},
+    );
   };
+
+  
 
   const onEditProfile = () => {
     console.log('Edit Profile');
+
+    let message = null;
+    if (name == '') {
+      message = 'Please enter name';
+    } else if (mobileNo == '') {
+      message = 'Please enter mobile number';
+    } else if (city == '' || city == 'Add City') {
+      message = 'Please enter City';
+    } else if (state == '' || state == 'Add State') {
+      message = 'Please enter State';
+    } else if (companyName == '' || companyName == 'Add Company Name') {
+      message = 'Please enter company name';
+    } else if (description == '' || description == 'Add Company Description') {
+      message = 'Please enter company description';
+    } else if (website == '' || website == 'Add Company WebSite') {
+      message = 'Please enter website';
+    } else if (email == '' || email == 'Add Company Email') {
+      message = 'Please enter company email';
+    } else if (companyPhone == '' || companyPhone == 'Add Company Number') {
+      message = 'Please enter company number';
+    }
+
+    if (message) {
+      toast.current.show(message);
+    } else {
+      const nameArray = name.split(' ');
+      const parmas = {
+        firstName: nameArray[0] || '',
+        lastName: nameArray[1] || '',
+        mobile: mobileNo,
+        type: 'JP',
+        login_type:
+          loginType == LOGINTYPE.Facebook
+            ? 'F'
+            : loginType == LOGINTYPE.Google
+            ? 'G'
+            : 'O',
+        company_name: companyName,
+        company_description: description,
+        company_phone: companyPhone,
+        company_email: email,
+        company_website: website,
+        city: city,
+        state: state,
+      };
+
+      setLoader(true);
+      dispatch(
+        postApi(
+          API_EDIT_PROFILE_DETAIL,
+          parmas,
+          GET_PROVIDER_PROFILE_SUCCESS,
+          GET_PROVIDER_PROFILE_ERROR,
+        ),
+      );
+    }
   };
   return (
     <ImageBackground
@@ -196,9 +270,7 @@ export default function ProviderProfile({navigation}) {
         <View style={styles.profileBgContainer}>
           <Image style={{height: 35, width: 35}} source={{uri: 'ic_avatar'}} />
         </View>
-        <TextInput style={styles.headerTitle}>
-          Hari Krishna Diamond PVT. LTD.
-        </TextInput>
+        <TextInput style={styles.headerTitle}>{companyName}</TextInput>
         <View style={styles.editProfileContiner}>
           <TouchableOpacity
             style={{flex: 1}}

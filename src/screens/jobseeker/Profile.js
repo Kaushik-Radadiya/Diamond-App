@@ -19,8 +19,12 @@ import {LOGOUT_ERROR, LOGOUT_SUCCESS, RESET} from '../../redux/AuthReducer';
 import {clearToken, postApi} from '../../utils/APIKit';
 import {API_RESPONSE_STATUS, LOGINTYPE, TOKEN} from '../../utils/Constant';
 import Theme from '../../utils/Theme';
-import {API_GET_PROFILE_DETAIL, API_LOGOUT} from '../../utils/Url';
-import {getData, storeData} from '../../utils/Utils';
+import {
+  API_EDIT_PROFILE_DETAIL,
+  API_GET_PROFILE_DETAIL,
+  API_LOGOUT,
+} from '../../utils/Url';
+import {getData, showAlert, storeData} from '../../utils/Utils';
 import {LoginManager} from 'react-native-fbsdk';
 import {GoogleSignin} from '@react-native-community/google-signin';
 import {RESET_REDUCER} from '../../redux/Store';
@@ -29,9 +33,10 @@ import {
   GET_SEEKER_PROFILE_SUCCESS,
 } from '../../redux/JobSeekerReducer';
 
+let loginType = 'other';
 export default function Profile({navigation}) {
   const dispatch = useDispatch();
-  const [skills, setskills] = useState(['Syner', 'Colur Paurity', 'Fency']);
+  const [skills, setskills] = useState([]);
   const [loading, setLoader] = useState(false);
   const [name, setName] = useState('');
   const [mobileNo, setMobileNo] = useState('');
@@ -60,6 +65,9 @@ export default function Profile({navigation}) {
   };
 
   React.useEffect(() => {
+    getData(LOGINTYPE.Type).then((value) => {
+      loginType = value;
+    });
     setLoader(true);
     dispatch(
       postApi(
@@ -76,18 +84,17 @@ export default function Profile({navigation}) {
       setLoader(false);
       if (logoutResponse.status == API_RESPONSE_STATUS.STATUS_200) {
         console.log('======logoutResponse===', logoutResponse);
-        getData(LOGINTYPE.Type).then((value) => {
-          if (value == LOGINTYPE.Facebook) LoginManager.logOut();
-          else if (value == LOGINTYPE.Google) googleSignOut();
 
-          storeData(TOKEN, '');
-          storeData(LOGINTYPE.Type, '');
-          dispatch({type: RESET_REDUCER});
-          clearToken();
-          navigation.reset({
-            index: 0,
-            routes: [{name: 'SelectAppType'}],
-          });
+        if (loginType == LOGINTYPE.Facebook) LoginManager.logOut();
+        else if (loginType == LOGINTYPE.Google) googleSignOut();
+
+        storeData(TOKEN, '');
+        storeData(LOGINTYPE.Type, '');
+        dispatch({type: RESET_REDUCER});
+        clearToken();
+        navigation.reset({
+          index: 0,
+          routes: [{name: 'SelectAppType'}],
         });
       } else {
         toast.current.show(logoutResponse.message);
@@ -112,6 +119,7 @@ export default function Profile({navigation}) {
         setCompanyName(data.company_name || 'Add Company Name');
         setEmail(data.company_email || 'Add Company Email');
         setExperiance(data.experience || 'Add Experience');
+        setskills(data.skill ? data.skill.split(',') : []);
       } else {
         toast.current.show(logoutResponse.message);
       }
@@ -138,7 +146,6 @@ export default function Profile({navigation}) {
         settotalAppliedJob(appliedJobcount);
         settotalSavedJob(savedJobcount);
       }
-      setLoader(false);
     }
   }, [
     logoutResponse,
@@ -159,6 +166,7 @@ export default function Profile({navigation}) {
             setData(text);
           }}
           secureTextEntry={title == 'Password' ? true : false}
+          editable={title == 'Password' ? false : true}
           value={value.toString()}
         />
       </View>
@@ -167,12 +175,76 @@ export default function Profile({navigation}) {
 
   const onLogout = () => {
     console.log('Logout');
-    setLoader(true);
-    dispatch(postApi(API_LOGOUT, {}, LOGOUT_SUCCESS, LOGOUT_ERROR));
+
+    showAlert(
+      'Logout',
+      'Are you sure, Want to logout',
+      'Yes',
+      'No',
+      () => {
+        setLoader(true);
+        dispatch(postApi(API_LOGOUT, {}, LOGOUT_SUCCESS, LOGOUT_ERROR));
+      },
+      () => {},
+    );
   };
 
   const onEditProfile = () => {
     console.log('Edit Profile');
+
+    let message = null;
+    if (name == '') {
+      message = 'Please enter name';
+    } else if (mobileNo == '') {
+      message = 'Please enter mobile number';
+    } else if (city == '' || city == 'Add City') {
+      message = 'Please enter City';
+    } else if (state == '' || state == 'Add State') {
+      message = 'Please enter State';
+    } else if (companyName == '' || companyName == 'Add Company Name') {
+      message = 'Please enter company name';
+    } else if (email == '' || email == 'Add Company Email') {
+      message = 'Please enter company email';
+    } else if (experience == '' || experience == 'Add Experience') {
+      message = 'Please enter experience';
+    } else if (!skills.length) {
+      message = 'Please add skills';
+    }
+
+    if (message) {
+      toast.current.show(message);
+    } else {
+      const nameArray = name.split(' ');
+      const parmas = {
+        firstName: nameArray[0] || '',
+        lastName: nameArray[1] || '',
+        mobile: mobileNo,
+        type: 'JP',
+        login_type:
+          loginType == LOGINTYPE.Facebook
+            ? 'F'
+            : loginType == LOGINTYPE.Google
+            ? 'G'
+            : 'O',
+        company_name: companyName,
+
+        company_email: email,
+        experience: experience,
+        city: city,
+        state: state,
+        skill: skills.toString(),
+      };
+
+      setLoader(true);
+      dispatch(
+        postApi(
+          API_EDIT_PROFILE_DETAIL,
+          parmas,
+          GET_SEEKER_PROFILE_SUCCESS,
+          GET_SEEKER_PROFILE_ERROR,
+        ),
+      );
+    }
   };
   return (
     <ImageBackground
@@ -190,7 +262,7 @@ export default function Profile({navigation}) {
         <View style={styles.profileBgContainer}>
           <Image style={{height: 35, width: 35}} source={{uri: 'ic_avatar'}} />
         </View>
-        <Text style={styles.headerTitle}>John Doe</Text>
+        <Text style={styles.headerTitle}>{name}</Text>
         <View style={styles.editProfileContiner}>
           <TouchableOpacity
             style={{flex: 1}}
@@ -229,15 +301,37 @@ export default function Profile({navigation}) {
             {renderBodyText('Company Name', companyName, setCompanyName)}
             {renderBodyText('Experience', experience, setExperiance)}
             <View>
-              <Text
-                style={[
-                  styles.subTitle,
-                  {
-                    paddingVertical: 5,
-                  },
-                ]}>
-                Skills
-              </Text>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <Text
+                  style={[
+                    styles.subTitle,
+                    {
+                      paddingVertical: 5,
+                    },
+                  ]}>
+                  Skills
+                </Text>
+                <TouchableOpacity
+                  style={{
+                    height: 20,
+                    width: 20,
+                    borderRadius: 10,
+                    backgroundColor: Theme.colors.categoryBg,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginLeft: 5,
+                  }}>
+                  <Text
+                    style={{
+                      fontSize: Theme.fontSizes.medium,
+                      color: Theme.colors.theme,
+                      includeFontPadding: false,
+                      padding: 0,
+                    }}>
+                    +
+                  </Text>
+                </TouchableOpacity>
+              </View>
               <FlatList
                 data={skills}
                 extraData={skills}

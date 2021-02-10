@@ -25,6 +25,8 @@ export default function CommonCard({...props}) {
     onApply,
     onSave,
     navigation,
+    isSaved,
+    isFreelanceJob,
   } = props;
 
   const renderImageAndText = (icon, title) => {
@@ -83,7 +85,7 @@ export default function CommonCard({...props}) {
                 {data.is_active ? 'OPEN' : 'CLOSE'}
               </Text>
             </View>
-            {data.isUrgent ? (
+            {isFreelanceJob ? (
               <View
                 style={[
                   styles.statusBackground,
@@ -217,7 +219,7 @@ export default function CommonCard({...props}) {
                 style={{height: 20, width: 20}}
                 source={{
                   uri: isJobSeeker
-                    ? data.save_user
+                    ? data.save_user || isSaved
                       ? 'ic_bookmarkfill'
                       : 'ic_bookmark'
                     : 'ic_more',
