@@ -6,6 +6,8 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import SelectAppType from './src/screens/SelectAppType';
 import Login from './src/screens/Login';
+import ForgotPassword from './src/screens/ForgotPassword';
+import ResetPassword from './src/screens/ResetPassword';
 import Register from './src/screens/Register';
 import LookingFor from './src/screens/jobseeker/LookingFor';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -203,13 +205,31 @@ const JobProviderDashbord = () => {
   );
 };
 
+const config = {
+  screens: {
+    ResetPassword: {
+      path: 'resetpassword/:token',
+      parse: {
+        token: (token) => token,
+      },
+    },
+  },
+};
+
+const linking = {
+  prefixes: ['diamondapp://'],
+  config,
+};
+
 const Route = () => {
   return (
-    <NavigationContainer>
+    <NavigationContainer linking={linking}>
       <Stack.Navigator headerMode={'none'} initialRouteName={'Splash'}>
         <Stack.Screen name="Splash" component={Splash} />
         <Stack.Screen name="SelectAppType" component={SelectAppType} />
         <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+        <Stack.Screen name="ResetPassword" component={ResetPassword} />
         <Stack.Screen name="Register" component={Register} />
         <Stack.Screen name="SocialRegister" component={SocialRegister} />
         <Stack.Screen name="LookingFor" component={LookingFor} />

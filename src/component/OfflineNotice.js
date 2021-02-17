@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     width,
-    // top: 30,
+    top: 30,
   },
   offlineText: {color: '#fff'},
 });

@@ -216,7 +216,7 @@ export default function Login({navigation, route}) {
           <TouchableOpacity
             activeOpacity={1}
             style={{flexDirection: 'row-reverse', paddingVertical: 10}}
-            onPress={() => {}}>
+            onPress={() => navigation.navigate('ForgotPassword')}>
             <Text style={styles.forgotPassText}>Forgot password</Text>
           </TouchableOpacity>
           <CommonButton
@@ -293,9 +293,6 @@ const styles = StyleSheet.create({
     fontSize: Theme.fontSizes.large,
     fontFamily: Theme.fontFamily.PoppinsMedium,
     color: Theme.colors.theme,
-  },
-  welcomeImage: {
-    marginVertical: 15,
   },
   topSubContainer: {
     padding: 30,

@@ -14,3 +14,4 @@ export const API_EDIT_PROFILE_DETAIL = 'user/edit-profile';
 export const API_PROVIDER_CHANGE_JOB_STATUS = 'job/provider/change-status/{ID}';
 export const API_SEEKER_CHANGE_JOB_STATUS = 'job/seeker/change-status/{ID}';
 export const API_PROVIDER_DELETE_JOB = 'job/delete/{ID}';
+export const API_FORGOT_PASSWORD = 'forgot-password'

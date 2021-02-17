@@ -25,7 +25,7 @@ export const postApi = (url, params, successtype, failType = 'default') => (
   console.log('=====POST=====', params, url);
   APIKit.post(url, params)
     .then(function (response) {
-      console.log('=====response====', response.data);
+      
       dispatch({type: successtype, payload: response});
     })
     .catch(function (error) {

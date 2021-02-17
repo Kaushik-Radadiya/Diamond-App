@@ -57,7 +57,7 @@ export default function Home({navigation}) {
   const getRecommendedJobs = () => {
     pageNumber++;
     const params = {
-      all: 0,
+      all: 1,
       page: pageNumber,
       perPage: 10,
       search: searchText,
@@ -207,31 +207,32 @@ export default function Home({navigation}) {
       />
       <Toast ref={toast} duration={5000} />
       <Loader loading={loading} />
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-        <>
-          <View style={[styles.titleContainer]}>
-            <Text style={styles.titleText}>Welcome, John</Text>
-            <View style={styles.searchContainer}>
-              <TextInput
-                style={styles.search}
-                placeholder={'What are you looking for?'}
-                onChangeText={(text) => {
-                  setsearchText(text);
-                }}
-                returnKeyType={'search'}
-                onSubmitEditing={() => searchJobs()}
-                onBlur={() => searchJobs()}
+      <TouchableWithoutFeedback   onPress={Keyboard.dismiss} accessible={false}><>
+        <View style={[styles.titleContainer]}>
+          <Text style={styles.titleText}>Welcome, John</Text>
+          <View style={styles.searchContainer}>
+            <TextInput
+              style={styles.search}
+              placeholder={'What are you looking for?'}
+              onChangeText={(text) => {
+                setsearchText(text);
+              }}
+              returnKeyType={'search'}
+              onSubmitEditing={() => searchJobs()}
+              onBlur={() => searchJobs()}
+            />
+            <TouchableOpacity onPress={() => searchJobs()}>
+              <Image
+                style={{height: 25, width: 25}}
+                source={{uri: 'ic_search'}}
               />
-              <TouchableOpacity onPress={() => searchJobs()}>
-                <Image
-                  style={{height: 25, width: 25}}
-                  source={{uri: 'ic_search'}}
-                />
-              </TouchableOpacity>
-            </View>
+            </TouchableOpacity>
           </View>
-          {recommendedJobData.length ? (
-            <View style={{paddingHorizontal: 15, paddingTop: 15, flex: 1}}>
+        </View>
+
+        <View style={{paddingHorizontal: 15, paddingTop: 15 , flex: 1,}}>
+          {searchCategoryData.length ? (
+            <>
               <Text style={styles.bodyTitle}>Search by Category</Text>
               <FlatList
                 contentContainerStyle={{paddingVertical: 10}}
@@ -268,6 +269,10 @@ export default function Home({navigation}) {
                   </TouchableOpacity>
                 )}
               />
+            </>
+          ) : null}
+          {recommendedJobData.length ? (
+            <>
               <Text style={styles.bodyTitle}>Recommended Job</Text>
 
               <FlatList
@@ -292,7 +297,7 @@ export default function Home({navigation}) {
                   />
                 )}
               />
-            </View>
+            </>
           ) : !loading ? (
             <View
               style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -306,6 +311,7 @@ export default function Home({navigation}) {
               </Text>
             </View>
           ) : null}
+        </View>
         </>
       </TouchableWithoutFeedback>
     </ImageBackground>
@@ -355,7 +361,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginRight: 10,
     alignItems: 'center',
-    // height: 40,
+    height: 30,
   },
   categoryText: {
     fontFamily: Theme.fontFamily.PoppinsMedium,

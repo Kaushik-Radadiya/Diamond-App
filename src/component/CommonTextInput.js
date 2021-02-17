@@ -39,7 +39,7 @@ export default function CommonTextinput({...props}) {
         }}
         returnKeyType={returnKeyType}
         onSubmitEditing={onSubmitEditing}
-        secureTextEntry={placeholder == 'Password' ? true : false}
+        secureTextEntry={placeholder == 'Password' || placeholder == 'Enter new password' || placeholder == 'Re-Enter password' ? true : false}
         value={value}
       />
     </TouchableOpacity>
