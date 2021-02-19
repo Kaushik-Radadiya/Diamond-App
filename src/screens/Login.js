@@ -7,6 +7,7 @@ import {postApi, setClientToken} from '../utils/APIKit';
 import {
   API_RESPONSE_STATUS,
   APPTYPE,
+  FCM_TOKEN,
   LOGINTYPE,
   TOKEN,
 } from '../utils/Constant';
@@ -29,7 +30,7 @@ import {
   REGISTER_SUCCESS,
   RESET,
 } from '../redux/AuthReducer';
-import {showAlert, storeData} from '../utils/Utils';
+import {getData, showAlert, storeData} from '../utils/Utils';
 
 export default function Login({navigation, route}) {
   const {apptype} = route.params;
@@ -108,7 +109,7 @@ export default function Login({navigation, route}) {
     new GraphRequestManager().addRequest(profileRequest).start();
   };
 
-  const onLoginButtonPress = () => {
+  const onLoginButtonPress = async () => {
     // if (apptype == APPTYPE.JOBPROVIDER) {
     //   navigation.reset({
     //     index: 0,
@@ -125,9 +126,11 @@ export default function Login({navigation, route}) {
     else if (password == '') toast.current.show('Please Enter Password');
     else {
       setLoader(true);
+      const fcmtoken = await getData(FCM_TOKEN);
       const params = {
         email: email,
         password: password,
+        fcmToken: fcmtoken,
       };
 
       dispatch(postApi(API_LOGIN, params, LOGIN_SUCCESS, LOGIN_ERROR));

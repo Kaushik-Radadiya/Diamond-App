@@ -7,42 +7,35 @@ import {
   TouchableOpacity,
   Image,
   FlatList,
+  Linking
 } from 'react-native';
 import CommonButton from '../../component/CommonButton';
 import CommonHeader from '../../component/CommonHeader';
 import Theme from '../../utils/Theme';
 
-export default function EmployeeApplied({navigation}) {
+export default function EmployeeApplied({navigation, route}) {
+  const {appliedData} = route.params
   const [isMoreDetailVisible, setisMoreDetailVisible] = useState(false);
-  const [appliedJobData, setappliedJobData] = useState([
-    {
-      id: 1,
-      image: 'ic_user',
-      name: 'John Doe',
-      email: 'Jhondoe@gmail.com',
-      mobile: '0123456789',
-      job_status: 'Krishna Diamond PVT. LTD. ( Running )',
-      location: 'Surat, Gujarat',
-      experiance: 'Experiance 1 to 5 years',
-      applied_date: '02-10-2020',
-      skills: ['Syner', 'Colur Paurity', 'Fency'],
-      isMoreDetailVisible: false,
-    },
-    {
-      id: 1,
-      image: 'ic_user',
-      name: 'John Doe',
-      email: 'Jhondoe@gmail.com',
-      mobile: '0123456789',
-      job_status: 'Krishna Diamond PVT. LTD. ( Running )',
-      location: 'Surat, Gujarat',
-      experiance: 'Experiance 1 to 5 years',
-      applied_date: '02-10-2020',
-      skills: ['Syner', 'Colur Paurity', 'Fency'],
-      isMoreDetailVisible: false,
-    },
-  ]);
+  const [appliedJobData, setappliedJobData] = useState(appliedData)
+  
 
+  const sendEmail = (email) => {
+    Linking.openURL(`mailto:${email}`)
+  }
+
+  const dialCall = (number) => {
+
+    let phoneNumber = '';
+
+    if (Platform.OS === 'android') {
+      phoneNumber = `tel:${number}`;
+    }
+    else {
+      phoneNumber = `telprompt:${number}`;
+    }
+
+    Linking.openURL(phoneNumber);
+  };
   const renderBodyItem = (title, value, icon, width = '100%') => {
     return (
       <View style={[styles.bodyItemContainer, {width: width}]}>
@@ -56,7 +49,7 @@ export default function EmployeeApplied({navigation}) {
             <TouchableOpacity
               style={styles.bodyIcon}
               activeOpacity={0.8}
-              onPress={() => {}}>
+              onPress={() => title == 'Email' ? sendEmail(value) : dialCall(value)}>
               <Image style={styles.image} source={{uri: icon}} />
             </TouchableOpacity>
           </View>
@@ -76,9 +69,9 @@ export default function EmployeeApplied({navigation}) {
     return (
       <View style={styles.cardContainer}>
         <View style={styles.cardTopContainer}>
-          <Text style={styles.titleText}>{item.name}</Text>
-          {renderBodyItem('Email', item.email, 'ic_mail_white')}
-          {renderBodyItem('Mobile No', item.mobile, 'ic_call_white')}
+          <Text style={styles.titleText}>{item.apply_user.name}</Text>
+          {renderBodyItem('Email', item.apply_user.email, 'ic_mail_white')}
+          {renderBodyItem('Mobile No', item.apply_user.mobile, 'ic_call_white')}
         </View>
         {!item.isMoreDetailVisible ? (
           <CommonButton
@@ -92,10 +85,10 @@ export default function EmployeeApplied({navigation}) {
           <View
             style={{borderBottomLeftRadius: 10, borderBottomRightRadius: 10}}>
             <View style={styles.moreDetailContainer}>
-              {renderBodyItem('Current Job Status', item.job_status)}
+              {renderBodyItem('Current Job Status', item.apply_user.company_name)}
               <View style={{flexDirection: 'row'}}>
-                {renderBodyItem('Experiance', item.experiance, null, '50%')}
-                {renderBodyItem('Applied Date', item.applied_date, null, '50%')}
+                {renderBodyItem('Experiance', `${item.apply_user.experience} years`, null, '50%')}
+                {renderBodyItem('Applied Date', item.apply_user.updated_at, null, '50%')}
               </View>
               <View>
                 <Text
@@ -108,8 +101,8 @@ export default function EmployeeApplied({navigation}) {
                   Skills
                 </Text>
                 <FlatList
-                  data={item.skills}
-                  extraData={item.skills}
+                  data={item.apply_user.skill.split(',')}
+                  extraData={item.apply_user.skill.split(',')}
                   horizontal
                   showsHorizontalScrollIndicator={false}
                   keyExtractor={(item, index) => index.toString()}

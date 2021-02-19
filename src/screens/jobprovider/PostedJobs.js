@@ -64,7 +64,11 @@ export default function PostedJobs({navigation}) {
 
     if (postedJobsData) {
       if (postedJobsData.status == API_RESPONSE_STATUS.STATUS_200) {
-        if (postedJobsData.data && postedJobsData.data.jobs && postedJobsData.data.jobs.length) {
+        if (
+          postedJobsData.data &&
+          postedJobsData.data.jobs &&
+          postedJobsData.data.jobs.length
+        ) {
           const data = postedJobs.concat(postedJobsData.data.jobs);
           setpostedJobsData(data);
         } else {
@@ -89,9 +93,11 @@ export default function PostedJobs({navigation}) {
     console.log('===onFilterPress==');
   };
 
-  const onEmployeeApplied = (id) => {
-    console.log('====onEmployeeApplied==', id);
-    navigation.navigate('EmployeeApplied');
+  const onEmployeeApplied = (data) => {
+    console.log('====onEmployeeApplied==', data);
+    if (data.applied_count > 0) {
+      navigation.navigate('EmployeeApplied', {appliedData : data.applied_user_details});
+    }
   };
   const onClosedRecruitment = (id) => {
     console.log('====onClosedRecruitment==', id);

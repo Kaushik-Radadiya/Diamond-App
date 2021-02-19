@@ -34,6 +34,7 @@ import {
   GET_JOB_CATEGORY_SUCCESS,
 } from '../../redux/JobProviderReducer';
 import ListFooterLoader from '../../component/ListFooterLoader';
+import messaging from '@react-native-firebase/messaging';
 
 let pageNumber = 0;
 let isLoadMore = true;
@@ -74,6 +75,36 @@ export default function Home({navigation}) {
       ),
     );
   };
+
+  useEffect(() => {
+    // Assume a message-notification contains a "type" property in the data payload of the screen to open
+
+    messaging().onNotificationOpenedApp((remoteMessage) => {
+      console.log(
+        'Notification caused app to open from background state:',
+        remoteMessage.notification,
+      );
+      // navigation.navigate(remoteMessage.data.type);
+    });
+
+    // Check whether an initial notification is available
+    messaging()
+      .getInitialNotification()
+      .then((remoteMessage) => {
+        if (remoteMessage) {
+          console.log(
+            'Notification caused app to open from quit state:',
+            remoteMessage.notification,
+          );
+          // setInitialRoute(remoteMessage.data.type); // e.g. "Settings"
+        }
+      });
+
+    messaging().onMessage((remoteMessage) => {
+      console.log("====forground notificaiton=====", remoteMessage.notification)
+      // alert('Foreground Push Notification opened');
+    });
+  }, []);
 
   useEffect(() => {
     if (!jobcategoryData) {
@@ -207,111 +238,116 @@ export default function Home({navigation}) {
       />
       <Toast ref={toast} duration={5000} />
       <Loader loading={loading} />
-      <TouchableWithoutFeedback   onPress={Keyboard.dismiss} accessible={false}><>
-        <View style={[styles.titleContainer]}>
-          <Text style={styles.titleText}>Welcome, John</Text>
-          <View style={styles.searchContainer}>
-            <TextInput
-              style={styles.search}
-              placeholder={'What are you looking for?'}
-              onChangeText={(text) => {
-                setsearchText(text);
-              }}
-              returnKeyType={'search'}
-              onSubmitEditing={() => searchJobs()}
-              onBlur={() => searchJobs()}
-            />
-            <TouchableOpacity onPress={() => searchJobs()}>
-              <Image
-                style={{height: 25, width: 25}}
-                source={{uri: 'ic_search'}}
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        <>
+          <View style={[styles.titleContainer]}>
+            <Text style={styles.titleText}>Welcome, John</Text>
+            <View style={styles.searchContainer}>
+              <TextInput
+                style={styles.search}
+                placeholder={'What are you looking for?'}
+                onChangeText={(text) => {
+                  setsearchText(text);
+                }}
+                returnKeyType={'search'}
+                onSubmitEditing={() => searchJobs()}
+                onBlur={() => searchJobs()}
               />
-            </TouchableOpacity>
-          </View>
-        </View>
-
-        <View style={{paddingHorizontal: 15, paddingTop: 15 , flex: 1,}}>
-          {searchCategoryData.length ? (
-            <>
-              <Text style={styles.bodyTitle}>Search by Category</Text>
-              <FlatList
-                contentContainerStyle={{paddingVertical: 10}}
-                data={searchCategoryData}
-                extraData={searchCategoryData}
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={({item, index}) => (
-                  <TouchableOpacity
-                    activeOpacity={0.5}
-                    style={[
-                      styles.categoryConatiner,
-                      {
-                        backgroundColor:
-                          selectedCategory == item.id
-                            ? Theme.colors.theme
-                            : Theme.colors.categoryBg,
-                      },
-                    ]}
-                    onPress={() => serachByCategory(item.id)}>
-                    <Text
-                      style={[
-                        styles.categoryText,
-                        {
-                          color:
-                            selectedCategory == item.id
-                              ? Theme.colors.whiteText
-                              : Theme.colors.theme,
-                        },
-                      ]}>
-                      {item.name}
-                    </Text>
-                  </TouchableOpacity>
-                )}
-              />
-            </>
-          ) : null}
-          {recommendedJobData.length ? (
-            <>
-              <Text style={styles.bodyTitle}>Recommended Job</Text>
-
-              <FlatList
-                contentContainerStyle={{paddingBottom: 10}}
-                data={recommendedJobData}
-                extraData={recommendedJobData}
-                showsVerticalScrollIndicator={false}
-                keyExtractor={(item, index) => index.toString()}
-                onEndReached={loadMoreData}
-                onEndReachedThreshold={0.5}
-                initialNumToRender={10}
-                ListFooterComponent={
-                  <ListFooterLoader isLoading={isLoadingMore} />
-                }
-                renderItem={({item}) => (
-                  <CommonCard
-                    data={item}
-                    isJobSeeker
-                    onSave={saveJob}
-                    onApply={applyJob}
-                    navigation={navigation}
-                  />
-                )}
-              />
-            </>
-          ) : !loading ? (
-            <View
-              style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-              <Text
-                style={{
-                  fontFamily: Theme.fontFamily.PoppinsMedium,
-                  fontSize: Theme.fontSizes.medium,
-                  color: Theme.colors.theme,
-                }}>
-                No jobs available
-              </Text>
+              <TouchableOpacity onPress={() => searchJobs()}>
+                <Image
+                  style={{height: 25, width: 25}}
+                  source={{uri: 'ic_search'}}
+                />
+              </TouchableOpacity>
             </View>
-          ) : null}
-        </View>
+          </View>
+
+          <View style={{paddingHorizontal: 15, paddingTop: 15, flex: 1}}>
+            {searchCategoryData.length ? (
+              <>
+                <Text style={styles.bodyTitle}>Search by Category</Text>
+                <FlatList
+                  contentContainerStyle={{paddingVertical: 10}}
+                  data={searchCategoryData}
+                  extraData={searchCategoryData}
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  keyExtractor={(item, index) => index.toString()}
+                  renderItem={({item, index}) => (
+                    <TouchableOpacity
+                      activeOpacity={0.5}
+                      style={[
+                        styles.categoryConatiner,
+                        {
+                          backgroundColor:
+                            selectedCategory == item.id
+                              ? Theme.colors.theme
+                              : Theme.colors.categoryBg,
+                        },
+                      ]}
+                      onPress={() => serachByCategory(item.id)}>
+                      <Text
+                        style={[
+                          styles.categoryText,
+                          {
+                            color:
+                              selectedCategory == item.id
+                                ? Theme.colors.whiteText
+                                : Theme.colors.theme,
+                          },
+                        ]}>
+                        {item.name}
+                      </Text>
+                    </TouchableOpacity>
+                  )}
+                />
+              </>
+            ) : null}
+            {recommendedJobData.length ? (
+              <>
+                <Text style={styles.bodyTitle}>Recommended Job</Text>
+
+                <FlatList
+                  contentContainerStyle={{paddingBottom: 10}}
+                  data={recommendedJobData}
+                  extraData={recommendedJobData}
+                  showsVerticalScrollIndicator={false}
+                  keyExtractor={(item, index) => index.toString()}
+                  onEndReached={loadMoreData}
+                  onEndReachedThreshold={0.5}
+                  initialNumToRender={10}
+                  ListFooterComponent={
+                    <ListFooterLoader isLoading={isLoadingMore} />
+                  }
+                  renderItem={({item}) => (
+                    <CommonCard
+                      data={item}
+                      isJobSeeker
+                      onSave={saveJob}
+                      onApply={applyJob}
+                      navigation={navigation}
+                    />
+                  )}
+                />
+              </>
+            ) : !loading ? (
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Text
+                  style={{
+                    fontFamily: Theme.fontFamily.PoppinsMedium,
+                    fontSize: Theme.fontSizes.medium,
+                    color: Theme.colors.theme,
+                  }}>
+                  No jobs available
+                </Text>
+              </View>
+            ) : null}
+          </View>
         </>
       </TouchableWithoutFeedback>
     </ImageBackground>

@@ -48,10 +48,11 @@ export default function Profile({navigation}) {
   const [experience, setExperiance] = useState('');
   const [totalSavedJob, settotalSavedJob] = useState(0);
   const [totalAppliedJob, settotalAppliedJob] = useState(0);
+  const [addSkill, setAddSkill] = useState('');
 
   const toast = useRef(null);
   const {logoutResponse, logoutError} = useSelector((state) => state.auth);
-  const {seekerJobsData, seekerProfileData, seekerProfileError} = useSelector(
+  const { seekerProfileData, seekerProfileError} = useSelector(
     (state) => state.jobSeeker,
   );
 
@@ -120,6 +121,8 @@ export default function Profile({navigation}) {
         setEmail(data.company_email || 'Add Company Email');
         setExperiance(data.experience || 'Add Experience');
         setskills(data.skill ? data.skill.split(',') : []);
+        settotalAppliedJob(data.appliedCount);
+        settotalSavedJob(data.saveCount);
       } else {
         toast.current.show(logoutResponse.message);
       }
@@ -128,32 +131,7 @@ export default function Profile({navigation}) {
       setLoader(false);
       dispatch({type: RESET});
     }
-
-    if (seekerJobsData) {
-      console.log('====seekerJobsData====', seekerJobsData);
-      if (
-        seekerJobsData.status == API_RESPONSE_STATUS.STATUS_200 &&
-        seekerJobsData.data &&
-        seekerJobsData.data.jobs &&
-        seekerJobsData.data.jobs.length
-      ) {
-        const appliedJobcount = seekerJobsData.data.jobs.filter(
-          (item) => item.apply_user,
-        ).length;
-        const savedJobcount = seekerJobsData.data.jobs.filter(
-          (item) => item.save_user,
-        ).length;
-        settotalAppliedJob(appliedJobcount);
-        settotalSavedJob(savedJobcount);
-      }
-    }
-  }, [
-    logoutResponse,
-    logoutError,
-    seekerProfileData,
-    seekerProfileError,
-    seekerJobsData,
-  ]);
+  }, [logoutResponse, logoutError, seekerProfileData, seekerProfileError]);
 
   const renderBodyText = (title, value, setData, keyboardType = 'default') => {
     return (
@@ -246,6 +224,24 @@ export default function Profile({navigation}) {
       );
     }
   };
+
+  const addSkills = () => {
+    if (addSkill != '') {
+      let data = [...skills];
+      data.push(addSkill);
+      setskills(data);
+      setAddSkill('');
+    } else {
+      toast.current.show('Please enter skills');
+    }
+  };
+
+  const removeSkill = (index) => {
+    let data = [...skills];
+    data.splice(index, 1);
+    setskills(data);
+  };
+
   return (
     <ImageBackground
       resizeMode={'stretch'}
@@ -311,6 +307,14 @@ export default function Profile({navigation}) {
                   ]}>
                   Skills
                 </Text>
+                <TextInput
+                  placeholder={'Add skill'}
+                  style={styles.addSkillTextinput}
+                  onChangeText={(text) => {
+                    setAddSkill(text);
+                  }}
+                  value={addSkill}
+                />
                 <TouchableOpacity
                   style={{
                     height: 20,
@@ -320,7 +324,8 @@ export default function Profile({navigation}) {
                     justifyContent: 'center',
                     alignItems: 'center',
                     marginLeft: 5,
-                  }}>
+                  }}
+                  onPress={() => addSkills()}>
                   <Text
                     style={{
                       fontSize: Theme.fontSizes.medium,
@@ -341,6 +346,26 @@ export default function Profile({navigation}) {
                 renderItem={({item, index}) => (
                   <View style={styles.skillContainer}>
                     <Text style={styles.skillText}>{item}</Text>
+                    <TouchableOpacity
+                      style={{
+                        height: 20,
+                        width: 20,
+
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        marginLeft: 5,
+                      }}
+                      onPress={() => removeSkill(index)}>
+                      <Text
+                        style={{
+                          fontSize: Theme.fontSizes.small,
+                          color: Theme.colors.theme,
+                          includeFontPadding: false,
+                          padding: 0,
+                        }}>
+                        ✕
+                      </Text>
+                    </TouchableOpacity>
                   </View>
                 )}
               />
@@ -435,9 +460,11 @@ const styles = StyleSheet.create({
   skillContainer: {
     backgroundColor: Theme.colors.categoryBg,
     paddingVertical: 3,
-    paddingHorizontal: 10,
+    paddingLeft:  10,
     marginRight: 10,
     borderRadius: 5,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   skillText: {
     fontFamily: Theme.fontFamily.PoppinsRegular,
@@ -482,5 +509,16 @@ const styles = StyleSheet.create({
     fontSize: Theme.fontSizes.mini - 1,
     includeFontPadding: false,
     padding: 0,
+  },
+  addSkillTextinput: {
+    height: 20,
+    width: 80,
+    fontFamily: Theme.fontFamily.PoppinsRegular,
+    fontSize: Theme.fontSizes.mini - 1,
+    includeFontPadding: false,
+    padding: 0,
+    marginLeft: 10,
+    borderWidth: 1,
+    paddingLeft: 5,
   },
 });

@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "7347435748-tt5i4p5i1av2jq5l5a0bjlj4q6ohp2h4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.diamondapp",
+            "certificate_hash": "565d2b13e6c77357134d36def4cf144a51c5d32a"
+          }
+        },
+        {
           "client_id": "7347435748-45ln0qtaim0kcutr0ukpgbdgcd9eudnk.apps.googleusercontent.com",
           "client_type": 3
         }

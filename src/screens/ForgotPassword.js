@@ -18,7 +18,7 @@ export default function ForgotPassword({navigation}) {
   const toast = useRef();
 
   const onSendButtonPresss = () => {
-    if (password == '') {
+    if (email == '') {
       toast.current.show('Please enter email');
     } else {
       setLoading(true);

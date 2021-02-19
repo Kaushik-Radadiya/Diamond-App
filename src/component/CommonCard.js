@@ -247,7 +247,7 @@ export default function CommonCard({...props}) {
               buttonStyle={styles.bottomButtom}
               text={`Employee Applied (${data.applied_count})`}
               textStyle={styles.buttonText}
-              buttonPress={() => onEmployeeApplied(data.id)}
+              buttonPress={() => onEmployeeApplied(data)}
             />
             <View style={styles.bottomSeprator}></View>
             <CommonButton

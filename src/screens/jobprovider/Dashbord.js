@@ -20,6 +20,7 @@ import {
 } from '../../redux/JobProviderReducer';
 import {postApi} from '../../utils/APIKit';
 import {RESET} from '../../redux/AuthReducer';
+import messaging from '@react-native-firebase/messaging';
 
 export default function Dashboard({navigation}) {
   const onFilterPress = () => {
@@ -32,6 +33,36 @@ export default function Dashboard({navigation}) {
   const {providerDashbordData, providerDashbordError} = useSelector(
     (state) => state.jobProvider,
   );
+
+  React.useEffect(() => {
+    // Assume a message-notification contains a "type" property in the data payload of the screen to open
+
+    messaging().onNotificationOpenedApp((remoteMessage) => {
+      console.log(
+        'Notification caused app to open from background state:',
+        remoteMessage.notification,
+      );
+      // navigation.navigate(remoteMessage.data.type);
+    });
+
+    // Check whether an initial notification is available
+    messaging()
+      .getInitialNotification()
+      .then((remoteMessage) => {
+        if (remoteMessage) {
+          console.log(
+            'Notification caused app to open from quit state:',
+            remoteMessage.notification,
+          );
+          // setInitialRoute(remoteMessage.data.type); // e.g. "Settings"
+        }
+      });
+
+    messaging().onMessage((remoteMessage) => {
+      console.log("====forground notificaiton=====", remoteMessage.notification)
+      // alert('Foreground Push Notification opened');
+    });
+  }, []);
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
