@@ -34,10 +34,10 @@ import {getData, showAlert, storeData} from '../utils/Utils';
 
 export default function Login({navigation, route}) {
   const {apptype} = route.params;
-  const [email, setEmail] = useState('kaushikradadiya1995@gmail.com');
-  const [password, setPassword] = useState('123456');
-  // const [email, setEmail] = useState('');
-  // const [password, setPassword] = useState('');
+  // const [email, setEmail] = useState('kaushik113@gmail.com');
+  // const [password, setPassword] = useState('123456');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [loading, setLoader] = useState(false);
   const emailAddressInput = useRef(null);
   const passwordInput = useRef(null);

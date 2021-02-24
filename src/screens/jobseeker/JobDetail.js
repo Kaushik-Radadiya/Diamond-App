@@ -240,7 +240,7 @@ export default function JobDetail({navigation, route}) {
             }}
             style={{
               height: 40,
-              width: 120,
+              width: 150,
               justifyContent: 'center',
               alignItems: 'center',
               borderBottomWidth: jobDetailSelected ? 0 : 2,
@@ -305,7 +305,7 @@ export default function JobDetail({navigation, route}) {
                 <Image
                   style={{height: 30, width: 30}}
                   source={{
-                    uri: isSaved ? 'ic_saved_jobfill' : 'ic_saved_job',
+                    uri: isSaved ? 'ic_bookmark_whitefill' : 'ic_bookmark_white',
                   }}
                 />
               </TouchableOpacity>

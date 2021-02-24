@@ -17,7 +17,12 @@ import Loader from '../../component/Loader';
 import Toast from '../../component/Toast';
 import {LOGOUT_ERROR, LOGOUT_SUCCESS, RESET} from '../../redux/AuthReducer';
 import {clearToken, postApi} from '../../utils/APIKit';
-import {API_RESPONSE_STATUS, LOGINTYPE, TOKEN} from '../../utils/Constant';
+import {
+  API_RESPONSE_STATUS,
+  LOGINTYPE,
+  SELECTED_CATEGORY,
+  TOKEN,
+} from '../../utils/Constant';
 import Theme from '../../utils/Theme';
 import {
   API_EDIT_PROFILE_DETAIL,
@@ -52,7 +57,7 @@ export default function Profile({navigation}) {
 
   const toast = useRef(null);
   const {logoutResponse, logoutError} = useSelector((state) => state.auth);
-  const { seekerProfileData, seekerProfileError} = useSelector(
+  const {seekerProfileData, seekerProfileError} = useSelector(
     (state) => state.jobSeeker,
   );
 
@@ -91,6 +96,7 @@ export default function Profile({navigation}) {
 
         storeData(TOKEN, '');
         storeData(LOGINTYPE.Type, '');
+        storeData(SELECTED_CATEGORY, '');
         dispatch({type: RESET_REDUCER});
         clearToken();
         navigation.reset({
@@ -118,11 +124,11 @@ export default function Profile({navigation}) {
         setCity(data.city || 'Add City');
         setState(data.state || 'Add State');
         setCompanyName(data.company_name || 'Add Company Name');
-        setEmail(data.company_email || 'Add Company Email');
+        setEmail(data.company_email || 'Add Email');
         setExperiance(data.experience || 'Add Experience');
         setskills(data.skill ? data.skill.split(',') : []);
-        settotalAppliedJob(data.appliedCount);
-        settotalSavedJob(data.saveCount);
+        settotalAppliedJob(data.appliedCount ? data.appliedCount : 0);
+        settotalSavedJob(data.saveCount ? data.saveCount : 0);
       } else {
         toast.current.show(logoutResponse.message);
       }
@@ -173,6 +179,8 @@ export default function Profile({navigation}) {
     let message = null;
     if (name == '') {
       message = 'Please enter name';
+    } else if (email == '' || email == 'Add Email') {
+      message = 'Please enter  email';
     } else if (mobileNo == '') {
       message = 'Please enter mobile number';
     } else if (city == '' || city == 'Add City') {
@@ -181,8 +189,6 @@ export default function Profile({navigation}) {
       message = 'Please enter State';
     } else if (companyName == '' || companyName == 'Add Company Name') {
       message = 'Please enter company name';
-    } else if (email == '' || email == 'Add Company Email') {
-      message = 'Please enter company email';
     } else if (experience == '' || experience == 'Add Experience') {
       message = 'Please enter experience';
     } else if (!skills.length) {
@@ -295,7 +301,12 @@ export default function Profile({navigation}) {
           <Text style={styles.bodyTitle}>Company Details</Text>
           <View style={[styles.bodyCardContainer, {paddingBottom: 10}]}>
             {renderBodyText('Company Name', companyName, setCompanyName)}
-            {renderBodyText('Experience', experience, setExperiance)}
+            {renderBodyText(
+              'Experience',
+              experience,
+              setExperiance,
+              'phone-pad',
+            )}
             <View>
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <Text
@@ -460,7 +471,7 @@ const styles = StyleSheet.create({
   skillContainer: {
     backgroundColor: Theme.colors.categoryBg,
     paddingVertical: 3,
-    paddingLeft:  10,
+    paddingLeft: 10,
     marginRight: 10,
     borderRadius: 5,
     flexDirection: 'row',

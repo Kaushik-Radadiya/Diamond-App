@@ -16,22 +16,27 @@ import {postApi, postApiWithoutDispatch} from '../../utils/APIKit';
 import {API_RESPONSE_STATUS} from '../../utils/Constant';
 import Loader from '../../component/Loader';
 import Toast from '../../component/Toast';
+import ListFooterLoader from '../../component/ListFooterLoader';
 
+let pageNumber = 0;
+let isLoadMore = true;
 export default function Setting({navigation}) {
   const [freelannceJobData, setFreelannceJobData] = useState([]);
 
   const dispatch = useDispatch();
   const toast = React.useRef(null);
   const [loading, setLoader] = React.useState(true);
+  const [isLoadingMore, setLoadingMore] = useState(false);
   const {freelannceJobsData, freelanceJobsError} = useSelector(
     (state) => state.jobSeeker,
   );
 
   const getFreelanceJobsData = () => {
+    pageNumber++;
     const params = {
       all: 0,
-      page: 1,
-      perPage: 25,
+      page: pageNumber,
+      perPage: 10,
       search: '',
       category_id: '',
       employment_type: 'F',
@@ -46,22 +51,31 @@ export default function Setting({navigation}) {
     );
   };
   React.useEffect(() => {
+    pageNumber = 0;
+    isLoadMore = true;
     getFreelanceJobsData();
   }, []);
   React.useEffect(() => {
     if (freelannceJobsData) {
       console.log('====freelannceJobsData====', freelannceJobsData);
-      if (
-        freelannceJobsData.status == API_RESPONSE_STATUS.STATUS_200 &&
-        freelannceJobsData.data &&
-        freelannceJobsData.data.jobs &&
-        freelannceJobsData.data.jobs.length
-      ) {
-        const data = freelannceJobsData.data.jobs.filter(
-          (item) => !item.apply_user,
-        );
-        setFreelannceJobData(data);
+
+      if (freelannceJobsData.status == API_RESPONSE_STATUS.STATUS_200) {
+        if (
+          freelannceJobsData.data &&
+          freelannceJobsData.data.jobs &&
+          freelannceJobsData.data.jobs.length
+        ) {
+          console.log('====freelannceJobsData========');
+          const filterdData = freelannceJobsData.data.jobs.filter(
+            (item) => !item.apply_user,
+          );
+          const data = freelannceJobData.concat(filterdData);
+          setFreelannceJobData(data);
+        } else {
+          isLoadMore = false;
+        }
       }
+      setLoadingMore(false);
       setLoader(false);
     }
 
@@ -92,10 +106,12 @@ export default function Setting({navigation}) {
     )
       .then((data) => {
         console.log('changeStatusdata======', data);
-        getFreelanceJobsData();
+        setLoader(false);
         if (status == 'A') {
+          removeItem(id);
           toast.current.show('Job Applied Successfully', 'SUCCESS');
         } else {
+          updateStatus(id);
           toast.current.show('Job Saved Successfully', 'SUCCESS');
         }
       })
@@ -108,6 +124,35 @@ export default function Setting({navigation}) {
   const onInfoPress = () => {
     console.log('---onInfoPress--');
   };
+
+  const removeItem = (id) => {
+    let newData = [...freelannceJobData];
+    newData.splice(
+      newData.findIndex(function (i) {
+        return i.id === id;
+      }),
+      1,
+    );
+    setFreelannceJobData(newData);
+  };
+
+  const updateStatus = (id) => {
+    let newData = [...freelannceJobData];
+    newData.map((item) => {
+      if (item.id == id) {
+        item.save_user = true;
+      }
+    });
+
+    setFreelannceJobData(newData);
+  };
+  const loadMoreData = () => {
+    if (isLoadMore) {
+      setLoadingMore(true);
+      getFreelanceJobsData();
+    }
+  };
+
   return (
     <ImageBackground
       resizeMode={'stretch'}
@@ -130,6 +175,10 @@ export default function Setting({navigation}) {
             extraData={freelannceJobData}
             showsVerticalScrollIndicator={false}
             keyExtractor={(item, index) => index.toString()}
+            onEndReached={loadMoreData}
+            onEndReachedThreshold={0.5}
+            initialNumToRender={10}
+            ListFooterComponent={<ListFooterLoader isLoading={isLoadingMore} />}
             renderItem={({item}) => (
               <CommonCard
                 data={item}

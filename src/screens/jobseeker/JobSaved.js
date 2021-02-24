@@ -111,8 +111,8 @@ export default function JobSaved({navigation}) {
     )
       .then((data) => {
         console.log('changeStatusdata======', data);
-        getSavedJobsData();
         if (status == 'A') {
+          updateStatus(id);
           toast.current.show('Job Applied Successfully', 'SUCCESS');
         } else {
           toast.current.show('Job Saved Successfully', 'SUCCESS');
@@ -129,6 +129,17 @@ export default function JobSaved({navigation}) {
       setLoadingMore(true);
       getSavedJobsData();
     }
+  };
+
+  const updateStatus = (id) => {
+    let newData = [...savedJobData];
+    newData.map((item) => {
+      if (item.id == id) {
+        item.apply_user = true;
+      }
+    });
+
+    setSavedJobData(newData);
   };
 
   return (

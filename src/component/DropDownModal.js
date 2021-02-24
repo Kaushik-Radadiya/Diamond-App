@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, forwardRef, useImperativeHandle} from 'react';
 import {
   Alert,
   Modal,
@@ -11,19 +11,26 @@ import {
 } from 'react-native';
 import Theme from '../utils/Theme';
 
-const DropDownModal = ({...props}) => {
-  const {visible, data, onSave, onCancel} = props;
-  const [selectedItem, setselectedItem] = useState('');
+const DropDownModal = forwardRef((props, ref) => {
+  const {visible, data, onSave, onCancel, selectedCategory, isFilter} = props;
+  const [selectedItem, setselectedItem] = useState(selectedCategory || '');
 
   const onSavePress = () => {
     if (selectedItem != '') {
       onSave(selectedItem);
-      setselectedItem('');
+      if(!isFilter)setselectedItem('');
     } else {
       onCancel();
-      setselectedItem('');
+      if(!isFilter)setselectedItem('');
     }
   };
+
+  useImperativeHandle(ref, () => ({
+    setFilterItem(item) {
+      setselectedItem(item);
+    },
+  }));
+
   const renderItem = ({item}) => {
     return (
       <TouchableOpacity
@@ -64,7 +71,7 @@ const DropDownModal = ({...props}) => {
               style={styles.cancelContainer}
               onPress={() => {
                 onCancel();
-                setselectedItem('');
+                if(!isFilter)setselectedItem('');
               }}>
               <Text style={styles.cancelText}>Cancel</Text>
             </TouchableOpacity>
@@ -78,7 +85,7 @@ const DropDownModal = ({...props}) => {
       </View>
     </Modal>
   );
-};
+});
 
 const styles = StyleSheet.create({
   centeredView: {

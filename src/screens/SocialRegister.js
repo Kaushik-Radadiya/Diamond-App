@@ -5,6 +5,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {
   API_RESPONSE_STATUS,
   APPTYPE,
+  FCM_TOKEN,
   LOGINTYPE,
   TOKEN,
 } from '../utils/Constant';
@@ -15,7 +16,7 @@ import {API_REGISTER} from '../utils/Url';
 import {REGISTER_ERROR, REGISTER_SUCCESS, RESET} from '../redux/AuthReducer';
 import Loader from '../component/Loader';
 import Toast from '../component/Toast';
-import {storeData} from '../utils/Utils';
+import {getData, storeData} from '../utils/Utils';
 
 export default function SocialRegister({navigation, route}) {
   const {apptype, userData} = route.params;
@@ -63,13 +64,14 @@ export default function SocialRegister({navigation, route}) {
     }
   }, [registerResponse, registerError]);
 
-  const onNextPress = () => {
+  const onNextPress = async() => {
     let message = null;
     if (apptype == APPTYPE.JOBPROVIDER && companyName == '')
       message = 'Please Enter CompnayName';
     else if (mobileNumber == '') message = 'Please Enter Mobile Number';
     else {
       setLoader(true);
+      const fcmtoken = await getData(FCM_TOKEN);
       const params = {
         firstName: userData.firstName,
         lastName: userData.lastName,
@@ -78,6 +80,7 @@ export default function SocialRegister({navigation, route}) {
         email: userData.email,
         login_type: userData.login_type,
         company_name: apptype == APPTYPE.JOBPROVIDER ? companyName : undefined,
+        fcmtoken:fcmtoken
       };
 
       dispatch(postApi(API_REGISTER, params, REGISTER_SUCCESS, REGISTER_ERROR));

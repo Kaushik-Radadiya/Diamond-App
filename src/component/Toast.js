@@ -21,9 +21,7 @@ export default Toast = forwardRef((props, ref) => {
   const [isVisible, setVisble] = useState(false);
 
   useImperativeHandle(ref, () => ({
-    getAlert() {
-      alert('getAlert from Child');
-    },
+    
 
     show(text, type = 'ERROR') {
       setVisble(true);

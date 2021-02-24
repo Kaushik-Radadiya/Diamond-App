@@ -101,8 +101,8 @@ export default function EmployeeApplied({navigation, route}) {
                   Skills
                 </Text>
                 <FlatList
-                  data={item.apply_user.skill.split(',')}
-                  extraData={item.apply_user.skill.split(',')}
+                  data={item.apply_user.skill?item.apply_user.skill.split(','):[]}
+                  extraData={item.apply_user.skill?item.apply_user.skill.split(','):[]}
                   horizontal
                   showsHorizontalScrollIndicator={false}
                   keyExtractor={(item, index) => index.toString()}

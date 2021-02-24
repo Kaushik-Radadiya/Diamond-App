@@ -23,7 +23,7 @@ import {
 } from '../../utils/Url';
 import {LOGOUT_ERROR, LOGOUT_SUCCESS, RESET} from '../../redux/AuthReducer';
 import {getData, showAlert, storeData} from '../../utils/Utils';
-import {API_RESPONSE_STATUS, LOGINTYPE, TOKEN} from '../../utils/Constant';
+import {API_RESPONSE_STATUS, LOGINTYPE, SELECTED_CATEGORY, TOKEN} from '../../utils/Constant';
 import {LoginManager} from 'react-native-fbsdk';
 import {GoogleSignin} from '@react-native-community/google-signin';
 import Toast from '../../component/Toast';
@@ -90,6 +90,7 @@ export default function ProviderProfile({navigation}) {
 
         storeData(TOKEN, '');
         storeData(LOGINTYPE.Type, '');
+        storeData(SELECTED_CATEGORY, null)
         dispatch({type: RESET_REDUCER});
         clearToken();
         navigation.reset({

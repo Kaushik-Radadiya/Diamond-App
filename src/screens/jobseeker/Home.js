@@ -26,7 +26,7 @@ import {
 } from '../../redux/JobSeekerReducer';
 import {postApi, postApiWithoutDispatch} from '../../utils/APIKit';
 import {useDispatch, useSelector} from 'react-redux';
-import {API_RESPONSE_STATUS} from '../../utils/Constant';
+import {API_RESPONSE_STATUS, SELECTED_CATEGORY} from '../../utils/Constant';
 import Loader from '../../component/Loader';
 import Toast from '../../component/Toast';
 import {
@@ -35,15 +35,19 @@ import {
 } from '../../redux/JobProviderReducer';
 import ListFooterLoader from '../../component/ListFooterLoader';
 import messaging from '@react-native-firebase/messaging';
+import {getData} from '../../utils/Utils';
+import DropDownModal from '../../component/DropDownModal';
 
 let pageNumber = 0;
 let isLoadMore = true;
 export default function Home({navigation}) {
   // const searchCategoryData = ['Round-cut', 'Fency', 'Greder', 'Syner'];
+  const [dropDownVisible, showHideDropDown] = useState(false);
   const [recommendedJobData, setRecommendedJobData] = useState([]);
   const [searchCategoryData, setSearchCategory] = useState([]);
   const dispatch = useDispatch();
   const toast = React.useRef(null);
+  const filter = React.useRef(null);
   const [loading, setLoader] = useState(true);
   const [isLoadingMore, setLoadingMore] = useState(false);
   const [searchText, setsearchText] = useState('');
@@ -65,7 +69,6 @@ export default function Home({navigation}) {
       category_id: selectedCategory || '',
       employment_type: '',
     };
-    console.log('parmas=====', params);
     dispatch(
       postApi(
         API_GET_SEEKER_JOB,
@@ -78,6 +81,16 @@ export default function Home({navigation}) {
 
   useEffect(() => {
     // Assume a message-notification contains a "type" property in the data payload of the screen to open
+
+    getData(SELECTED_CATEGORY).then((category) => {
+      if (category && category != '') {
+        setSelectedCategory(JSON.parse(category).id);
+      } else {
+        pageNumber = 0;
+        isLoadMore = true;
+        getRecommendedJobs();
+      }
+    });
 
     messaging().onNotificationOpenedApp((remoteMessage) => {
       console.log(
@@ -101,7 +114,10 @@ export default function Home({navigation}) {
       });
 
     messaging().onMessage((remoteMessage) => {
-      console.log("====forground notificaiton=====", remoteMessage.notification)
+      console.log(
+        '====forground notificaiton=====',
+        remoteMessage.notification,
+      );
       // alert('Foreground Push Notification opened');
     });
   }, []);
@@ -118,10 +134,12 @@ export default function Home({navigation}) {
       );
     }
 
-    pageNumber = 0;
-    isLoadMore = true;
-    setRecommendedJobData([]);
-    getRecommendedJobs();
+    if (selectedCategory || selectedCategory == '') {
+      pageNumber = 0;
+      isLoadMore = true;
+      setRecommendedJobData([]);
+      getRecommendedJobs();
+    }
   }, [selectedCategory]);
 
   useEffect(() => {
@@ -137,6 +155,7 @@ export default function Home({navigation}) {
             (item) => !item.apply_user && item.is_active,
           );
           const data = recommendedJobData.concat(filterdData);
+          console.log('======data=====', data);
           setRecommendedJobData(data);
         } else {
           isLoadMore = false;
@@ -172,6 +191,7 @@ export default function Home({navigation}) {
 
   const onFilterPress = () => {
     console.log('===onFilterPress==');
+    showHideDropDown(true);
   };
 
   const saveJob = (id) => {
@@ -194,11 +214,12 @@ export default function Home({navigation}) {
     )
       .then((data) => {
         console.log('changeStatusdata======', data);
-        getRecommendedJobs();
-
+        setLoader(false);
         if (status == 'A') {
+          removeItem(id);
           toast.current.show('Job Applied Successfully', 'SUCCESS');
         } else {
+          updateStatus(id);
           toast.current.show('Job Saved Successfully', 'SUCCESS');
         }
       })
@@ -211,11 +232,15 @@ export default function Home({navigation}) {
   const searchJobs = () => {
     Keyboard.dismiss();
     setLoader(true);
+    pageNumber = 0;
+    isLoadMore = true;
+    setRecommendedJobData([]);
     getRecommendedJobs();
   };
 
-  const serachByCategory = (id) => {
-    setSelectedCategory(selectedCategory == id ? '' : id);
+  const serachByCategory = (item) => {
+    setSelectedCategory(selectedCategory == item.id ? '' : item.id);
+    filter.current.setFilterItem(selectedCategory == item.id ? '' : item);
     setLoader(true);
   };
 
@@ -224,6 +249,34 @@ export default function Home({navigation}) {
       setLoadingMore(true);
       getRecommendedJobs();
     }
+  };
+
+  const removeItem = (id) => {
+    let newData = [...recommendedJobData];
+    newData.splice(
+      newData.findIndex(function (i) {
+        return i.id === id;
+      }),
+      1,
+    );
+    setRecommendedJobData(newData);
+  };
+
+  const updateStatus = (id) => {
+    let newData = [...recommendedJobData];
+    newData.map((item) => {
+      if (item.id == id) {
+        item.save_user = true;
+      }
+    });
+
+    setRecommendedJobData(newData);
+  };
+
+  const onSave = (item) => {
+    setSelectedCategory(item.id);
+    showHideDropDown(false);
+    setLoader(true);
   };
 
   return (
@@ -235,6 +288,14 @@ export default function Home({navigation}) {
         filterPress={onFilterPress}
         isJobAvailable={true}
         navigation={navigation}
+      />
+      <DropDownModal
+        ref={filter}
+        visible={dropDownVisible}
+        onSave={onSave}
+        onCancel={() => showHideDropDown(false)}
+        data={searchCategoryData}
+        isFilter={true}
       />
       <Toast ref={toast} duration={5000} />
       <Loader loading={loading} />
@@ -285,7 +346,7 @@ export default function Home({navigation}) {
                               : Theme.colors.categoryBg,
                         },
                       ]}
-                      onPress={() => serachByCategory(item.id)}>
+                      onPress={() => serachByCategory(item)}>
                       <Text
                         style={[
                           styles.categoryText,

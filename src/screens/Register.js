@@ -24,15 +24,16 @@ export default function Register({navigation, route}) {
   // const [firstName, setFirstName] = useState('Kaushik');
   // const [lastName, setLastName] = useState('Radadiya');
   // const [companyName, setCompnayName] = useState('RK');
-  // const [email, setEmail] = useState('kaushikradadiya112@gmail.com');
+  // const [email, setEmail] = useState('kaushik113@gmail.com');
   // const [mobileNumber, setMobileNumber] = useState('1234567890');
+  // const [password, setPassword] = useState('123456');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [companyName, setCompnayName] = useState('');
   const [email, setEmail] = useState('');
   const [mobileNumber, setMobileNumber] = useState('');
-  const [loading, setLoader] = useState(false);
   const [password, setPassword] = useState('');
+  const [loading, setLoader] = useState(false);
   const dispatch = useDispatch();
 
   const refFirstName = useRef(null);
@@ -41,7 +42,7 @@ export default function Register({navigation, route}) {
   const refCompanyName = useRef(null);
   const refMobileNumber = useRef(null);
   const toast = useRef(null);
-  // const refPassword = useRef(null);
+  const refPassword = useRef(null);
   const {registerResponse, registerError} = useSelector((state) => state.auth);
 
   const onRegisterButtonPress = (item) => {
@@ -52,12 +53,14 @@ export default function Register({navigation, route}) {
       message = 'Please Enter CompnayName';
     else if (email == '') message = 'Please Enter Email';
     else if (mobileNumber == '') message = 'Please Enter Mobile Number';
+    else if (password == '') message = 'Please Enter Password';
     else {
       setLoader(true);
       const params = {
         firstName: firstName,
         lastName: lastName,
         mobile: mobileNumber,
+        password:password,
         type: apptype == APPTYPE.JOBPROVIDER ? 'JP' : 'JS',
         email: email,
         login_type: 'O',
@@ -86,7 +89,10 @@ export default function Register({navigation, route}) {
       setLoader(false);
       if (registerResponse.status == API_RESPONSE_STATUS.STATUS_200) {
         toast.current.show(registerResponse.message, 'SUCCESS');
-        navigation.goBack();
+        setTimeout(() => {
+          
+          navigation.goBack();
+        }, 1000);
       } else {
         console.log('====response.MESSAGE===', registerResponse.MESSAGE);
         toast.current.show(registerResponse.MESSAGE);
@@ -243,18 +249,18 @@ export default function Register({navigation, route}) {
               icon={'ic_mobile'}
               placeholder={'Mobile Number'}
               onChangeText={(text) => setMobileNumber(text)}
-              returnKeyType={'done'}
+              returnKeyType={'next'}
               keyboardType={'phone-pad'}
-              onSubmitEditing={() => onRegisterButtonPress()}
+              onSubmitEditing={() => refPassword.current.focus()}
             />
-            {/* <CommonTextInput
+            <CommonTextInput
               refs={refPassword}
               icon={'ic_password'}
               placeholder="Password"
               returnKeyType={'done'}
               onChangeText={(text) => setPassword(text)}
-              onSubmitEditing={() => {}}
-            /> */}
+              onSubmitEditing={() => onRegisterButtonPress()}
+            />
 
             <CommonButton
               buttonStyle={[

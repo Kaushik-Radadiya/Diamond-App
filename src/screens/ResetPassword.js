@@ -10,7 +10,7 @@ import CommonButton from '../component/CommonButton';
 import CommonTextinput from '../component/CommonTextInput';
 import Loader from '../component/Loader';
 import {postApiWithoutDispatch} from '../utils/APIKit';
-import {API_FORGOT_PASSWORD} from '../utils/Url';
+import {API_FORGOT_PASSWORD, API_RESET_PASSWORD} from '../utils/Url';
 
 export default function ResetPassword({navigation, route}) {
   const {token} = route.params;
@@ -34,19 +34,20 @@ export default function ResetPassword({navigation, route}) {
     if (message) {
       toast.current.show(message);
     } else {
-      // setLoading(true);
-      // const params = {
-      //   email: 'kaushikradadiya1995@gmail.com',
-      // };
-      // postApiWithoutDispatch(API_FORGOT_PASSWORD, params)
-      //   .then((data) => {
-      //     setLoading(false);
-      //     console.log('==---data====', data);
-      //     toast.current.show(data.message, 'SUCCESS');
-      //   })
-      //   .catch((error) => {
-      //     console.log('===Forgotpassword---Error--', error);
-      //   });
+      setLoading(true);
+      const params = {
+        token: token,
+        password: password
+      };
+      postApiWithoutDispatch(API_RESET_PASSWORD, params)
+        .then((data) => {
+          setLoading(false);
+          console.log('==---data====', data);
+          toast.current.show(data.message, 'SUCCESS');
+        })
+        .catch((error) => {
+          console.log('===Forgotpassword---Error--', error);
+        });
     }
   };
   return (

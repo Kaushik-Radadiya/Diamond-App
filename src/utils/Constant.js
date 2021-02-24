@@ -17,6 +17,7 @@ export const LOGINTYPE = {
 
 export const TOKEN = 'token';
 export const FCM_TOKEN = 'fcm_token';
+export const SELECTED_CATEGORY = 'selected_category';
 
 export const API_RESPONSE_STATUS = {
   STATUS_200: '200',
