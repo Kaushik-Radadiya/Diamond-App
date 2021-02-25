@@ -10,12 +10,14 @@ import CommonButton from '../component/CommonButton';
 import CommonTextinput from '../component/CommonTextInput';
 import Loader from '../component/Loader';
 import {postApiWithoutDispatch} from '../utils/APIKit';
+import { APPTYPE } from '../utils/Constant';
 import {API_FORGOT_PASSWORD, API_RESET_PASSWORD} from '../utils/Url';
+import { getData } from '../utils/Utils';
 
 export default function ResetPassword({navigation, route}) {
   const {token} = route.params;
 
-  console.log('==token===', token);
+  console.log('==token===', token );
   const [password, setPassword] = useState('');
   const [confirmPassowrd, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -50,6 +52,13 @@ export default function ResetPassword({navigation, route}) {
         });
     }
   };
+
+  const navigateToLogin = async() => {
+    getData(APPTYPE.TYPE).then(type => {
+      console.log("type====",type)
+      navigation.navigate('Login', {apptype: type});
+    })
+  }
   return (
     <View style={styles.container}>
       <Toast ref={toast} duration={5000} />
@@ -84,7 +93,7 @@ export default function ResetPassword({navigation, route}) {
           />
           <View style={styles.registerContainer}>
             <Text style={styles.registerText}>Back to</Text>
-            <TouchableOpacity onPress={() => navigation.goBack()}>
+            <TouchableOpacity onPress={() => navigateToLogin()}>
               <Text
                 style={[
                   styles.registerText,
